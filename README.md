@@ -8,6 +8,7 @@ Course notes and worked exercise solutions for Bayesian Statistics, including La
 | --- | --- |
 | `bayes_notes/` | Course notes, with `main.tex` as the entry point and separate introduction, Chapter 1, and Chapter 2 sources. Includes a compiled PDF, usage instructions, and a board reference index. |
 | `board_transcription/` | A separate electronic transcription of the instructor's blackboard, organized by section, with LaTeX sources, a compiled PDF, and a photo source index. |
+| `exam_reference/` | A two-page A4 reference sheet for the Chapter 1 and Chapter 2 exam, with LaTeX source and a compiled PDF for double-sided printing. |
 | `exercise_solutions/` | Selected Chapter 1 exercise solutions in LaTeX and PDF formats. |
 | `exercise_solutions_chapter2/` | Solutions to Chapter 2 exercises 2.1–2.10 in LaTeX and PDF formats. |
 
