@@ -1,0 +1,109 @@
+% Sources: E07-E15, E22.
+\boardsection{2}{贝叶斯公式}
+\[
+\pi(\theta\mid x)=
+\frac{\pi(\theta)f(x\mid\theta)}{m(x)},\qquad
+m(x)=\int\pi(t)f(x\mid t)\,dt.
+\]
+
+\block{例1.2.1}
+\[
+P(A)=\theta,\quad 0<\theta<1,\qquad X\mid\theta\sim\Bin(n,\theta).
+\]
+\[
+P(X=x\mid\theta)=\binom nx\theta^x(1-\theta)^{n-x},
+\quad x=0,1,\ldots,n.
+\]
+\[
+L(\theta\mid x)\propto\theta^x(1-\theta)^{n-x}.
+\]
+\[
+\theta\sim U(0,1),\qquad
+\pi(\theta)=
+\begin{cases}1,&0\leq\theta\leq1,\\0,&\text{其它}.\end{cases}
+\qquad U(0,1)=\Be(1,1).
+\]
+\[
+\int_0^1 1\,d\theta=1.
+\]
+\begin{align*}
+h(x,\theta)
+&=P(X=x\mid\theta)\pi(\theta)
+=\binom nx\theta^x(1-\theta)^{n-x},\\
+m(x)&=\int_0^1h(x,\theta)\,d\theta\\
+&=\binom nx\int_0^1\theta^x(1-\theta)^{n-x}\,d\theta\\
+&=\binom nx B(x+1,n-x+1)\\
+&=\binom nx\frac{\Gamma(x+1)\Gamma(n-x+1)}{\Gamma(n+2)}\\
+&=\frac{n!}{x!(n-x)!}\frac{x!(n-x)!}{(n+1)!}
+=\frac{1}{n+1}.
+\end{align*}
+\begin{align*}
+\pi(\theta\mid x)
+&=\frac{h(x,\theta)}{m(x)}
+=(n+1)\binom nx\theta^x(1-\theta)^{n-x}\\
+&=\frac{(n+1)!}{x!(n-x)!}\theta^x(1-\theta)^{n-x}\\
+&=\frac{\Gamma(n+2)}{\Gamma(x+1)\Gamma(n-x+1)}
+\theta^x(1-\theta)^{n-x}.
+\end{align*}
+\[
+\theta\mid x\sim\Be(x+1,n-x+1).
+\]
+当$x=0$，
+\[
+\theta\mid x=0\sim\Be(1,n+1),\qquad
+\pi(\theta\mid x=0)=(n+1)(1-\theta)^n.
+\]
+\[
+x\leq n/2\quad\Longrightarrow\quad x/n\leq1/2.
+\]
+
+\block{例1.2.2}
+\[
+\theta_1=0.9,\quad\theta_2=0.7,\qquad
+\pi(\theta_1)=0.4,\quad\pi(\theta_2)=0.6.
+\]
+事件$A$：
+\[
+P(A\mid\theta_1)=0.9^5\approx0.590,\qquad
+P(A\mid\theta_2)=0.7^5\approx0.168.
+\]
+\[
+P(A)=0.590\times0.4+0.168\times0.6\approx0.337.
+\]
+\[
+\pi(\theta_1\mid A)=\frac{0.590\times0.4}{0.337}\approx0.7,\qquad
+\pi(\theta_2\mid A)\approx0.3.
+\]
+\[
+\pi_1(\theta_1)=\pi(\theta_1\mid A)=0.7,\qquad
+\pi_1(\theta_2)=\pi(\theta_2\mid A)=0.3.
+\]
+事件$B$：$X_B\mid\theta\sim\Bin(10,\theta)$，$X_B=9$。
+\[
+P(B\mid\theta)=\binom{10}{9}\theta^9(1-\theta).
+\]
+\[
+P(B\mid\theta_1)\approx0.387,\qquad
+P(B\mid\theta_2)\approx0.121.
+\]
+\[
+P(B)=P(B\mid\theta_1)\pi_1(\theta_1)
++P(B\mid\theta_2)\pi_1(\theta_2)
+=0.387\times0.7+0.121\times0.3\approx0.307.
+\]
+\[
+\pi(\theta_1\mid A,B)\approx0.882,\qquad
+\pi(\theta_2\mid A,B)\approx0.118.
+\]
+\[
+\frac{\pi(\theta_1\mid A)}{\pi(\theta_2\mid A)}
+=\frac{\pi(\theta_1)}{\pi(\theta_2)}
+\frac{P(A\mid\theta_1)}{P(A\mid\theta_2)}.
+\]
+\[
+\BF_{12}(B)=\frac{0.387}{0.121}\approx3.2,\qquad
+\text{先验赔率}\times\BF_{12}=2.3\times3.2=7.36.
+\]
+\[
+\frac{7.36}{1+7.36}\approx0.88.
+\]

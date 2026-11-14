@@ -1,0 +1,256 @@
+% Sources: E09-E12, E14-E27; exponential/Poisson panels E28-E31.
+\boardsection{3}{共轭先验分布}
+\block{一、Gamma函数}
+\[
+\Gamma(\alpha)=\int_0^{+\infty}x^{\alpha-1}e^{-x}\,dx,\quad\alpha>0.
+\]
+\begin{align*}
+\Gamma(\alpha+1)
+&=\int_0^{+\infty}x^\alpha e^{-x}\,dx\\
+&=\left[-x^\alpha e^{-x}\right]_0^{+\infty}
++\alpha\int_0^{+\infty}x^{\alpha-1}e^{-x}\,dx
+=\alpha\Gamma(\alpha).
+\end{align*}
+\[
+\Gamma(1)=\int_0^{+\infty}e^{-x}\,dx=1,\quad
+\Gamma(n+1)=n\Gamma(n)=n!,\quad
+\Gamma(1/2)=\sqrt{\pi}.
+\]
+
+\block{二、Beta函数}
+\[
+B(\alpha,\beta)=\int_0^1 x^{\alpha-1}(1-x)^{\beta-1}\,dx,
+\quad\alpha,\beta>0.
+\]
+\[
+B(\alpha,\beta)=\frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)},
+\qquad B(1,1)=\int_0^1 1\,dx=1.
+\]
+
+\block{三、Gamma分布}
+\[
+f(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}
+x^{\alpha-1}e^{-\lambda x},\quad x>0,
+\qquad X\sim\Ga(\alpha,\lambda).
+\]
+\[
+\int_0^\infty x^{\alpha-1}e^{-\lambda x}\,dx
+=\frac1{\lambda^\alpha}\int_0^\infty u^{\alpha-1}e^{-u}\,du
+=\frac{\Gamma(\alpha)}{\lambda^\alpha}.
+\]
+\[
+\E X=\frac{\alpha}{\lambda},\qquad
+\Var(X)=\frac{\alpha}{\lambda^2},\qquad
+\operatorname{Mode}(X)=\frac{\alpha-1}{\lambda}\quad(\alpha>1).
+\]
+特别地，$X\sim\Ga(1,\lambda)$，即指数分布：
+\[
+f(x)=\lambda e^{-\lambda x},\quad x>0.
+\]
+若$X_1\sim\Ga(\alpha_1,\lambda)$，$X_2\sim\Ga(\alpha_2,\lambda)$，
+$X_1,X_2$独立，则
+\[
+X_1+X_2\sim\Ga(\alpha_1+\alpha_2,\lambda).
+\]
+
+\block{四、Beta分布}
+\[
+f(\theta)=\frac1{B(\alpha,\beta)}
+\theta^{\alpha-1}(1-\theta)^{\beta-1},\quad0<\theta<1,
+\qquad\theta\sim\Be(\alpha,\beta).
+\]
+\[
+f(\theta)=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+\theta^{\alpha-1}(1-\theta)^{\beta-1}.
+\]
+\[
+\E\theta=\frac{\alpha}{\alpha+\beta},\quad
+\Var(\theta)=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}.
+\]
+\[
+\operatorname{Mode}(\theta)=\frac{\alpha-1}{\alpha+\beta-2}
+\quad(\alpha,\beta>1),\qquad \Be(1,1)=U(0,1).
+\]
+若$X\sim\Ga(\alpha,1)$，$Y\sim\Ga(\beta,1)$，$X,Y$相互独立，则
+\[
+\frac{X}{X+Y}\sim\Be(\alpha,\beta),\qquad
+X+Y\sim\Ga(\alpha+\beta,1).
+\]
+
+\block{五、逆Gamma分布}
+\[
+X\sim\IGa(\alpha,\beta),\qquad
+f_X(x)=\frac{\beta^\alpha}{\Gamma(\alpha)}
+x^{-(\alpha+1)}\exp(-\beta/x),\quad x>0.
+\]
+设$Y\sim\Ga(\alpha,\beta)$，令$X=1/Y$，则$Y=1/X$，
+$\left|dy/dx\right|=1/x^2$。
+\begin{align*}
+f_X(x)
+&=f_Y(1/x)\left|\frac{d(1/x)}{dx}\right|\\
+&=\frac{\beta^\alpha}{\Gamma(\alpha)}
+(1/x)^{\alpha-1}e^{-\beta/x}\frac1{x^2}\\
+&=\frac{\beta^\alpha}{\Gamma(\alpha)}
+x^{-(\alpha+1)}e^{-\beta/x}.
+\end{align*}
+\[
+Y\sim\Ga(\alpha,\beta)\Longrightarrow 1/Y\sim\IGa(\alpha,\beta);
+\qquad
+X\sim\IGa(\alpha,\beta)\Longrightarrow 1/X\sim\Ga(\alpha,\beta).
+\]
+
+\block{例1.3.1 正态均值的共轭先验}
+设$X_1,\ldots,X_n\mid\theta\overset{\mathrm{iid}}{\sim}N(\theta,\sigma^2)$，
+其中$\sigma^2$已知。
+
+Step 1：写出似然函数。
+\begin{align*}
+L(\theta\mid x)
+&=\prod_{i=1}^n\frac1{\sqrt{2\pi\sigma^2}}
+\exp\left\{-\frac{(x_i-\theta)^2}{2\sigma^2}\right\}\\
+&=(2\pi\sigma^2)^{-n/2}
+\exp\left\{-\frac1{2\sigma^2}\sum_{i=1}^n(x_i-\theta)^2\right\}.
+\end{align*}
+\[
+\sum_{i=1}^n(x_i-\theta)^2
+=\sum_{i=1}^n(x_i-\bar x)^2+n(\bar x-\theta)^2.
+\]
+\[
+L(\theta\mid x)\propto
+\exp\left\{-\frac{n}{2\sigma^2}(\theta-\bar x)^2\right\}.
+\]
+\[
+\bar X\mid\theta\sim N(\theta,\sigma^2/n),\quad
+\sigma_0^2=\sigma^2/n,\quad
+L(\theta\mid x)\propto\exp\left\{-\frac{(\theta-\bar x)^2}{2\sigma_0^2}\right\}.
+\]
+
+Step 2：先验密度。$\theta\sim N(\mu,\tau^2)$。
+\[
+\pi(\theta)=\frac1{\sqrt{2\pi\tau^2}}
+\exp\left\{-\frac{(\theta-\mu)^2}{2\tau^2}\right\}.
+\]
+由贝叶斯公式，
+\begin{align*}
+\pi(\theta\mid x)
+&\propto L(\theta\mid x)\pi(\theta)\\
+&\propto\exp\left\{-\frac12
+\left[\frac{(\theta-\bar x)^2}{\sigma_0^2}
++\frac{(\theta-\mu)^2}{\tau^2}\right]\right\}\\
+&\propto\exp\left\{-\frac12(A\theta^2-2B\theta+C)\right\}.
+\end{align*}
+\[
+\frac{(\theta-\bar x)^2}{\sigma_0^2}
+=\frac{\theta^2-2\bar x\theta+\bar x^2}{\sigma_0^2},
+\qquad
+\frac{(\theta-\mu)^2}{\tau^2}
+=\frac{\theta^2-2\mu\theta+\mu^2}{\tau^2}.
+\]
+\[
+A=\frac1{\sigma_0^2}+\frac1{\tau^2}
+=\frac n{\sigma^2}+\frac1{\tau^2},\qquad
+B=\frac{\bar x}{\sigma_0^2}+\frac\mu{\tau^2},\qquad
+C=\frac{\bar x^2}{\sigma_0^2}+\frac{\mu^2}{\tau^2}.
+\]
+\[
+A\theta^2-2B\theta=A(\theta-B/A)^2-B^2/A.
+\]
+\[
+\pi(\theta\mid x)\propto
+\exp\left\{-\frac A2(\theta-B/A)^2\right\}
+=\exp\left\{-\frac{(\theta-B/A)^2}{2(1/A)}\right\}.
+\]
+这是正态分布的密度核。
+\[
+\theta\mid x\sim N(\mu_1,\tau_1^2),\quad
+\mu_1=\frac BA=\frac{n\bar x/\sigma^2+\mu/\tau^2}{n/\sigma^2+1/\tau^2},
+\quad\tau_1^2=\frac1A.
+\]
+\[
+\gamma=\frac{n/\sigma^2}{n/\sigma^2+1/\tau^2}
+=\frac{\sigma_0^{-2}}{\sigma_0^{-2}+\tau^{-2}},
+\qquad
+1-\gamma=\frac{\tau^{-2}}{\sigma_0^{-2}+\tau^{-2}}.
+\]
+\[
+\boxed{\mu_1=\gamma\bar x+(1-\gamma)\mu},\qquad
+\boxed{\frac1{\tau_1^2}=\frac n{\sigma^2}+\frac1{\tau^2}}.
+\]
+\[
+n\uparrow,\quad\gamma\to1,\quad\mu_1\to\bar x.
+\]
+$1/\sigma^2$：精度；$\tau^2\downarrow$，先验信息越来越强。
+
+\block{例1.3.3 正态总体方差的共轭先验}
+设$X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}N(\mu,\sigma^2)$，
+$\mu$已知，$\sigma^2$未知。
+
+1．写出似然函数。
+\[
+f(x_i\mid\sigma^2)=\frac1{\sqrt{2\pi\sigma^2}}
+\exp\left\{-\frac{(x_i-\mu)^2}{2\sigma^2}\right\}.
+\]
+\begin{align*}
+L(\sigma^2\mid x)
+&=\prod_{i=1}^n f(x_i\mid\sigma^2)\\
+&=(2\pi\sigma^2)^{-n/2}
+\exp\left\{-\frac1{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right\}\\
+&\propto(\sigma^2)^{-n/2}
+\exp\left\{-\frac1{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right\}.
+\end{align*}
+2．先验分布：$\sigma^2\sim\IGa(\alpha,\lambda)$。
+\[
+\pi(\sigma^2)=\frac{\lambda^\alpha}{\Gamma(\alpha)}
+(\sigma^2)^{-(\alpha+1)}\exp(-\lambda/\sigma^2),\quad\sigma^2>0.
+\]
+3．求后验。
+\begin{align*}
+\pi(\sigma^2\mid x)
+&\propto L(\sigma^2\mid x)\pi(\sigma^2)\\
+&\propto(\sigma^2)^{-n/2}
+\exp\left\{-\frac{\sum_i(x_i-\mu)^2}{2\sigma^2}\right\}
+(\sigma^2)^{-(\alpha+1)}\exp(-\lambda/\sigma^2)\\
+&\propto(\sigma^2)^{-(\alpha+n/2+1)}
+\exp\left\{-\frac{\lambda+\frac12\sum_i(x_i-\mu)^2}{\sigma^2}\right\}.
+\end{align*}
+\[
+\boxed{\sigma^2\mid x\sim
+\IGa\left(\alpha+\frac n2,\lambda+\frac12\sum_{i=1}^n(x_i-\mu)^2\right)}.
+\]
+
+\block{表中指数分布的率参数——伽马共轭先验}
+\[
+X_1,\ldots,X_n\mid\lambda\overset{\mathrm{iid}}{\sim}\Exp(\lambda),
+\quad f(x\mid\lambda)=\lambda e^{-\lambda x},\quad x>0,\ \lambda>0.
+\]
+\[
+L(\lambda\mid x)=\prod_{i=1}^n\lambda e^{-\lambda x_i}
+=\lambda^n e^{-\lambda\sum_i x_i}.
+\]
+\[
+\lambda\sim\Ga(\alpha,\beta),\qquad
+\pi(\lambda)\propto\lambda^{\alpha-1}e^{-\beta\lambda}.
+\]
+\[
+\pi(\lambda\mid x)\propto
+\lambda^{\alpha+n-1}e^{-(\beta+\sum_i x_i)\lambda},
+\quad
+\lambda\mid x\sim\Ga\left(\alpha+n,\beta+\sum_i x_i\right).
+\]
+
+\block{表中泊松分布的均值参数——伽马共轭先验}
+\[
+X_1,\ldots,X_n\mid\lambda\overset{\mathrm{iid}}{\sim}\Pois(\lambda),
+\qquad p(x_i\mid\lambda)=\frac{\lambda^{x_i}e^{-\lambda}}{x_i!}.
+\]
+\[
+L(\lambda\mid x)=\prod_{i=1}^n\frac{\lambda^{x_i}e^{-\lambda}}{x_i!}
+\propto\lambda^{\sum_i x_i}e^{-n\lambda}.
+\]
+\[
+\pi(\lambda\mid x)\propto L(\lambda\mid x)\pi(\lambda)
+\propto\lambda^{\sum_i x_i+\alpha-1}e^{-(n+\beta)\lambda}.
+\]
+\[
+\lambda\mid x\sim\Ga\left(\alpha+\sum_i x_i,\beta+n\right).
+\]

@@ -1,0 +1,110 @@
+% Sources: L08-L14.
+\boardsection{6}{似然原理}
+\[
+L(\theta;x)=p(x\mid\theta).
+\]
+固定$\theta$，看作$x$的函数：抽样分布。
+
+固定$x$，看作$\theta$的函数：似然函数。
+\[
+\int p(x\mid\theta)\,dx=1,\qquad
+\int L(\theta;x)\,d\theta\text{不一定等于}1.
+\]
+似然函数不是参数的概率密度。
+\[
+L_1(\theta;x)=C\,L_2(\theta;y),\qquad C>0,\ C\text{与}\theta\text{无关}.
+\]
+两种数据对$\theta$提供相同的证据。
+\[
+\frac{L_1(\theta_1;x)}{L_1(\theta_2;x)}
+=\frac{L_2(\theta_1;y)}{L_2(\theta_2;y)}.
+\]
+
+\block{停止规则}
+固定10次试验，3次成功：
+\[
+L_A(\theta)=\binom{10}{3}\theta^3(1-\theta)^7.
+\]
+第3次成功时停止，恰在第10次：
+\[
+L_B(\theta)=\binom92\theta^3(1-\theta)^7.
+\]
+\[
+\frac{L_A(\theta)}{L_B(\theta)}=\frac{10}{3}.
+\]
+同一先验$\theta\sim\Be(\alpha,\beta)$，两种情形均得
+\[
+\theta\mid\mathrm{data}\sim\Be(\alpha+3,\beta+7).
+\]
+
+\block{例2.16（2.6.1）}
+\[
+H_0:\theta=\frac12,\qquad H_1:\theta>\frac12.
+\]
+方案①：抛12次，正面9次。
+\[
+X\sim\Bin(12,\theta),\qquad
+L_1(\theta)=\binom{12}{9}\theta^9(1-\theta)^3
+=220\theta^9(1-\theta)^3.
+\]
+方案②：出现3次反面停止，此前正面9次。
+\[
+P(X=x\mid\theta)=\binom{x+2}{2}\theta^x(1-\theta)^3,\quad x=0,1,\ldots,
+\]
+\[
+L_2(\theta)=\binom{11}{2}\theta^9(1-\theta)^3
+=55\theta^9(1-\theta)^3,\qquad L_1=4L_2.
+\]
+在$H_0$下，方案①$X\sim\Bin(12,1/2)$：
+\begin{align*}
+p_1&=P_{1/2}(X\geq9)
+=\sum_{j=9}^{12}\binom{12}{j}2^{-12}\\
+&=\frac{220+66+12+1}{4096}=0.072998>0.05.
+\end{align*}
+在5\%水平下，不拒绝$H_0$。
+
+在方案②下，
+\begin{align*}
+p_2&=P_{1/2}(X\geq9)
+=\sum_{j=9}^{+\infty}\binom{j+2}{2}2^{-(j+3)}\\
+&=\sum_{j=0}^2\binom{11}{j}2^{-11}
+=\frac{1+11+55}{2048}=0.032715<0.05.
+\end{align*}
+在5\%水平下，拒绝$H_0$。
+
+给定$P(H_0)=P(H_1)=1/2$，在$H_1$下
+\[
+\theta\mid H_1\sim U(1/2,1),\qquad 1/2<\theta<1.
+\]
+\[
+L_i(\theta)=k_i\theta^9(1-\theta)^3,\qquad k_1=220,\ k_2=55.
+\]
+\[
+H_0:\quad M_{0,i}=k_i2^{-12};\qquad
+H_1:\quad M_{1,i}=2k_i\int_{1/2}^1\theta^9(1-\theta)^3\,d\theta.
+\]
+\[
+\BF_{01}(x)=
+\frac{2^{-12}}{2\int_{1/2}^1\theta^9(1-\theta)^3\,d\theta}.
+\]
+\[
+\theta^9(1-\theta)^3
+=\theta^9(1-\theta^3-3\theta+3\theta^2)
+=\theta^9-\theta^{12}-3\theta^{10}+3\theta^{11}.
+\]
+\begin{align*}
+\int_{1/2}^1\theta^9(1-\theta)^3\,d\theta
+&=\left[\frac{\theta^{10}}{10}-\frac{\theta^{13}}{13}
+-\frac{3\theta^{11}}{11}+\frac{\theta^{12}}4\right]_{1/2}^1\\
+&\approx0.0003335166.
+\end{align*}
+\[
+\BF_{01}=\frac{0.0002441406}{0.0006670332}\approx0.3660,
+\qquad\BF_{10}=\frac1{\BF_{01}}\approx2.732.
+\]
+\[
+P(H_0\mid\mathrm{data})=\frac{\BF_{01}}{1+\BF_{01}}\approx0.26794,
+\qquad
+P(H_1\mid\mathrm{data})=\frac1{1+\BF_{01}}\approx0.73206.
+\]
+在等错误损失下，选择$H_1$。

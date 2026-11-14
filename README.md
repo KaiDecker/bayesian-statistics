@@ -7,6 +7,7 @@ Course notes and worked exercise solutions for Bayesian Statistics, including La
 | Directory | Contents |
 | --- | --- |
 | `bayes_notes/` | Course notes, with `main.tex` as the entry point and separate introduction, Chapter 1, and Chapter 2 sources. Includes a compiled PDF, usage instructions, and a board reference index. |
+| `board_transcription/` | A separate electronic transcription of the instructor's blackboard, organized by section, with LaTeX sources, a compiled PDF, and a photo source index. |
 | `exercise_solutions/` | Selected Chapter 1 exercise solutions in LaTeX and PDF formats. |
 | `exercise_solutions_chapter2/` | Solutions to Chapter 2 exercises 2.1–2.10 in LaTeX and PDF formats. |
 
@@ -27,5 +28,7 @@ Compiled PDFs are included in version control. LaTeX build artifacts are exclude
 ## Editorial approach
 
 The notes prioritize the instructor's board work, using lecture slides as supporting material. Exercise solutions follow the classroom sequence: likelihood, prior density, posterior distribution, and the requested result.
+
+The blackboard transcription preserves photographed board content and is maintained separately from the notes. It merges overlapping photographs without adding slide material or explanatory derivations. Source discrepancies and reading decisions are recorded separately.
 
 Original lecture slides and board photographs are stored separately. Some image links in the board reference index refer to local files and will not resolve on GitHub.

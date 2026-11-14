@@ -1,0 +1,57 @@
+\documentclass[UTF8,a4paper,11pt,openany]{ctexbook}
+\usepackage[margin=23mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,booktabs,array,longtable}
+\usepackage{tikz}
+\usepackage[hidelinks,bookmarksnumbered]{hyperref}
+\usepackage{fancyhdr}
+\xeCJKDeclareCharClass{CJK}{"2460->"2473}
+\pagestyle{fancy}
+\fancyhf{}\fancyhead[L]{贝叶斯统计 · 板书电子版}\fancyhead[R]{\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\allowdisplaybreaks[2]
+\raggedbottom
+\newcommand{\Ga}{\operatorname{Ga}}
+\newcommand{\IGa}{\operatorname{IGa}}
+\newcommand{\Be}{\operatorname{Beta}}
+\newcommand{\Bin}{\operatorname{Bin}}
+\newcommand{\Pois}{\operatorname{Poisson}}
+\newcommand{\Exp}{\operatorname{Exp}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\MSE}{\operatorname{MSE}}
+\newcommand{\BF}{\operatorname{BF}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\E}{\operatorname{E}}
+\newcommand{\block}[1]{\par\medskip\textbf{#1}\par\nopagebreak}
+\newcommand{\boardsection}[2]{\setcounter{section}{#1}\addtocounter{section}{-1}\section{#2}}
+\begin{document}
+\frontmatter
+\begin{titlepage}
+\centering\vspace*{36mm}
+{\Huge 贝叶斯统计\par}\vspace{10mm}
+{\LARGE 板书电子版\par}\vspace{18mm}
+{\large 绪论、第一章、第二章\par}
+\vfill
+\end{titlepage}
+\tableofcontents
+\chapter*{绪论}\addcontentsline{toc}{chapter}{绪论}
+\markboth{绪论}{绪论}
+\input{intro}
+\mainmatter
+\chapter{先验分布与后验分布}
+\input{chapter1/section1_1}
+\input{chapter1/section1_2}
+\input{chapter1/section1_3}
+\input{chapter1/section1_5}
+\input{chapter1/section1_6}
+\chapter{贝叶斯推断}
+\input{chapter2/section2_1}
+\input{chapter2/section2_2}
+\input{chapter2/section2_3}
+\input{chapter2/section2_4}
+\input{chapter2/section2_5}
+\input{chapter2/section2_6}
+\backmatter
+\input{administrative}
+\end{document}

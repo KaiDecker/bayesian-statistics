@@ -1,0 +1,290 @@
+% Sources: W07-W21; L40-L47, L54-L60.
+\boardsection{2}{估计}
+\block{贝叶斯估计}
+\[
+\hat\theta_B:\quad\hat\theta_{\mathrm{Mo}},\quad
+\hat\theta_{\mathrm{Me}},\quad\hat\theta_E.
+\]
+后验众数、中位数、期望值。
+\[
+\hat\theta_{\mathrm{Mo}}=\arg\max_\theta\pi(\theta\mid x),
+\qquad
+\int_0^{\hat\theta_{\mathrm{Me}}}\pi(\theta\mid x)\,d\theta=\frac12,
+\qquad
+\hat\theta_E=\E(\theta\mid x).
+\]
+后验分布不受损失函数影响：
+\[
+\pi(\theta\mid x,L)\propto p(x\mid\theta,L)\pi(\theta)
+\quad\longrightarrow\quad\pi(\theta\mid x).
+\]
+
+\block{例2.2.1}
+\[
+X\mid\theta\sim N(\theta,100),\qquad\theta\sim N(100,225).
+\]
+\[
+\text{后验均值}\quad
+\frac{400+9x}{13}=\frac4{13}\times100+\frac9{13}x.
+\]
+\[
+\text{后验方差}\quad\sigma_1^2
+=\frac{100\times225}{100+225}=\frac{900}{13}.
+\]
+\[
+\theta\mid X=x\sim N\left(\frac{400+9x}{13},\frac{900}{13}\right).
+\]
+当$x=115$，
+\[
+\frac{400+9\times115}{13}=\frac{1435}{13}\approx110.38,
+\qquad\theta\mid X=115\sim N(110.38,69.23).
+\]
+\[
+\text{后验标准差}=8.32.
+\]
+
+\block{例2.2.2}
+\[
+X\mid\theta\sim\Bin(n,\theta),\qquad
+p(x\mid\theta)=\binom nx\theta^x(1-\theta)^{n-x}.
+\]
+选Beta先验：
+\[
+\theta\sim\Be(\alpha,\beta),\quad
+\pi(\theta)=\frac1{B(\alpha,\beta)}
+\theta^{\alpha-1}(1-\theta)^{\beta-1}.
+\]
+\[
+B(\alpha,\beta)=\int_0^1t^{\alpha-1}(1-t)^{\beta-1}\,dt,\qquad
+\E\theta=\frac\alpha{\alpha+\beta},\quad
+\text{众数}=\frac{\alpha-1}{\alpha+\beta-2}.
+\]
+由贝叶斯公式，
+\begin{align*}
+\pi(\theta\mid x)&\propto p(x\mid\theta)\pi(\theta)\\
+&\propto\theta^x(1-\theta)^{n-x}\theta^{\alpha-1}(1-\theta)^{\beta-1}\\
+&\propto\theta^{\alpha+x-1}(1-\theta)^{\beta+n-x-1}.
+\end{align*}
+\[
+\theta\mid x\sim\Be(\alpha+x,\beta+n-x),\quad
+\pi(\theta\mid x)=
+\frac{\theta^{\alpha+x-1}(1-\theta)^{\beta+n-x-1}}
+{B(\alpha+x,\beta+n-x)}.
+\]
+后验众数。记$a=\alpha+x,\ b=\beta+n-x$。
+\begin{align*}
+\ell(\theta)&=(a-1)\log\theta+(b-1)\log(1-\theta),\\
+\ell'(\theta)&=\frac{a-1}{\theta}-\frac{b-1}{1-\theta}=0,\\
+(a-1)(1-\theta)&=\theta(b-1),\qquad
+\theta=\frac{a-1}{a+b-2},\\
+\ell''(\theta)&=-\frac{a-1}{\theta^2}-\frac{b-1}{(1-\theta)^2}<0.
+\end{align*}
+\[
+\hat\theta_{\mathrm{Mo}}=\frac{\alpha+x-1}{\alpha+\beta+n-2}.
+\]
+下推后验均值估计：
+\begin{align*}
+\hat\theta_E
+&=\E(\theta\mid x)
+=\frac1{B(a,b)}\int_0^1\theta\,\theta^{a-1}(1-\theta)^{b-1}\,d\theta\\
+&=\frac{B(a+1,b)}{B(a,b)}\\
+&=\frac{\Gamma(a+1)\Gamma(b)}{\Gamma(a+b+1)}
+\bigg/\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
+=\frac a{a+b}.
+\end{align*}
+利用$B(a,b)=\Gamma(a)\Gamma(b)/\Gamma(a+b)$，$\Gamma(a+1)=a\Gamma(a)$。
+\[
+\hat\theta_E=\frac{\alpha+x}{\alpha+\beta+n}.
+\]
+记$\alpha+\beta=s$，$\mu_0=\alpha/(\alpha+\beta)$，则
+\[
+\hat\theta_E=\frac{s}{s+n}\mu_0+\frac n{s+n}\frac xn.
+\]
+先验均值；样本频率。
+\[
+\theta\mid x=0\sim\Be(1,n+1).
+\]
+\begin{align*}
+P(\theta>t\mid x=0)
+&=\int_t^1(n+1)(1-\theta)^n\,d\theta
+=(1-t)^{n+1}.
+\end{align*}
+\[
+n=3,\ x=0,\ t=0.2:\quad0.8^{3+1}=0.8^4;
+\qquad n=10,\ x=0:\quad0.8^{10+1}=0.8^{11}.
+\]
+
+\block{例2.4（2.2.3）}
+\[
+p(x\mid\theta)=e^{-(x-\theta)}\ind_{\{x\geq\theta\}},
+\qquad X=\theta+Y,\quad Y\sim\Exp(1).
+\]
+柯西分布先验：
+\[
+\pi(\theta)=\frac1{\pi(1+\theta^2)},\qquad
+\pi(\theta\mid x)=\frac{p(x\mid\theta)\pi(\theta)}{m(x)}.
+\]
+\begin{align*}
+m(x)&=\int_{-\infty}^{+\infty}p(x\mid t)\pi(t)\,dt
+=\frac{e^{-x}}\pi\int_{-\infty}^x\frac{e^t}{1+t^2}\,dt,\\
+\pi(\theta\mid x)
+&=\frac{e^{-x+\theta}}{\pi m(x)(1+\theta^2)}
+\ind_{\{x\geq\theta\}}\\
+&=\frac{e^\theta/(1+\theta^2)}
+{\int_{-\infty}^xe^t/(1+t^2)\,dt}\ind_{\{x\geq\theta\}}.
+\end{align*}
+由于归一化常数不影响最大值的位置，故只需在$\theta\leq x$上最大化。
+\[
+g(\theta)=\frac{e^\theta}{1+\theta^2},\qquad
+g'(\theta)=\frac{e^\theta(1+\theta^2)-2\theta e^\theta}{(1+\theta^2)^2}
+=\frac{e^\theta(\theta-1)^2}{(1+\theta^2)^2}\geq0.
+\]
+\[
+\hat\theta_{\mathrm{Mo}}=x=\hat\theta_{\mathrm{MLE}},\qquad
+\E(\theta\mid x)=
+\frac{\int_{-\infty}^x te^t/(1+t^2)\,dt}
+{\int_{-\infty}^x e^t/(1+t^2)\,dt}<x.
+\]
+
+\block{估计误差}
+\[
+\MSE(\hat\theta\mid x)
+=\Var(\theta\mid x)+\{\E(\theta\mid x)-\hat\theta\}^2.
+\]
+后验均方误差：
+\[
+\MSE(\hat\theta\mid x)
+=\E\{(\theta-\hat\theta)^2\mid x\}
+=\int(\theta-\hat\theta)^2\pi(\theta\mid x)\,d\theta.
+\]
+令$m=\E(\theta\mid x)$。给定$x$后，$m,\hat\theta$均为常数。
+\begin{align*}
+\theta-\hat\theta&=(\theta-m)+(m-\hat\theta),\\
+(\theta-\hat\theta)^2
+&=(\theta-m)^2+(m-\hat\theta)^2+2(\theta-m)(m-\hat\theta),\\
+\MSE(\hat\theta\mid x)
+&=\E\{(\theta-m)^2\mid x\}
++2(m-\hat\theta)\underbrace{\E(\theta-m\mid x)}_{=\,0}
++(m-\hat\theta)^2\\
+&=\Var(\theta\mid x)+(m-\hat\theta)^2.
+\end{align*}
+特别地，
+\[
+\MSE(\hat\theta_E\mid x)=\Var(\theta\mid x),\qquad
+\operatorname{SD}(\theta\mid x)=\sqrt{\Var(\theta\mid x)}.
+\]
+平方损失下，后验均值为最优贝叶斯估计！
+
+\block{例2.5}
+\[
+P(X=x)=\theta(1-\theta)^{x-1},\qquad
+P(X=3)=\theta(1-\theta)^2.
+\]
+$\theta$取$1/4,1/2,3/4$，
+\[
+P(\theta=1/4)=P(\theta=1/2)=P(\theta=3/4)=1/3.
+\]
+\begin{align*}
+P(X=3\mid\theta=1/4)&=\tfrac14(\tfrac34)^2=\tfrac9{64},
+&P(X=3,\theta=1/4)&=\tfrac9{192},\\
+P(X=3\mid\theta=1/2)&=\tfrac12(\tfrac12)^2=\tfrac8{64},
+&P(X=3,\theta=1/2)&=\tfrac8{192},\\
+P(X=3\mid\theta=3/4)&=\tfrac34(\tfrac14)^2=\tfrac3{64},
+&P(X=3,\theta=3/4)&=\tfrac3{192}.
+\end{align*}
+由全概率公式，
+\[
+P(X=3)=\frac9{192}+\frac8{192}+\frac3{192}
+=\frac{20}{192}=\frac5{48}.
+\]
+由贝叶斯公式，
+\[
+P(\theta=t\mid X=3)=\frac{P(X=3,\theta=t)}{P(X=3)}.
+\]
+\begin{center}
+\begin{tabular}{c|ccc}
+$\theta$&$1/4$&$1/2$&$3/4$\\\hline
+$P(\theta\mid X=3)$&$9/20$&$8/20$&$3/20$
+\end{tabular}
+\end{center}
+\[
+\hat\theta_{\mathrm{Mo}}=\frac14,\qquad
+\hat\theta_E=\E(\theta\mid X=3)
+=\frac14\frac9{20}+\frac12\frac8{20}+\frac34\frac3{20}
+=\frac{17}{40}=0.425.
+\]
+\[
+\E(\theta^2\mid X=3)
+=\left(\frac14\right)^2\frac9{20}
++\left(\frac12\right)^2\frac8{20}
++\left(\frac34\right)^2\frac3{20}=\frac{17}{80}.
+\]
+\[
+\Var(\theta\mid X=3)=\frac{17}{80}-\left(\frac{17}{40}\right)^2
+=\frac{51}{1600}.
+\]
+\[
+\MSE(\hat\theta_{\mathrm{Mo}}\mid X=3)
+=\frac{51}{1600}+\left(\frac{17}{40}-\frac14\right)^2
+=\frac1{16},\qquad
+\sqrt{\MSE(\hat\theta_{\mathrm{Mo}}\mid X=3)}=\frac14.
+\]
+\[
+\E\{(\theta-\tfrac14)^2\mid X=3\}
+=0^2\frac9{20}+\left(\frac14\right)^2\frac8{20}
++\left(\frac12\right)^2\frac3{20}=\frac1{16}.
+\]
+
+\block{例2.2.5}
+\[
+X\mid\theta\sim\Bin(n,\theta),\qquad\theta\sim\Be(\alpha,\beta),
+\]
+\[
+p(x\mid\theta)\propto\theta^x(1-\theta)^{n-x},\qquad
+\pi(\theta)\propto\theta^{\alpha-1}(1-\theta)^{\beta-1}.
+\]
+\[
+\pi(\theta\mid x)\propto\theta^{\alpha+x-1}(1-\theta)^{\beta+n-x-1},
+\qquad\theta\mid x\sim\Be(\alpha+x,\beta+n-x).
+\]
+\[
+\E(\theta\mid x)=\frac{\alpha+x}{\alpha+\beta+n},\qquad
+\Var(\theta\mid x)=
+\frac{(\alpha+x)(\beta+n-x)}
+{(\alpha+\beta+n)^2(\alpha+\beta+n+1)}.
+\]
+特别地，若$\alpha=\beta=1$，即$\theta\sim U(0,1)$，有
+\[
+\theta\mid x\sim\Be(x+1,n-x+1),\qquad
+\hat\theta_E=\frac{x+1}{n+2}
+=\frac n{n+2}\frac xn+\frac2{n+2}\frac12.
+\]
+\[
+\frac d{d\theta}\log\pi(\theta\mid x)
+=\frac x\theta-\frac{n-x}{1-\theta}=0,\qquad
+\hat\theta_{\mathrm{Mo}}=\frac xn.
+\]
+\[
+\MSE(\hat\theta_E\mid x)=\Var(\theta\mid x)
+=\frac{(x+1)(n-x+1)}{(n+2)^2(n+3)}.
+\]
+% The missing square in this next denominator is visible in L46-L47;
+% retained literally, with the discrepancy recorded in transcription_checks.md.
+\[
+\MSE(\hat\theta_{\mathrm{Mo}}\mid x)
+=\frac{(x+1)(n-x+1)}{(n+2)(n+3)}
++\left(\frac{x+1}{n+2}-\frac xn\right)^2.
+\]
+\[
+\MSE(\hat\theta_{\mathrm{Mo}}\mid x)-\MSE(\hat\theta_E\mid x)
+=\frac{(n-2x)^2}{n^2(n+2)^2}\geq0.
+\]
+如$n=3,x=0$，$\theta\mid x\sim\Be(1,4)$。
+\[
+\hat\theta_E=\frac15,\quad\hat\theta_{\mathrm{Mo}}=0,\qquad
+\MSE(\hat\theta_E\mid x)=\frac{1\times4}{5^2\times6}=\frac2{75},
+\]
+\[
+\MSE(\hat\theta_{\mathrm{Mo}}\mid x)
+=\frac2{75}+\left(\frac15\right)^2=\frac1{15}.
+\]

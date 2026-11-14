@@ -1,0 +1,121 @@
+% Sources: L15-L20.
+\boardsection{3}{区间估计}
+\[
+\int_a^b\pi(\theta\mid x)\,d\theta=P(a\leq\theta\leq b\mid x).
+\]
+\[
+P(\theta_L\leq\theta\leq\theta_U\mid x)\geq1-\alpha.
+\]
+例如$P(1.5\leq\theta\leq2.6\mid x)=0.9$。
+\begin{center}
+\begin{tabular}{c|ccc}
+$\theta$&0&1&2\\\hline
+$P(\theta\mid x)$&0.2&0.5&0.3
+\end{tabular}
+\end{center}
+\[
+P(0\leq\theta\leq2\mid x)\geq0.9.
+\]
+后验分布函数与分位数：
+\[
+F_x(t)=P(\theta\leq t\mid x),\qquad
+q_p=\inf\{t:F_x(t)\geq p\}.
+\]
+等尾可信区间：
+\[
+[q_{\alpha/2},q_{1-\alpha/2}].
+\]
+单侧可信限：
+\[
+P(\theta\geq L\mid x)\geq1-\alpha,\qquad
+P(\theta\leq U\mid x)\geq1-\alpha.
+\]
+
+\block{例2.3.1}
+\[
+\theta\mid x\sim N(\mu_1,\sigma_1^2),\qquad
+\frac{\theta-\mu_1}{\sigma_1}\mid x\sim N(0,1).
+\]
+\[
+P\left(-z_{1-\alpha/2}\leq
+\frac{\theta-\mu_1}{\sigma_1}\leq z_{1-\alpha/2}\,\middle|\,x\right)
+=1-\alpha.
+\]
+\[
+[\mu_1-z_{1-\alpha/2}\sigma_1,\ \mu_1+z_{1-\alpha/2}\sigma_1].
+\]
+智商例：
+\[
+110.38\pm1.96\times8.32.
+\]
+
+\block{例2.3.2}
+寿命$T$的密度与存活概率：
+\[
+p(t\mid\theta)=\frac1\theta e^{-t/\theta},\quad t>0,\qquad
+P(T>t\mid\theta)=e^{-t/\theta}.
+\]
+前$r$个失效时间$t_1,\ldots,t_r$，其余$n-r$个寿命超过$t_r$。
+\begin{align*}
+L(\theta\mid x)
+&\propto\prod_{i=1}^r\left(\frac1\theta e^{-t_i/\theta}\right)
+\left(e^{-t_r/\theta}\right)^{n-r}\\
+&=\theta^{-r}\exp\left\{-\frac{\sum_{i=1}^rt_i+(n-r)t_r}{\theta}\right\}.
+\end{align*}
+\[
+S_r=\sum_{i=1}^rt_i+(n-r)t_r,\qquad
+L(\theta\mid x)\propto\theta^{-r}e^{-S_r/\theta}.
+\]
+\[
+\theta\sim\IGa(\alpha,\beta),\qquad
+\pi(\theta)\propto\theta^{-(\alpha+1)}e^{-\beta/\theta}.
+\]
+\[
+\pi(\theta\mid x)\propto
+\theta^{-(\alpha+r+1)}e^{-(\beta+S_r)/\theta},\qquad
+\theta\mid x\sim\IGa(\alpha+r,\beta+S_r).
+\]
+\[
+\E(\theta\mid x)=\frac{\beta+S_r}{\alpha+r-1}.
+\]
+当$r=0$，$S_r=40000$，$\alpha=1.956$，$\beta=2868$：
+\[
+\theta\mid x\sim\IGa(1.956,42868),\qquad
+\E(\theta\mid x)=\frac{42868}{0.956}\approx44841\text{小时}.
+\]
+
+\block{最高后验密度区间（HPD）}
+\[
+f(\theta)=\pi(\theta\mid x),\qquad
+C_k=\{\theta:f(\theta)\geq k\},\qquad
+\int_{C_k}f(\theta)\,d\theta=1-\alpha.
+\]
+\[
+\int_L^Uf(\theta)\,d\theta=1-\alpha,\qquad f(L)=f(U).
+\]
+\begin{align*}
+F(U)-F(L)&=1-\alpha,\\
+f(U)\frac{dU}{dL}&=f(L),\\
+\frac{d(U-L)}{dL}&=\frac{f(L)}{f(U)}-1=0.
+\end{align*}
+\[
+M(k)=\int_{\{f(\theta)\geq k\}}f(\theta)\,d\theta.
+\]
+\[
+M(k)>1-\alpha:\ k\uparrow;\qquad
+M(k)<1-\alpha:\ k\downarrow.
+\]
+\[
+h(L)=h(U)\quad\longrightarrow\quad P.
+\]
+\begin{center}
+\begin{tabular}{c rr l}\toprule
+ & $L$ & $U$ & $P$\\\midrule
+1&6357&42868&$\approx0.7264$，扩大区间\\
+$\vdots$&&&\\
+4&4735.17&81183.22&$\approx0.9000012$\\\bottomrule
+\end{tabular}
+\end{center}
+\[
+[L,U]\approx[4735.17,\ 81183.22].
+\]

@@ -1,0 +1,105 @@
+% Sources: E01-E07 (IMG_5335-IMG_5341).
+\block{一、医学试验}
+\[
+n=500,\qquad C:\text{控制组},\quad D:\text{治疗组}.
+\]
+\[
+P(\text{食疗治愈})=0.1,\qquad
+P(F=F_A)=0.9,\quad P(F=F_B)=0.1.
+\]
+\[
+P(\text{药物有效}\mid F_A)=0,\qquad
+P(\text{药物有效}\mid F_B)=0.95.
+\]
+\begin{align*}
+P(\text{治愈}\mid F_A,\mathrm{drug})&=0.1,\\
+P(\text{治愈}\mid F_B,\mathrm{drug})
+&=1-P(\text{食疗无效且药物无效})\\
+&=1-(1-0.1)(1-0.95)\\
+&=1-0.9\times0.05=0.955.
+\end{align*}
+由全概率公式，
+\begin{align*}
+P(\text{治愈}\mid\mathrm{drug})
+&=0.1\times0.9+0.955\times0.1\\
+&=0.09+0.0955=0.1855.
+\end{align*}
+\[
+18.55\%-10\%=8.55\%.
+\]
+
+\block{二、经典统计解释}
+\begin{center}
+\begin{tabular}{lrrr}\toprule
+ &未治愈&治愈&合计\\\midrule
+控制组&233&20&253\\
+治疗组&202&45&247\\\midrule
+合计&435&65&500\\\bottomrule
+\end{tabular}
+\end{center}
+\[
+H_0:p_C=p_D,\qquad H_1:p_C\ne p_D,\qquad
+\frac{65}{500}=0.13.
+\]
+\[
+E_{C,\text{治愈}}=\frac{253\times65}{500}=32.89,\qquad
+E_{C,\text{未治愈}}=\frac{253\times435}{500}=220.11.
+\]
+\[
+E_{D,\text{未治愈}}=\frac{247\times435}{500}=214.89.
+\]
+\[
+\chi^2=\sum_i\sum_j\frac{(O_{ij}-E_{ij})^2}{E_{ij}}
+=10.8601,\quad
+\mathrm{df}=(2-1)(2-1)=1.
+\]
+\[
+p\text{值}=0.0009826.
+\]
+
+\block{三、贝叶斯解释}
+设某组真实治愈率为$p$，$p\sim\Be(\alpha,\beta)$。
+\[
+\pi(p)=\frac{1}{B(\alpha,\beta)}p^{\alpha-1}(1-p)^{\beta-1},
+\quad 0<p<1.
+\]
+\[
+\pi(p\mid x)=
+\frac{f(x\mid p)\pi(p)}{\int f(x\mid p)\pi(p)\,dp},
+\qquad
+\pi(p\mid x)\propto f(x\mid p)\pi(p).
+\]
+\[
+\text{后验分布}\propto\text{似然函数}\times\text{先验分布}.
+\]
+\[
+\E(p)=\frac{\alpha}{\alpha+\beta},\qquad
+\Var(p)=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}.
+\]
+取$\alpha=0.1,\ \beta=0.9$，$\E(p)=0.1$。
+\begin{align*}
+p_C\mid\mathrm{data}
+&\sim\Be(0.1+20,0.9+233)=\Be(20.1,233.9),\\
+\E(p_C\mid\mathrm{data})
+&=\frac{20.1}{20.1+233.9}=0.07913,\\
+p_D\mid\mathrm{data}
+&\sim\Be(0.1+45,0.9+202)=\Be(45.1,202.9),\\
+\E(p_D\mid\mathrm{data})
+&=\frac{45.1}{202.9+45.1}=0.18185.
+\end{align*}
+\[
+\text{样本率}\quad \frac{45}{247}=0.18219.
+\]
+后验分布的计算：MCMC。因果推断；生命科学。
+
+\block{贝叶斯公式}
+\[
+P(B_i\mid A)=
+\frac{P(B_i)P(A\mid B_i)}
+{\sum_{j=1}^{k}P(B_j)P(A\mid B_j)}.
+\]
+\[
+\pi(\theta\mid x)=
+\frac{\pi(\theta)f(x\mid\theta)}{m(x)},\qquad
+m(x)=\int \pi(t)f(x\mid t)\,dt.
+\]

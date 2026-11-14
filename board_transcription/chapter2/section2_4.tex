@@ -1,0 +1,353 @@
+% Sources: L01-L03, L21-L25, L27-L38.
+\boardsection{4}{假设检验}
+\[
+H_0:\theta\in\Theta_0,\qquad H_1:\theta\in\Theta_1,\qquad
+\Theta_0\cap\Theta_1=\varnothing,\quad\Theta_0\cup\Theta_1=\Theta.
+\]
+例如$H_0:\theta\leq0.05$，$H_1:\theta>0.05$。
+\[
+\alpha_i=P(H_i\mid x)=\int_{\Theta_i}\pi(\theta\mid x)\,d\theta,
+\quad i=0,1,\qquad\alpha_0+\alpha_1=1.
+\]
+例如后验为$\Be(a,b)$，
+\[
+\alpha_0=F(0.05)=0.8,\qquad\alpha_1=0.2.
+\]
+若误判代价$C_{01}=10,\ C_{10}=1$，
+\[
+R(\text{选择}H_0\mid x)=10\times0.2=2,\qquad
+R(\text{选择}H_1\mid x)=1\times0.8=0.8.
+\]
+选择$H_1$。
+
+频率检验：拒绝域$W$，显著性水平$\alpha$，
+\[
+\sup_{\theta\in\Theta_0}P_\theta(X\in W)\leq\alpha.
+\]
+
+\block{贝叶斯因子}
+记两个假设的先验与后验概率为
+\[
+\pi_i=P(H_i),\quad\alpha_i=P(H_i\mid x),\quad i=0,1.
+\]
+且$\pi_0,\pi_1$均大于0。支持$H_0$相对于$H_1$的Bayes因子定义为
+\[
+\BF_{01}(x)=\frac{\alpha_0/\alpha_1}{\pi_0/\pi_1},
+\qquad
+\underbrace{\frac{\alpha_0}{\alpha_1}}_{\text{后验赔率}}
+=\underbrace{\frac{\pi_0}{\pi_1}}_{\text{先验赔率}}\BF_{01}(x).
+\]
+贝叶斯因子等于边际似然比。记假设$H_i$下data的边际密度为
+\[
+m_i(x)=p(x\mid H_i).
+\]
+由贝叶斯公式，
+\[
+\alpha_i=\frac{\pi_i m_i(x)}{\pi_0m_0(x)+\pi_1m_1(x)},\quad i=0,1.
+\]
+\[
+\frac{\alpha_0}{\alpha_1}
+=\frac{\pi_0m_0(x)}{\pi_1m_1(x)},\qquad
+\BF_{01}(x)=\frac{m_0(x)}{m_1(x)}.
+\]
+对于复合假设，
+\[
+m_i(x)=\int_{\Theta_i}p(x\mid\theta)\pi(\theta\mid H_i)\,d\theta.
+\]
+\[
+g_i(\theta)=\frac{\pi(\theta)\ind_{\Theta_i}(\theta)}{\pi_i},
+\quad
+\pi(\theta)=\pi_0g_0(\theta)+\pi_1g_1(\theta),
+\]
+\[
+\BF_{01}(x)=
+\frac{\int_{\Theta_0}p(x\mid\theta)g_0(\theta)\,d\theta}
+{\int_{\Theta_1}p(x\mid\theta)g_1(\theta)\,d\theta}.
+\]
+
+\block{例2.4.1}
+\[
+X\mid\theta\sim\Bin(n,\theta),\quad\theta\sim U(0,1),
+\qquad H_0:\theta\leq\tfrac12,\quad H_1:\theta>\tfrac12.
+\]
+\[
+\theta\mid x\sim\Be(x+1,n-x+1).
+\]
+\[
+\alpha_0=P(\theta\leq\tfrac12\mid x)
+=\frac{(n+1)!}{x!(n-x)!}
+\int_0^{1/2}\theta^x(1-\theta)^{n-x}\,d\theta,\quad\alpha_1=1-\alpha_0.
+\]
+令$m=n-x$，
+\[
+I_{x,m}=\int_0^{1/2}\theta^x(1-\theta)^m\,d\theta.
+\]
+分部积分：
+\begin{align*}
+I_{x,m}
+&=\left[\frac{\theta^{x+1}(1-\theta)^m}{x+1}\right]_0^{1/2}
++\frac m{x+1}\int_0^{1/2}\theta^{x+1}(1-\theta)^{m-1}\,d\theta\\
+&=\frac{2^{-(n+1)}}{x+1}+\frac m{x+1}I_{x+1,m-1}.
+\end{align*}
+\[
+I_{n,0}=\frac{2^{-(n+1)}}{n+1}.
+\]
+\begin{align*}
+I_{x,m}
+=\frac{2^{-(n+1)}}{x+1}
+\left[1+\frac m{x+2}
++\frac{m(m-1)}{(x+2)(x+3)}
++\cdots+\frac{m!(x+1)!}{(n+1)!}\right].
+\end{align*}
+另一种展开：
+\[
+(1-\theta)^m=\sum_{k=0}^m(-1)^k\binom mk\theta^k,
+\quad
+I_{x,m}=\sum_{k=0}^m(-1)^k\binom mk
+\frac{2^{-(x+k+1)}}{x+k+1}.
+\]
+\[
+\alpha_0=\frac{(n+1)!}{x!(n-x)!}
+\sum_{k=0}^{n-x}(-1)^k\binom{n-x}{k}
+\frac{2^{-(x+k+1)}}{x+k+1}.
+\]
+取$n=5,x=1$，则
+\begin{align*}
+\alpha_0
+&=\frac{6!}{1!4!}
+\left(\frac18-\frac16+\frac3{32}-\frac1{40}+\frac1{384}\right)\\
+&=30\times\frac{57}{1920}=\frac{57}{64},\qquad
+\alpha_1=\frac7{64}.
+\end{align*}
+Beta分布的转化性质。若$U\sim\Be(a,b)$，$a,b\in\{1,2,\ldots\}$，
+对$0\leq t\leq1$，
+\[
+P(U\leq t)=\sum_{j=a}^{a+b-1}\binom{a+b-1}{j}
+t^j(1-t)^{a+b-1-j}.
+\]
+若$Y\sim\Bin(a+b-1,t)$，则$P(U\leq t)=P(Y\geq a)$。
+代入$a=x+1,\ b=n-x+1$，
+\[
+\alpha_0=P\{\Bin(n+1,\tfrac12)\geq x+1\}
+=\frac1{2^{n+1}}\sum_{j=x+1}^{n+1}\binom{n+1}{j}.
+\]
+如$n=5,x=1$，
+\[
+\alpha_0=1-P(Y=0)-P(Y=1)
+=1-\frac{\binom60+\binom61}{64}=\frac{57}{64}.
+\]
+\begin{center}
+\begin{tabular}{c c c c}\toprule
+$x$&$P(H_0\mid x)$&$P(H_1\mid x)$&后验赔率\\\midrule
+0&$63/64\approx0.984$&$1/64$&$63:1$\\
+1&$57/64\approx0.891$&$7/64$&$8.14:1$\\
+2&$42/64\approx0.656$&$22/64$&$1.91:1$\\
+3&$22/64$&$42/64$&$0.52$\\
+4&$7/64$&$57/64$&$0.12$\\
+5&$1/64$&$63/64$&$0.016$\\\bottomrule
+\end{tabular}
+\end{center}
+$x=0,1,2$选择$H_0$；$x=3,4,5$选择$H_1$。
+
+注：对称性，$\alpha_0(x)=\alpha_1(n-x)$，即交换成功与失败次数，就交换了对应的假设支持。
+
+\block{简单原假设与简单备择假设}
+\[
+H_0:\theta=\theta_0,\qquad H_1:\theta=\theta_1.
+\]
+\[
+m(x)=\pi_0p(x\mid\theta_0)+\pi_1p(x\mid\theta_1),
+\quad
+\alpha_0=\frac{\pi_0p(x\mid\theta_0)}{m(x)},\quad
+\alpha_1=\frac{\pi_1p(x\mid\theta_1)}{m(x)}.
+\]
+\[
+\frac{\alpha_0}{\alpha_1}
+=\frac{\pi_0p(x\mid\theta_0)}{\pi_1p(x\mid\theta_1)},\qquad
+\BF_{01}(x)=\frac{\alpha_0/\alpha_1}{\pi_0/\pi_1}
+=\frac{p(x\mid\theta_0)}{p(x\mid\theta_1)}.
+\]
+$\BF_{01}(x)>1$，证据向$H_0$倾斜；
+$\BF_{01}(x)<1$，证据向$H_1$倾斜。
+
+在两种错误损失相同、正确决策损失为0时，选择后验概率较大的假设。
+选择$H_1$当且仅当$\alpha_1>\alpha_0$，等价于
+\[
+\frac{p(x\mid\theta_1)}{p(x\mid\theta_0)}>\frac{\pi_0}{\pi_1}.
+\]
+N-P引理：
+\[
+\frac{p(x\mid\theta_1)}{p(x\mid\theta_0)}>C\qquad(\text{阈值}).
+\]
+例2.10中$P(H_0)=P(H_1)=1/2$，故$\BF_{01}$恰好等于后验赔率。
+$n=5,x=1$时，
+\[
+\BF_{01}(x)=\frac{57}{7}\approx8.14,\qquad
+P(H_0\mid x)=\frac{8.14}{1+8.14}\approx0.891.
+\]
+
+\block{例2.11}
+\[
+X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}N(\theta,1),\quad
+\theta\in\{0,1\},\qquad H_0:\theta=0,\quad H_1:\theta=1.
+\]
+\[
+\sum_i(x_i-\theta)^2=\sum_i(x_i-\bar x)^2+n(\bar x-\theta)^2.
+\]
+略写似然函数：
+\[
+L(\theta;x)=h(x)\exp\left\{-\frac n2(\bar x-\theta)^2\right\}.
+\]
+由因子分解定理，$\bar X$为充分统计量，比较两个假设时$h(x)$约去，可直接用
+$\bar X\mid\theta\sim N(\theta,1/n)$。
+\begin{align*}
+\BF_{01}(x)
+&=\frac{p(x\mid\theta=0)}{p(x\mid\theta=1)}\\
+&=\exp\left\{-\frac n2\bar x^2+\frac n2(\bar x-1)^2\right\}\\
+&=\exp\left\{-\frac n2(2\bar x-1)\right\}.
+\end{align*}
+\[
+\bar x<\tfrac12:\ \BF_{01}>1,\text{支持}H_0;\quad
+\bar x>\tfrac12:\ \BF_{01}<1,\text{支持}H_1;\quad
+\bar x=\tfrac12:\ \BF_{01}=1.
+\]
+若$n=10,\bar x=2$，有
+\[
+\BF_{01}=e^{-10(4-1)/2}=e^{-15}\approx3.06\times10^{-7},
+\quad
+\BF_{10}=e^{15}\approx3.3\times10^6.
+\]
+①若两种假设的先验概率相等，
+\[
+P(H_0\mid x)=\frac{\BF_{01}}{1+\BF_{01}}\approx\BF_{01},
+\quad P(H_1\mid x)\approx1-\BF_{01}\approx0.999999694.
+\]
+②由
+\[
+\frac{P(H_0\mid x)}{P(H_1\mid x)}
+=\BF_{01}\frac{\pi_0}{\pi_1},
+\]
+欲选择$H_0$，必须满足
+\[
+\BF_{01}\frac{\pi_0}{\pi_1}>1,\qquad
+e^{-15}\frac{\pi_0}{\pi_1}>1,\qquad
+\frac{\pi_0}{\pi_1}>e^{15}\approx330\text{万}.
+\]
+即使$\pi_0/\pi_1=10000$，后验赔率$\approx3.06\times10^{-3}$，
+对应$P(H_0\mid x)\approx3.04\times10^{-3}$，仍选择$H_1$。
+\[
+\frac{2-1}{1/\sqrt{10}}=\sqrt{10}\approx3.2.
+\]
+
+\block{注：广义似然比与后验赔率}
+\[
+\lambda(x)=\frac{\sup_{\theta\in\Theta_0}p(x\mid\theta)}
+{\sup_{\theta\in\Theta_0\cup\Theta_1}p(x\mid\theta)}.
+\]
+\[
+\text{后验赔率}=\text{先验赔率}\times
+\frac{H_0\text{下的边际似然}}{H_1\text{下的边际似然}}.
+\]
+
+\block{例2.4.3}
+\[
+X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}N(\theta,1),\qquad
+\theta\sim N(\mu,2).
+\]
+\[
+\pi(\theta\mid x)\propto
+\exp\left\{-\frac12\left[n(\theta-\bar x)^2+\frac12(\theta-\mu)^2\right]\right\}.
+\]
+配方：
+\[
+\theta\mid x\sim N(\mu_n,S_n^2),\qquad
+\mu_n=\frac{n\bar x+\mu/2}{n+1/2},\quad S_n^2=\frac1{n+1/2}.
+\]
+取$n=10,\bar x=1.5,\mu=0.5$，
+\[
+\mu_n=\frac{15+0.25}{10.5}=1.452381,\qquad
+S_n=\sqrt{\frac1{10.5}}=0.308607.
+\]
+\[
+H_0=\{\theta\leq1\},\qquad
+\alpha_0=P(H_0\mid x)=\Phi\left(\frac{1-\mu_n}{S_n}\right).
+\]
+\[
+\frac{1-\mu_n}{S_n}\approx-1.46585,\qquad
+\alpha_0\approx0.07134,\quad\alpha_1\approx0.92866,\quad
+\frac{\alpha_0}{\alpha_1}\approx0.07682.
+\]
+\[
+\pi_0=P(\theta\leq1)
+=\Phi\left(\frac{1-0.5}{\sqrt2}\right)\approx0.63816,\qquad
+\pi_1\approx0.36184,\quad\frac{\pi_0}{\pi_1}\approx1.76366.
+\]
+\[
+\BF_{01}\approx\frac{0.07682}{1.76366}\approx0.04356,\qquad
+\BF_{10}\approx22.96.
+\]
+
+\block{3．简单原假设与复合备择假设}
+\[
+H_0:\theta=\theta_0,\qquad H_1:\theta\ne\theta_0.
+\]
+设$P(H_0)=\pi_0$，$P(H_1)=\pi_1=1-\pi_0$。
+在$H_1$下给定$\theta$的密度$g_1(\theta)$，则
+\[
+\pi(d\theta)=\pi_0\delta_{\theta_0}(d\theta)+\pi_1g_1(\theta)\,d\theta,
+\qquad
+\delta_{\theta_0}(A)=\ind_{\{\theta_0\in A\}}.
+\]
+在$H_0$下$m_0(x)=p(x\mid\theta_0)$；在$H_1$下
+\[
+m_1(x)=\int_{\theta\ne\theta_0}p(x\mid\theta)g_1(\theta)\,d\theta.
+\]
+\[
+m(x)=\pi_0p(x\mid\theta_0)+\pi_1m_1(x).
+\]
+\[
+\alpha_0=\frac{\pi_0p(x\mid\theta_0)}
+{\pi_0p(x\mid\theta_0)+\pi_1m_1(x)},\qquad
+\alpha_1=\frac{\pi_1m_1(x)}
+{\pi_0p(x\mid\theta_0)+\pi_1m_1(x)}.
+\]
+\[
+\frac{\alpha_0}{\alpha_1}=\frac{\pi_0p(x\mid\theta_0)}{\pi_1m_1(x)},\quad
+\BF_{01}(x)=\frac{p(x\mid\theta_0)}{m_1(x)},\quad
+P(H_0\mid x)=
+\left[1+\frac{1-\pi_0}{\pi_0}\frac1{\BF_{01}(x)}\right]^{-1}.
+\]
+如$\pi_0=1/2$，
+\[
+P(H_0\mid x)=\frac{\BF_{01}}{1+\BF_{01}}.
+\]
+
+\block{例2.4.4}
+\[
+X\mid\theta\sim\Bin(n,\theta),\qquad
+\pi(d\theta)=\pi_0\delta_{1/2}(d\theta)
++(1-\pi_0)\ind_{(0,1)}(\theta)\,d\theta.
+\]
+\[
+P(\theta=1/2)=\pi_0>0.
+\]
+\begin{align*}
+m_1(x)&=\int_0^1\binom nx\theta^x(1-\theta)^{n-x}\,d\theta\\
+&=\binom nx B(x+1,n-x+1)=\frac1{n+1},\quad x=0,\ldots,n,\\
+m_0(x)&=P(X=x\mid\theta=1/2)=\binom nx2^{-n}.
+\end{align*}
+\[
+\BF_{01}(x)=\frac{\binom nx2^{-n}}{1/(n+1)}
+=\frac{(n+1)!}{2^n x!(n-x)!}.
+\]
+取$n=5,x=3$，
+\[
+m_0=\frac{\binom53}{2^5}=\frac5{16},\qquad
+m_1=\frac16,\qquad\BF_{01}=\frac{15}{8}=1.875.
+\]
+若$\pi_0=\pi_1=1/2$，
+\[
+P(H_0\mid x)=\frac{15}{23}\approx0.6522,\qquad
+P(H_1\mid x)=\frac8{23}\approx0.3478.
+\]
+选择$H_0$。

@@ -1,0 +1,80 @@
+% Sources: E28-E31.
+\boardsection{5}{多参数模型}
+\block{例1.5.1 正态均值和方差的联合共轭先验}
+\[
+X_1,\ldots,X_n\mid\mu,\sigma^2
+\overset{\mathrm{iid}}{\sim}N(\mu,\sigma^2),\qquad\mu,\sigma^2\text{未知}.
+\]
+求$(\mu,\sigma^2)$的联合共轭先验。
+\begin{align*}
+L(\mu,\sigma^2\mid x)
+&=(2\pi\sigma^2)^{-n/2}
+\exp\left\{-\frac1{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right\},\\
+\sum_{i=1}^n(x_i-\mu)^2
+&=\sum_{i=1}^n(x_i-\bar x)^2+n(\bar x-\mu)^2\\
+&=(n-1)s^2+n(\bar x-\mu)^2.
+\end{align*}
+\[
+L(\mu,\sigma^2\mid x)\propto
+(\sigma^2)^{-n/2}\exp\left\{
+-\frac{(n-1)s^2+n(\bar x-\mu)^2}{2\sigma^2}\right\}.
+\]
+设条件先验为
+\[
+\mu\mid\sigma^2\sim N(\mu_0,\sigma^2/\kappa_0),\quad\kappa_0>0,
+\qquad
+\pi(\mu\mid\sigma^2)\propto(\sigma^2)^{-1/2}
+\exp\left\{-\frac{\kappa_0(\mu-\mu_0)^2}{2\sigma^2}\right\}.
+\]
+再设
+\[
+\sigma^2\sim\IGa\left(\frac{\nu_0}2,\frac{\nu_0\sigma_0^2}2\right),
+\quad
+\pi(\sigma^2)\propto(\sigma^2)^{-(\nu_0/2+1)}
+\exp\left\{-\frac{\nu_0\sigma_0^2}{2\sigma^2}\right\}.
+\]
+则$(\mu,\sigma^2)$的联合先验为
+\begin{align*}
+\pi(\mu,\sigma^2)
+&=\pi(\mu\mid\sigma^2)\pi(\sigma^2)\\
+&\propto(\sigma^2)^{-(\nu_0/2+3/2)}
+\exp\left\{-\frac{\nu_0\sigma_0^2+\kappa_0(\mu-\mu_0)^2}{2\sigma^2}\right\}.
+\end{align*}
+正态—逆伽马分布。
+\begin{align*}
+\pi(\mu,\sigma^2\mid x)
+&\propto L(\mu,\sigma^2\mid x)\pi(\mu,\sigma^2)\\
+&\propto(\sigma^2)^{-n/2}(\sigma^2)^{-(\nu_0/2+3/2)}\\
+&\quad\times\exp\left\{-\frac1{2\sigma^2}
+\left[\nu_0\sigma_0^2+(n-1)s^2
++\kappa_0(\mu-\mu_0)^2+n(\mu-\bar x)^2\right]\right\}.
+\end{align*}
+记$\kappa_n=\kappa_0+n$，
+\begin{align*}
+&\kappa_0(\mu-\mu_0)^2+n(\mu-\bar x)^2\\
+&=(\kappa_0+n)\mu^2-2(\kappa_0\mu_0+n\bar x)\mu
++\kappa_0\mu_0^2+n\bar x^2\\
+&=\kappa_n(\mu-\mu_n)^2
++\frac{\kappa_0n}{\kappa_0+n}(\bar x-\mu_0)^2.
+\end{align*}
+\[
+\mu_n=\frac{\kappa_0\mu_0+n\bar x}{\kappa_0+n},\qquad\nu_n=\nu_0+n,
+\]
+\[
+\nu_n\sigma_n^2=\nu_0\sigma_0^2+(n-1)s^2
++\frac{\kappa_0n}{\kappa_0+n}(\bar x-\mu_0)^2.
+\]
+\[
+\pi(\mu,\sigma^2\mid x)\propto
+(\sigma^2)^{-(\nu_n/2+3/2)}
+\exp\left\{-\frac{\nu_n\sigma_n^2+\kappa_n(\mu-\mu_n)^2}{2\sigma^2}\right\}.
+\]
+此即正态—逆伽马分布的核。更新公式：
+\[
+\pi(\mu,\sigma^2\mid x)=\pi(\mu\mid\sigma^2,x)\pi(\sigma^2\mid x),
+\]
+\[
+\boxed{\mu\mid\sigma^2,x\sim N(\mu_n,\sigma^2/\kappa_n)},\qquad
+\boxed{\sigma^2\mid x\sim
+\IGa\left(\frac{\nu_n}2,\frac{\nu_n\sigma_n^2}2\right)}.
+\]
