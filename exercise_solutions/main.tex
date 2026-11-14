@@ -1,0 +1,602 @@
+\documentclass[UTF8,zihao=-4]{ctexart}
+\usepackage{amsmath,amssymb,geometry,enumitem,booktabs}
+\geometry{a4paper,margin=2.2cm}
+\setlist{nosep}
+\title{第一章习题解答}
+\author{按课堂板书方法整理}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{说明：}以下解答按课堂板书顺序书写：先写似然函数，再写先验分布，利用
+\(\pi(\theta\mid x)\propto L(x\mid\theta)\pi(\theta)\) 得到后验核，最后补上归一化常数或识别后验分布。Gamma 分布采用课堂使用的率参数化。
+
+\section*{1.1}
+设不合格品数为 \(X\)，观测到 \(X=2\)，样本量 \(n=8\)。参数只可能取 \(0.1\) 和 \(0.2\)，且
+\[
+P(\theta=0.1)=0.7,\qquad P(\theta=0.2)=0.3.
+\]
+
+\textbf{Step 1：似然函数}
+\[
+P(X=2\mid\theta)={8\choose2}\theta^2(1-\theta)^6.
+\]
+分别计算
+\[
+\begin{aligned}
+P(X=2\mid\theta=0.1)&={8\choose2}(0.1)^2(0.9)^6,\\
+P(X=2\mid\theta=0.2)&={8\choose2}(0.2)^2(0.8)^6.
+\end{aligned}
+\]
+
+\textbf{Step 2：先验分布}
+\[
+P(\theta=0.1)=0.7,\qquad P(\theta=0.2)=0.3.
+\]
+
+\textbf{Step 3：后验分布}
+由贝叶斯公式，
+\[
+P(\theta=0.1\mid X=2)
+=\frac{P(X=2\mid\theta=0.1)P(\theta=0.1)}
+{\sum_{j=1}^2P(X=2\mid\theta_j)P(\theta_j)}.
+\]
+组合数 \({8\choose2}\) 在分子、分母中约去，故
+\[
+P(\theta=0.1\mid X=2)
+=\frac{0.7(0.1)^2(0.9)^6}
+{0.7(0.1)^2(0.9)^6+0.3(0.2)^2(0.8)^6}
+\approx0.5418.
+\]
+同理，
+\[
+P(\theta=0.2\mid X=2)\approx0.4582.
+\]
+因此，\(\theta\) 的后验分布为
+\[
+\boxed{P(\theta=0.1\mid X=2)=0.5418,\qquad
+P(\theta=0.2\mid X=2)=0.4582.}
+\]
+
+\section*{1.2}
+设缺陷数 \(X\mid\lambda\sim\operatorname{Poisson}(\lambda)\)，参数只可能取 \(1.0,1.5\)，先验为
+\[
+P(\lambda=1.0)=0.4,\qquad P(\lambda=1.5)=0.6.
+\]
+观测到 \(X=3\)。
+
+\textbf{Step 1：似然函数}
+\[
+P(X=3\mid\lambda)=\frac{e^{-\lambda}\lambda^3}{3!}.
+\]
+
+\textbf{Step 2：先验分布}
+\[
+P(\lambda=1.0)=0.4,\qquad P(\lambda=1.5)=0.6.
+\]
+
+\textbf{Step 3：后验分布}
+\[
+P(\lambda=1.0\mid X=3)
+=\frac{0.4e^{-1}(1)^3/3!}
+{0.4e^{-1}(1)^3/3!+0.6e^{-1.5}(1.5)^3/3!}.
+\]
+约去 \(3!\)，得
+\[
+P(\lambda=1.0\mid X=3)\approx0.2457.
+\]
+同理，
+\[
+P(\lambda=1.5\mid X=3)\approx0.7543.
+\]
+所以
+\[
+\boxed{P(\lambda=1.0\mid X=3)=0.2457,\qquad
+P(\lambda=1.5\mid X=3)=0.7543.}
+\]
+
+\section*{1.3}
+设从一批产品中抽取 \(n=8\) 件，发现不合格品数 \(x=3\)。
+\[
+X\mid\theta\sim\operatorname{Bin}(8,\theta),\qquad
+L(\theta\mid x)={8\choose3}\theta^3(1-\theta)^5.
+\]
+
+\subsection*{(1) \(\theta\sim U(0,1)\)}
+\textbf{Step 1：似然函数}
+\[
+L(\theta\mid x)={8\choose3}\theta^3(1-\theta)^5
+\propto\theta^3(1-\theta)^5.
+\]
+
+\textbf{Step 2：先验密度}
+\[
+\pi(\theta)=1,\qquad0<\theta<1.
+\]
+
+\textbf{Step 3：后验核}
+\[
+\pi(\theta\mid x)\propto L(\theta\mid x)\pi(\theta)
+\propto\theta^3(1-\theta)^5,\qquad0<\theta<1.
+\]
+这是 \(\operatorname{Be}(4,6)\) 的核。因此
+\[
+\boxed{\theta\mid x\sim\operatorname{Be}(4,6)},
+\]
+后验密度为
+\[
+\boxed{\pi(\theta\mid x)=\frac{\Gamma(10)}{\Gamma(4)\Gamma(6)}
+\theta^3(1-\theta)^5=504\theta^3(1-\theta)^5,\quad0<\theta<1.}
+\]
+
+\subsection*{(2) \(\pi(\theta)=2(1-\theta),\ 0<\theta<1\)}
+\textbf{Step 1：似然函数}
+\[
+L(\theta\mid x)\propto\theta^3(1-\theta)^5.
+\]
+
+\textbf{Step 2：先验密度}
+\[
+\pi(\theta)=2(1-\theta),\qquad0<\theta<1.
+\]
+
+\textbf{Step 3：后验核}
+\[
+\pi(\theta\mid x)\propto\theta^3(1-\theta)^5\cdot2(1-\theta)
+\propto\theta^3(1-\theta)^6.
+\]
+这是 \(\operatorname{Be}(4,7)\) 的核。因此
+\[
+\boxed{\theta\mid x\sim\operatorname{Be}(4,7)},
+\]
+后验密度为
+\[
+\boxed{\pi(\theta\mid x)=\frac{\Gamma(11)}{\Gamma(4)\Gamma(7)}
+\theta^3(1-\theta)^6=840\theta^3(1-\theta)^6,\quad0<\theta<1.}
+\]
+
+\section*{1.5}
+设
+\[
+X\mid\theta\sim U\left(\theta-\frac12,\theta+\frac12\right),
+\qquad\theta\sim U(10,20).
+\]
+
+\subsection*{(1) 观测到 \(X=12\)}
+\textbf{Step 1：似然函数}
+\[
+p(12\mid\theta)=
+\begin{cases}
+1,&\theta-\frac12<12<\theta+\frac12,\\
+0,&\text{其他情况}.
+\end{cases}
+\]
+条件等价于 \(11.5<\theta<12.5\)，所以
+\[
+L(\theta\mid12)\propto I_{(11.5,12.5)}(\theta).
+\]
+
+\textbf{Step 2：先验密度}
+\[
+\pi(\theta)=\frac1{10},\qquad10<\theta<20.
+\]
+
+\textbf{Step 3：后验分布}
+\[
+\pi(\theta\mid12)\propto I_{(11.5,12.5)}(\theta)I_{(10,20)}(\theta)
+=I_{(11.5,12.5)}(\theta).
+\]
+区间长度为 \(1\)，故
+\[
+\boxed{\theta\mid X=12\sim U(11.5,12.5)},
+\qquad
+\pi(\theta\mid12)=I_{(11.5,12.5)}(\theta).
+\]
+
+\subsection*{(2) 连续得到六个观测值}
+六个观测值为
+\[
+12.0,\ 11.5,\ 11.7,\ 11.1,\ 11.4,\ 11.9.
+\]
+记 \(x=(x_1,\ldots,x_6)\)。由于观测独立，
+\[
+L(\theta\mid x)=\prod_{i=1}^6I_{(\theta-1/2,\theta+1/2)}(x_i).
+\]
+每个观测值都要求
+\[
+x_i-\frac12<\theta<x_i+\frac12.
+\]
+因此
+\[
+\max_i\left(x_i-\frac12\right)<\theta<\min_i\left(x_i+\frac12\right).
+\]
+本题中
+\[
+\max_i x_i=12.0,\qquad\min_i x_i=11.1,
+\]
+故
+\[
+11.5<\theta<11.6.
+\]
+与先验区间 \((10,20)\) 相交后仍为该区间，且其长度为 \(0.1\)。所以
+\[
+\boxed{\theta\mid x\sim U(11.5,11.6)},
+\]
+即
+\[
+\boxed{\pi(\theta\mid x)=10I_{(11.5,11.6)}(\theta).}
+\]
+
+\section*{1.6}
+设 \(X_1,\ldots,X_n\mid\lambda\) 独立同分布于泊松分布 \(\operatorname{Poisson}(\lambda)\)，其中 \(\lambda\) 是均值参数。
+
+\textbf{Step 1：似然函数}
+\[
+L(\lambda\mid x)=\prod_{i=1}^n\frac{e^{-\lambda}\lambda^{x_i}}{x_i!}
+=\frac{e^{-n\lambda}\lambda^{\sum_i x_i}}{\prod_i x_i!}
+\propto\lambda^{\sum_i x_i}e^{-n\lambda}.
+\]
+
+\textbf{Step 2：先验密度}
+取 Gamma 先验 \(\lambda\sim\operatorname{Ga}(\alpha,\beta)\)，采用率参数化：
+\[
+\pi(\lambda)=\frac{\beta^\alpha}{\Gamma(\alpha)}
+\lambda^{\alpha-1}e^{-\beta\lambda},\qquad\lambda>0.
+\]
+
+\textbf{Step 3：后验分布}
+\[
+\begin{aligned}
+\pi(\lambda\mid x)&\propto L(\lambda\mid x)\pi(\lambda)\\
+&\propto\lambda^{\alpha-1+\sum_i x_i}e^{-(\beta+n)\lambda}.
+\end{aligned}
+\]
+这是 Gamma 分布的核，故
+\[
+\boxed{\lambda\mid x\sim\operatorname{Ga}\left(\alpha+\sum_{i=1}^nx_i,\ \beta+n\right).}
+\]
+因此 Gamma 分布是泊松均值参数 \(\lambda\) 的共轭先验分布。
+
+\section*{1.7}
+已知随机变量的密度为
+\[
+p(x\mid\theta)=\frac{2x}{\theta^2},\qquad0<x<\theta<1.
+\]
+设观测到 \(X=x\)，其中 \(0<x<1\)。
+
+\subsection*{(1) \(\theta\sim U(0,1)\)}
+\textbf{Step 1：似然函数}
+\[
+L(\theta\mid x)=\frac{2x}{\theta^2}I_{(x,1)}(\theta)
+\propto\theta^{-2}I_{(x,1)}(\theta).
+\]
+
+\textbf{Step 2：先验密度}
+\[
+\pi(\theta)=1,\qquad0<\theta<1.
+\]
+
+\textbf{Step 3：后验分布}
+\[
+\pi(\theta\mid x)\propto\theta^{-2}I_{(x,1)}(\theta).
+\]
+归一化常数由
+\[
+\int_x^1\theta^{-2}\,d\theta=\frac1x-1=\frac{1-x}{x}
+\]
+给出，因此
+\[
+\boxed{\pi(\theta\mid x)=\frac{x}{1-x}\theta^{-2},\qquad x<\theta<1.}
+\]
+
+\subsection*{(2) \(\pi(\theta)=3\theta^2,\ 0<\theta<1\)}
+\textbf{Step 1：似然函数}
+\[
+L(\theta\mid x)\propto\theta^{-2}I_{(x,1)}(\theta).
+\]
+
+\textbf{Step 2：先验密度}
+\[
+\pi(\theta)=3\theta^2,\qquad0<\theta<1.
+\]
+
+\textbf{Step 3：后验分布}
+\[
+\pi(\theta\mid x)\propto\theta^{-2}\cdot3\theta^2I_{(x,1)}(\theta)
+\propto I_{(x,1)}(\theta).
+\]
+区间长度为 \(1-x\)，故
+\[
+\boxed{\pi(\theta\mid x)=\frac1{1-x},\qquad x<\theta<1,}
+\]
+即
+\[
+\boxed{\theta\mid x\sim U(x,1).}
+\]
+
+\section*{1.8}
+抽取 \(n=100\) 件产品，发现不合格品数 \(x=3\)。先验为 \(\theta\sim\operatorname{Be}(2,200)\)。
+
+\textbf{Step 1：似然函数}
+\[
+L(\theta\mid x)={100\choose3}\theta^3(1-\theta)^{97}
+\propto\theta^3(1-\theta)^{97}.
+\]
+
+\textbf{Step 2：先验密度}
+\[
+\pi(\theta)=\frac{\Gamma(202)}{\Gamma(2)\Gamma(200)}
+\theta^{2-1}(1-\theta)^{200-1}
+\propto\theta(1-\theta)^{199}.
+\]
+
+\textbf{Step 3：后验分布}
+\[
+\begin{aligned}
+\pi(\theta\mid x)&\propto\theta^3(1-\theta)^{97}
+\cdot\theta(1-\theta)^{199}\\
+&\propto\theta^4(1-\theta)^{296}.
+\end{aligned}
+\]
+所以
+\[
+\boxed{\theta\mid x\sim\operatorname{Be}(5,297).}
+\]
+其后验密度为
+\[
+\boxed{\pi(\theta\mid x)=\frac{\Gamma(302)}{\Gamma(5)\Gamma(297)}
+\theta^4(1-\theta)^{296},\qquad0<\theta<1.}
+\]
+
+\section*{1.9}
+设总体测量值
+\[
+X_i\mid\theta\overset{iid}{\sim}N(\theta,5^2),\qquad n=10,
+\]
+先验分布为
+\[
+\theta\sim N(172.72,2.54),
+\]
+这里按题目和课堂记号，第二个参数作为方差。样本均值为 \(\bar x=176.53\)。
+
+\textbf{Step 1：似然函数}
+因为 \(\bar X\mid\theta\sim N(\theta,5^2/10)\)，所以
+\[
+L(\theta\mid\bar x)\propto
+\exp\left\{-\frac{n}{2\cdot5^2}(\bar x-\theta)^2\right\}.
+\]
+
+\textbf{Step 2：先验密度}
+\[
+\pi(\theta)\propto
+\exp\left\{-\frac{(\theta-172.72)^2}{2\cdot2.54}\right\}.
+\]
+
+\textbf{Step 3：后验分布}
+\[
+\begin{aligned}
+\pi(\theta\mid\bar x)&\propto
+\exp\left\{-\frac12\left[\frac{10}{25}(\theta-176.53)^2
++\frac1{2.54}(\theta-172.72)^2\right]\right\}.
+\end{aligned}
+\]
+这是正态分布的核。令
+\[
+A=\frac{10}{25}+\frac1{2.54}=0.7937008,
+\]
+则
+\[
+\tau_1^2=\frac1A=1.2599206,
+\]
+\[
+\mu_1=\frac{(10/25)176.53+(1/2.54)172.72}{10/25+1/2.54}
+=174.640119.
+\]
+所以
+\[
+\boxed{\theta\mid x\sim N(174.6401,1.2599).}
+\]
+
+\textbf{(2) 求区间}
+正态后验密度关于后验均值 \(174.6401\) 对称，并且离均值越近密度越大。因此半径为 \(2.5\) 的所求区间为
+\[
+\boxed{[174.6401-2.5,\ 174.6401+2.5]
+=[172.1401,177.1401].}
+\]
+
+\textbf{(3) 区间概率}
+后验标准差为
+\[
+\tau_1=\sqrt{1.2599206}=1.1224619.
+\]
+因此
+\[
+\begin{aligned}
+P(172.1401<\theta<177.1401\mid x)
+&=P\left(-\frac{2.5}{1.1224619}<Z<\frac{2.5}{1.1224619}\right)\\
+&=2\Phi(2.22725)-1\\
+&\approx0.9741.
+\end{aligned}
+\]
+\[
+\boxed{P(\theta\text{ 落在该区间内}\mid x)\approx0.9741.}
+\]
+
+\section*{1.10}
+设
+\[
+X_1,\ldots,X_n\mid\theta\overset{iid}{\sim}N(\theta,2^2),\qquad n=100,
+\]
+且先验 \(\theta\sim N(\mu,\tau^2)\)，其中 \(\tau^2>0\) 任意。
+
+由正态--正态共轭结果，后验方差为
+\[
+\tau_1^2=\left(\frac n{\sigma^2}+\frac1{\tau^2}\right)^{-1}
+=\left(\frac{100}{4}+\frac1{\tau^2}\right)^{-1}.
+\]
+因为 \(1/\tau^2>0\)，所以
+\[
+\tau_1^2<\left(\frac{100}{4}\right)^{-1}=\frac1{25}.
+\]
+开平方得后验标准差
+\[
+\boxed{\tau_1<\frac15.}
+\]
+这个结论与先验标准差 \(\tau\) 的具体大小无关，只要先验为正常的正态分布即可。
+
+\section*{1.12}
+设 \(X_1,\ldots,X_n\mid\theta\overset{iid}{\sim}U(0,\theta)\)，且先验为 Pareto 分布
+\[
+\pi(\theta)=
+\begin{cases}
+\displaystyle\frac{\alpha\theta_0^\alpha}{\theta^{\alpha+1}},&\theta>\theta_0,\\
+0,&\theta\leq\theta_0,
+\end{cases}
+\qquad\theta_0>0,\ \alpha>0.
+\]
+记样本最大值为
+\[
+x_{(n)}=\max\{x_1,\ldots,x_n\}.
+\]
+
+\textbf{Step 1：似然函数}
+单个观测的密度为
+\[
+p(x_i\mid\theta)=\frac1\theta I_{(0,\theta)}(x_i).
+\]
+因此样本似然为
+\[
+\begin{aligned}
+L(\theta\mid x)&=\prod_{i=1}^n\frac1\theta I_{(0,\theta)}(x_i)\\
+&=\theta^{-n}I(\theta\geq x_1,\ldots,\theta\geq x_n)\\
+&=\theta^{-n}I(\theta\geq x_{(n)}).
+\end{aligned}
+\]
+这里出现最大次序统计量，是因为 \(\theta\) 必须同时大于所有观测值，而这等价于只要求它大于最大观测值。
+
+\textbf{Step 2：先验密度}
+\[
+\pi(\theta)=\frac{\alpha\theta_0^\alpha}{\theta^{\alpha+1}}
+I(\theta>\theta_0).
+\]
+
+\textbf{Step 3：后验核}
+\[
+\begin{aligned}
+\pi(\theta\mid x)&\propto L(\theta\mid x)\pi(\theta)\\
+&\propto\theta^{-n}\theta^{-(\alpha+1)}
+I(\theta\geq x_{(n)})I(\theta>\theta_0)\\
+&\propto\theta^{-(\alpha+n+1)}I(\theta>a),
+\end{aligned}
+\]
+其中
+\[
+a=\max\{\theta_0,x_{(n)}\}.
+\]
+
+\textbf{Step 4：归一化并识别分布}
+因为
+\[
+\int_a^\infty\theta^{-(\alpha+n+1)}d\theta
+=\frac{a^{-(\alpha+n)}}{\alpha+n},
+\]
+故后验密度为
+\[
+\boxed{\pi(\theta\mid x)=
+(\alpha+n)a^{\alpha+n}\theta^{-(\alpha+n+1)}I(\theta>a).}
+\]
+这正是 Pareto 分布，因此
+\[
+\boxed{\theta\mid x\sim\operatorname{Pareto}(\alpha+n,a),
+\qquad a=\max\{\theta_0,x_{(n)}\}.}
+\]
+
+\section*{1.15}
+设 \(X_1,\ldots,X_n\mid\lambda\) 独立同分布于指数分布
+\[
+p(x\mid\lambda)=\lambda e^{-\lambda x},\qquad x>0.
+\]
+
+\subsection*{(1) 证明 Gamma 分布是共轭先验}
+\textbf{Step 1：似然函数}
+\[
+L(\lambda\mid x)=\prod_{i=1}^n\lambda e^{-\lambda x_i}
+=\lambda^n e^{-\lambda\sum_i x_i}.
+\]
+
+\textbf{Step 2：先验密度}
+取 \(\lambda\sim\operatorname{Ga}(\alpha,\beta)\)，即
+\[
+\pi(\lambda)=\frac{\beta^\alpha}{\Gamma(\alpha)}
+\lambda^{\alpha-1}e^{-\beta\lambda},\qquad\lambda>0.
+\]
+
+\textbf{Step 3：后验分布}
+\[
+\begin{aligned}
+\pi(\lambda\mid x)&\propto L(\lambda\mid x)\pi(\lambda)\\
+&\propto\lambda^n e^{-\lambda\sum_i x_i}
+\lambda^{\alpha-1}e^{-\beta\lambda}\\
+&\propto\lambda^{\alpha+n-1}
+e^{-\left(\beta+\sum_i x_i\right)\lambda}.
+\end{aligned}
+\]
+所以
+\[
+\boxed{\lambda\mid x\sim\operatorname{Ga}\left(\alpha+n,\ \beta+\sum_{i=1}^nx_i\right).}
+\]
+后验仍为 Gamma 分布，故 Gamma 分布是参数 \(\lambda\) 的共轭先验分布。
+
+\subsection*{(2) 确定超参数}
+Gamma 分布的均值和方差为
+\[
+E(\lambda)=\frac\alpha\beta,\qquad
+\operatorname{Var}(\lambda)=\frac\alpha{\beta^2}.
+\]
+题给先验均值为 \(0.0002\)，先验标准差为 \(0.0001\)，所以方差为 \(10^{-8}\)。于是
+\[
+\frac\alpha\beta=0.0002,\qquad
+\frac\alpha{\beta^2}=10^{-8}.
+\]
+两式相除得
+\[
+\beta=\frac{0.0002}{10^{-8}}=20000,
+\]
+再由第一式得
+\[
+\alpha=0.0002\times20000=4.
+\]
+故先验分布为
+\[
+\boxed{\lambda\sim\operatorname{Ga}(4,20000).}
+\]
+
+\section*{1.19}
+设 \(X_1,\ldots,X_n\mid\lambda\) 是来自泊松分布 \(\operatorname{Poisson}(\lambda)\) 的样本，证明
+\[
+T(X)=\sum_{i=1}^nX_i
+\]
+是 \(\lambda\) 的充分统计量。
+
+样本的联合密度（即似然函数）为
+\[
+\begin{aligned}
+L(\lambda\mid x)&=\prod_{i=1}^n\frac{e^{-\lambda}\lambda^{x_i}}{x_i!}\\
+&=e^{-n\lambda}\lambda^{\sum_{i=1}^nx_i}
+\frac1{\prod_{i=1}^nx_i!}.
+\end{aligned}
+\]
+令
+\[
+T(x)=\sum_{i=1}^nx_i,qquad
+g(T(x),\lambda)=e^{-n\lambda}\lambda^{T(x)},qquad
+h(x)=\frac1{\prod_{i=1}^nx_i!}.
+\]
+则
+\[
+L(\lambda\mid x)=g(T(x),\lambda)h(x).
+\]
+其中 \(g\) 只通过统计量 \(T(x)\) 和参数 \(\lambda\) 发生变化，而 \(h(x)\) 与 \(\lambda\) 无关。根据因子分解定理，
+\[
+\boxed{T(X)=\sum_{i=1}^nX_i\text{ 是 }\lambda\text{ 的充分统计量}.}
+\]
+\end{document}

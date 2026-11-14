@@ -1,0 +1,25 @@
+# LaTeX build artifacts; keep .tex sources and .pdf outputs
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+*.lof
+*.lot
+
+# Editor and operating system temporary files
+*.bak
+*.swp
+~$*
+Thumbs.db
+.DS_Store

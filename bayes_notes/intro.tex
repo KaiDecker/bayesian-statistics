@@ -1,0 +1,65 @@
+\chapter*{绪论}
+\addcontentsline{toc}{chapter}{绪论}
+\section*{经典统计与贝叶斯统计}
+统计推断通常利用总体信息（总体分布或分布族）、样本信息（观测数据）和先验信息（观测前关于未知参数的知识）。经典统计主要依据总体与样本信息；贝叶斯统计将未知参数视为随机变量，以先验分布表示先验信息，再用样本信息更新为后验分布。
+
+概率解释的差异在于：频率学派将概率理解为重复试验下的长期频率，参数通常视为固定常数；贝叶斯学派允许概率表示对未知事件或参数的信念，参数以概率分布刻画。贝叶斯推断的基本流程为
+\[
+\text{先验信息}+\text{样本信息}\xrightarrow{\text{贝叶斯公式}}\text{后验信息}\xrightarrow{}\text{推断或决策}.
+\]
+经典方法的区间覆盖率是重复抽样下的性质；贝叶斯可信区间则可直接表述为给定数据后参数落入区间的后验概率。
+
+\section*{医疗试验引例}
+课堂引例设控制饮食的治愈率为 $0.1$。隐藏因素分为 $F_A,F_B$，且
+\[
+P(F_A)=0.9,\quad P(F_B)=0.1,\quad P(\text{药物有效}\mid F_A)=0,
+\quad P(\text{药物有效}\mid F_B)=0.95.
+\]
+因而治疗组个体治愈率为
+\[
+P(\text{治愈}\mid\text{drug})=0.9(0.1)+0.1\{1-(1-0.1)(1-0.95)\}=0.1855.
+\]
+即模型给出的治疗组治愈率为 $18.55\%$，相对 $10\%$ 的饮食治愈率提高 $8.55$ 个百分点。这个例子用于说明群体频率比较与针对个体的概率判断所回答的问题不同。
+
+\section*{事件形式的贝叶斯公式}
+若 $A_1,\ldots,A_k$ 构成完备事件组，且 $P(B)>0$，则
+\[
+P(A_j\mid B)=\frac{P(B\mid A_j)P(A_j)}{\sum_{i=1}^kP(B\mid A_i)P(A_i)}.
+\]
+分子是“假设 $A_j$ 成立且观察到 $B$”的概率，分母是观察到 $B$ 的总概率。
+
+\subsection*{医学检测}
+令 $A$ 表示患病、$B$ 表示检测阳性。即使检测灵敏度 $P(B\mid A)$ 很高，阳性后的患病概率仍为
+\[
+P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B\mid A)P(A)+P(B\mid A^c)P(A^c)}.
+\]
+必须同时考虑患病率和假阳性率，不能把 $P(B\mid A)$ 与 $P(A\mid B)$ 混淆。
+
+\section*{参数的密度形式与共轭更新}
+若样本 $x$ 在给定参数 $\theta$ 下的似然为 $L(x\mid\theta)$，先验密度为 $\pi(\theta)$，则
+\[
+\pi(\theta\mid x)=\frac{L(x\mid\theta)\pi(\theta)}{m(x)},\qquad
+m(x)=\int_\Theta L(x\mid\theta)\pi(\theta)\,d\theta.
+\]
+其中 $m(x)$ 是边缘似然（证据），保证后验密度积分为 $1$。计算时常先写
+\[
+\pi(\theta\mid x)\propto L(x\mid\theta)\pi(\theta),
+\]
+然后辨认分布核并补上归一化常数。
+
+\subsection*{二项--贝塔示例}
+若 $X\mid\theta\sim\operatorname{Bin}(n,\theta)$，观测成功数为 $x$，则
+\[
+L(x\mid\theta)=\binom{n}{x}\theta^x(1-\theta)^{n-x}\propto\theta^x(1-\theta)^{n-x}.
+\]
+取均匀先验 $\theta\sim\operatorname{Be}(1,1)$，有
+\[
+\pi(\theta\mid x)=(n+1)\binom{n}{x}\theta^x(1-\theta)^{n-x},\quad
+\theta\mid x\sim\operatorname{Be}(x+1,n-x+1).
+\]
+边缘概率为 $m(x)=1/(n+1)$（$x=0,1,\ldots,n$）。一般地，若先验为 $\operatorname{Be}(\alpha,\beta)$，则后验为 $\operatorname{Be}(\alpha+x,\beta+n-x)$。
+
+\section*{贝叶斯统计的发展与应用}
+Thomas Bayes 的工作于 1763 年由 Richard Price 在英国皇家学会宣读发表；Laplace 对贝叶斯推理的发展作出重要贡献。统计决策理论的发展、决策问题对先验知识的需要，以及经济、工业、医学等应用推动了贝叶斯统计的发展。
+
+贝叶斯方法的重要挑战包括先验分布的确定和后验分布的计算。课程介绍了无信息先验、共轭先验、最大熵以及自助法和随机加权法等先验确定思路。现代数值近似和 MCMC 方法提高了复杂后验的可计算性。应用领域包括经济金融与保险、生物医学与生态、可靠性和机器学习等。课程还提及客观贝叶斯、主观贝叶斯、稳健贝叶斯、频率贝叶斯与拟贝叶斯等方向。

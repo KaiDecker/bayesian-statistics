@@ -1,0 +1,351 @@
+\chapter{先验分布与后验分布}
+\section{三种信息与先验分布}
+总体信息是总体分布或所属分布族提供的信息；样本信息来自抽取的数据；先验信息是观测前关于未知量的经验、历史资料或已有认识。贝叶斯统计综合三者。
+
+把未知参数 $\theta$ 看作随机变量，用概率分布描述观测前对其不确定性的认识，称为先验分布，记作 $\pi(\theta)$。先验概率可表达主观信念，不必是重复试验频率。离散参数用先验概率质量函数，连续参数用先验密度。
+
+\section{贝叶斯公式}
+\subsection{事件形式}
+若 $A_1,\dots,A_k$ 为完备事件组，$P(B)>0$，则
+\[
+P(A_j\mid B)=\frac{P(B\mid A_j)P(A_j)}{\sum_iP(B\mid A_i)P(A_i)}.
+\]
+\subsection{密度形式}
+对连续参数，样本 $x$ 的联合密度记 $h(x,\theta)=L(x\mid\theta)\pi(\theta)$，样本边缘密度
+\[
+m(x)=\int_\Theta h(x,\theta)\,d\theta,
+\]
+故
+\[
+\pi(\theta\mid x)=\frac{h(x,\theta)}{m(x)}
+=\frac{L(x\mid\theta)\pi(\theta)}{\int_\Theta L(x\mid t)\pi(t)\,dt}.
+\]
+注意 $L(x\mid\theta)$ 是观测数据固定后关于参数的函数；$\pi(\theta)$ 是先验；分母不依赖 $\theta$，用于归一化。
+
+\subsection{二项模型与均匀先验}
+若 $X\mid\theta\sim\operatorname{Bin}(n,\theta)$，则
+\[
+L(x\mid\theta)=\binom{n}{x}\theta^x(1-\theta)^{n-x},\quad x=0,1,\ldots,n.
+\]
+取 $\theta\sim U(0,1)=\operatorname{Be}(1,1)$，则
+\[
+m(x)=\int_0^1\binom{n}{x}\theta^x(1-\theta)^{n-x}\,d\theta=\frac1{n+1},
+\]
+以及
+\[
+\theta\mid x\sim\operatorname{Be}(x+1,n-x+1).
+\]
+其密度为 $\frac{\Gamma(n+2)}{\Gamma(x+1)\Gamma(n-x+1)}\theta^x(1-\theta)^{n-x}$。
+
+\section{共轭先验分布}
+若先验与似然相乘后所得后验仍属于同一分布族，则该先验称为该模型参数的共轭先验。共轭性是针对“指定模型中的指定参数”而言。优点是后验计算方便、超参数常可解释；选择先验时合理性优先于计算便利。
+
+\subsection{正态均值，方差已知}
+设 $X_1,\ldots,X_n\mid\theta\overset{iid}{\sim}N(\theta,\sigma^2)$，$\sigma^2$ 已知，先验 $\theta\sim N(\mu,\tau^2)$。令 $\bar x=n^{-1}\sum_i x_i$，则
+\[
+L(x\mid\theta)\propto\exp\left[-\frac{n}{2\sigma^2}(\theta-\bar x)^2\right],\qquad
+\pi(\theta)\propto\exp\left[-\frac1{2\tau^2}(\theta-\mu)^2\right].
+\]
+相乘并配方得 $\theta\mid x\sim N(\mu_1,\tau_1^2)$，其中
+\[
+\frac1{\tau_1^2}=\frac n{\sigma^2}+\frac1{\tau^2},\qquad
+\mu_1=\frac{n\bar x/\sigma^2+\mu/\tau^2}{n/\sigma^2+1/\tau^2}
+=\gamma\bar x+(1-\gamma)\mu,
+\quad \gamma=\frac{n/\sigma^2}{n/\sigma^2+1/\tau^2}.
+\]
+后验均值是样本均值与先验均值的精度加权平均；后验精度等于样本均值分布精度与先验精度之和。
+
+\subsection{二项概率，贝塔先验}
+若 $X\mid\theta\sim\operatorname{Bin}(n,\theta)$，且 $\theta\sim\operatorname{Be}(\alpha,\beta)$，则
+\[
+\pi(\theta\mid x)\propto\theta^{\alpha+x-1}(1-\theta)^{\beta+n-x-1},\quad
+\theta\mid x\sim\operatorname{Be}(\alpha+x,\beta+n-x).
+\]
+因此
+\[
+E(\theta\mid x)=\frac{\alpha+x}{\alpha+\beta+n}
+=\gamma\frac xn+(1-\gamma)\frac\alpha{\alpha+\beta},\quad
+\gamma=\frac n{\alpha+\beta+n},
+\]
+\[
+\operatorname{Var}(\theta\mid x)=
+\frac{(\alpha+x)(\beta+n-x)}{(\alpha+\beta+n)^2(\alpha+\beta+n+1)}
+=\frac{E(\theta\mid x)[1-E(\theta\mid x)]}{\alpha+\beta+n+1}.
+\]
+固定超参数且 $n$ 较大时，后验均值主要由 $x/n$ 决定，后验方差趋于零；这不表示任意增加一个新观测，后验方差都必然单调下降。
+
+\subsection{Gamma、Beta 函数及常用分布}
+Gamma 函数与 Beta 函数定义为
+\[
+\Gamma(a)=\int_0^\infty x^{a-1}e^{-x}\,dx,\quad a>0,
+\qquad
+B(a,b)=\int_0^1t^{a-1}(1-t)^{b-1}\,dt
+=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}.
+\]
+常用关系为 $\Gamma(a+1)=a\Gamma(a)$、$\Gamma(n+1)=n!$。若 $X\sim\operatorname{Be}(a,b)$，则
+\[
+f(x)=\frac{x^{a-1}(1-x)^{b-1}}{B(a,b)},\quad 0<x<1,
+\quad E(X)=\frac a{a+b},\quad
+\operatorname{Var}(X)=\frac{ab}{(a+b)^2(a+b+1)}.
+\]
+若 $X_1\sim\operatorname{Ga}(a_1,\lambda)$、$X_2\sim\operatorname{Ga}(a_2,\lambda)$ 相互独立且率参数相同，则 $X_1+X_2\sim\operatorname{Ga}(a_1+a_2,\lambda)$。指数分布是 $a=1$ 的 Gamma 分布。
+
+本笔记按课堂板书采用 Gamma 的率参数化：若 $X\sim\operatorname{Ga}(\alpha,\lambda)$，则
+\[
+f(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x},\quad x>0;
+\quad E(X)=\frac\alpha\lambda,\quad \operatorname{Var}(X)=\frac\alpha{\lambda^2}.
+\]
+若 $Y=X^{-1}$，变量变换给出
+\[
+f_Y(y)=\frac{\lambda^\alpha}{\Gamma(\alpha)}y^{-\alpha-1}e^{-\lambda/y},\quad y>0,
+\]
+记 $Y\sim\operatorname{IGa}(\alpha,\lambda)$。当 $\alpha>1$ 时 $E(Y)=\lambda/(\alpha-1)$。
+
+\subsection{例1.3.3：正态方差的倒 Gamma 共轭先验}
+设 $X_i\mid\sigma^2\overset{iid}{\sim}N(\mu,\sigma^2)$，$\mu$ 已知，令 $T=\sum_{i=1}^n(x_i-\mu)^2$。
+\step{Step 1：似然函数}
+\[
+L(\sigma^2;x)=\prod_{i=1}^n\frac1{\sqrt{2\pi\sigma^2}}
+\exp\left[-\frac{(x_i-\mu)^2}{2\sigma^2}\right]
+=(2\pi\sigma^2)^{-n/2}e^{-T/(2\sigma^2)}.
+\]
+保留与未知参数有关的部分，即
+\[
+L(x\mid\sigma^2)\propto(\sigma^2)^{-n/2}\exp\left(-\frac{T}{2\sigma^2}\right).
+\]
+\step{Step 2：先验密度}
+取 $\sigma^2\sim\operatorname{IGa}(\alpha,\lambda)$，$\alpha,\lambda>0$，则
+\[
+\pi(\sigma^2)=\frac{\lambda^\alpha}{\Gamma(\alpha)}
+(\sigma^2)^{-\alpha-1}e^{-\lambda/\sigma^2},\qquad\sigma^2>0.
+\]
+\step{Step 3：相乘、整理幂次与指数}
+\begin{align*}
+\pi(\sigma^2\mid x)&\propto
+(\sigma^2)^{-n/2}e^{-T/(2\sigma^2)}
+(\sigma^2)^{-\alpha-1}e^{-\lambda/\sigma^2}\\
+&=(\sigma^2)^{-(\alpha+n/2)-1}
+\exp\left[-\frac{\lambda+T/2}{\sigma^2}\right].
+\end{align*}
+\step{Step 4：识别并归一化后验}
+令 $a=\alpha+n/2$，$b=\lambda+T/2$，则归一化后的后验密度为
+\[
+\pi(\sigma^2\mid x)=\frac{b^a}{\Gamma(a)}
+(\sigma^2)^{-a-1}e^{-b/\sigma^2},\quad\sigma^2>0.
+\]
+因此
+\[
+\sigma^2\mid x\sim\operatorname{IGa}\left(\alpha+\frac n2,\lambda+\frac T2\right).
+\]
+\step{Step 5：推导后验均值}
+为避免把方差参数与标准差混淆，令 $v=\sigma^2$ 为积分变量。当 $a>1$ 时，代换 $u=b/v$，有
+\begin{align*}
+E(\sigma^2\mid x)
+&=\frac{b^a}{\Gamma(a)}\int_0^\infty v^{-a}e^{-b/v}\,dv\\
+&=\frac{b^a}{\Gamma(a)}b^{1-a}\int_0^\infty u^{a-2}e^{-u}\,du\\
+&=b\frac{\Gamma(a-1)}{\Gamma(a)}=\frac b{a-1}.
+\end{align*}
+所以当 $\alpha+n/2>1$ 时，后验均值为
+\[
+E(\sigma^2\mid x)=\frac{\lambda+T/2}{\alpha+n/2-1}.
+\]
+当 $\alpha>1$ 时，先验均值为 $\lambda/(\alpha-1)$，并可改写为
+\[
+E(\sigma^2\mid x)=\gamma\frac{\lambda}{\alpha-1}+(1-\gamma)\frac Tn,
+\qquad \gamma=\frac{\alpha-1}{\alpha+n/2-1}.
+\]
+这个加权式由分子拆开得到。记 $D=\alpha-1+n/2$，则
+\[
+\frac{\lambda+T/2}{D}
+=\frac{\alpha-1}{D}\frac{\lambda}{\alpha-1}
++\frac{n/2}{D}\frac Tn,
+\qquad\frac{\alpha-1}{D}+\frac{n/2}{D}=1.
+\]
+这里 $T/n$ 使用已知的总体均值 $\mu$ 计算；它不是以 $\bar x$ 为中心、分母为 $n-1$ 的样本方差。上述先验均值的加权解释要求 $\alpha>1$；后验均值本身只要求 $\alpha+n/2>1$。
+
+\section{超参数及其确定}
+先验分布中未知的参数称为超参数。例如 $\operatorname{Be}(\alpha,\beta)$ 中 $\alpha,\beta$，以及 $N(\mu,\tau^2)$ 中的 $\mu,\tau^2$。
+
+\subsection{利用先验矩}
+若历史信息给出 $\theta$ 的先验均值 $\bar\theta$ 与方差 $s_\theta^2$，并用 $\operatorname{Be}(\alpha,\beta)$ 表示先验，则令
+\[
+\bar\theta=\frac{\alpha}{\alpha+\beta},\qquad
+s_\theta^2=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}.
+\]
+解得
+\[
+\alpha=\bar\theta\left(\frac{(1-\bar\theta)\bar\theta}{s_\theta^2}-1\right),\qquad
+\beta=(1-\bar\theta)\left(\frac{(1-\bar\theta)\bar\theta}{s_\theta^2}-1\right).
+\]
+
+\subsection{利用分位数或混合信息}
+若已知上下四分位数 $\theta_L,\theta_U$，可令贝塔分布满足
+\[
+P(\theta\leq\theta_L)=0.25,\qquad P(\theta\geq\theta_U)=0.25,
+\]
+数值求解 $\alpha,\beta$。若已知均值 $\bar\theta$ 和一个 $p$ 分位数 $\theta_p$，则解
+\[
+\frac{\alpha}{\alpha+\beta}=\bar\theta,\qquad
+\int_0^{\theta_p}\frac{t^{\alpha-1}(1-t)^{\beta-1}}{B(\alpha,\beta)}dt=p.
+\]
+若只知道均值，则只能确定 $\alpha/(\alpha+\beta)$，不能唯一确定两个超参数。还需表达对均值的确信程度；在均值固定时，$\alpha+\beta$ 越大，先验方差越小、先验越集中。
+
+\section{多参数模型}
+\subsection{正态均值与方差联合先验}
+课堂涉及正态模型 $X_i\mid\mu,\sigma^2\sim N(\mu,\sigma^2)$ 的联合共轭构造：先给定 $\sigma^2$，取 $\mu\mid\sigma^2$ 为正态分布；再对 $\sigma^2$ 取倒 Gamma 先验。联合先验与正态似然相乘后仍可整理为同一类正态--倒 Gamma 形式。后续计算通常通过似然核与先验核相乘、对 $\mu$ 配方，并整理出 $\sigma^2$ 的幂次和指数项。
+
+更具体地，设
+\[
+\mu\mid\sigma^2\sim N\left(\mu_0,\frac{\sigma^2}{\kappa_0}\right),\qquad
+\sigma^2\sim\operatorname{IGa}\left(\frac{\nu_0}{2},\frac{\nu_0\sigma_0^2}{2}\right).
+\]
+由 $\pi(\mu,\sigma^2)=\pi(\mu\mid\sigma^2)\pi(\sigma^2)$，联合先验核为
+\[
+\pi(\mu,\sigma^2)\propto(\sigma^2)^{-(\nu_0/2+3/2)}
+\exp\left\{-\frac{\nu_0\sigma_0^2+\kappa_0(\mu-\mu_0)^2}{2\sigma^2}\right\}.
+\]
+这里条件正态密度中的 $(\sigma^2)^{-1/2}$ 也必须保留，因为 $\sigma^2$ 同样是未知参数；不能把它当成常数略去。
+
+令 $\bar x=n^{-1}\sum_i x_i$，$s^2=(n-1)^{-1}\sum_i(x_i-\bar x)^2$，配方后得到
+\[
+\mu_n=\frac{\kappa_0\mu_0+n\bar x}{\kappa_0+n},\quad
+\kappa_n=\kappa_0+n,\quad \nu_n=\nu_0+n,
+\]
+\[
+\nu_n\sigma_n^2=\nu_0\sigma_0^2+(n-1)s^2+
+\frac{n\kappa_0}{\kappa_0+n}(\bar x-\mu_0)^2.
+\]
+因此联合后验仍为正态--倒 Gamma。积分消去 $\sigma^2$ 后，$\mu$ 的边缘后验为 Student $t$ 分布，自由度为 $\nu_n$，位置为 $\mu_n$，尺度平方为 $\sigma_n^2/\kappa_n$。
+
+\subsection{多元正态均值}
+设 $Y_1,\ldots,Y_n\sim N_d(\mu,\Sigma)$，其中协方差矩阵 $\Sigma$ 已知，均值先验为 $\mu\sim N_d(\mu_0,\Lambda_0)$。记 $\bar y=n^{-1}\sum_iY_i$，则
+\[
+\mu\mid y\sim N_d(\mu_n,\Lambda_n),\quad
+\Lambda_n^{-1}=\Lambda_0^{-1}+n\Sigma^{-1},\quad
+\mu_n=\Lambda_n(\Lambda_0^{-1}\mu_0+n\Sigma^{-1}\bar y).
+\]
+后验精度矩阵是先验精度矩阵与样本均值精度矩阵之和，后验均值由两者按精度加权。
+
+\section{充分统计量}
+若样本关于参数的似然可分解为 $L(x\mid\theta)=g(T(x),\theta)h(x)$，其中样本对参数的依赖仅通过 $T(x)$，则 $T(x)$ 为充分统计量。本章示例中：二项模型的成功次数 $x$ 充分；正态均值且方差已知时样本均值 $\bar x$ 充分；正态均值已知、方差未知时 $T=\sum_i(x_i-\mu)^2$ 充分。充分统计量压缩数据而不丢失关于参数的似然信息。
+
+经典定义：给定 $T(x)=t$ 后，样本 $x$ 的条件分布若不依赖 $\theta$，则 $T$ 对 $\theta$ 充分。因子分解定理给出等价判别：
+\[
+L(x\mid\theta)=g(T(x),\theta)h(x).
+\]
+从贝叶斯角度看，若 $T$ 充分，则对于使后验有定义的先验，$\pi(\theta\mid x)=\pi(\theta\mid T(x))$。这表示利用完整样本与仅利用充分统计量得到相同的后验。单独对某一个特殊先验验证相等，一般还不足以反过来证明充分性。
+
+事实上，若 $p(x\mid\theta)=h(x)g(T(x),\theta)$，则
+\[
+\pi(\theta\mid x)
+=\frac{h(x)g(T(x),\theta)\pi(\theta)}{h(x)\int g(T(x),u)\pi(u)\,du}
+=\frac{g(T(x),\theta)\pi(\theta)}{\int g(T(x),u)\pi(u)\,du},
+\]
+右端只通过 $T(x)$ 依赖样本。
+
+例如 $X_i\sim\operatorname{Exp}(\theta)$ 的联合似然为
+\[
+L(x\mid\theta)=\theta^n\exp\left(-\theta\sum_i x_i\right),
+\]
+故 $T=\sum_iX_i$ 充分。正态样本 $N(\mu,\sigma^2)$ 中，$\mu,\sigma^2$ 均未知时，$T=(\bar X,Q)$ 充分，其中 $Q=\sum_i(X_i-\bar X)^2$。
+
+
+\subsection{用定义证明：指数样本的和充分}
+设 $X_1,\ldots,X_n\mid\theta$ 独立同分布，密度为
+\[
+f(x_i\mid\theta)=\theta e^{-\theta x_i}\ind_{\{x_i>0\}},\qquad\theta>0.
+\]
+此处 $\theta$ 是\textbf{率参数}。令 $T=\sum_{i=1}^nX_i$，证明其充分性时，老师在板书中先作变量变换，再计算条件密度。
+
+\step{第一步：把最后一个变量换成样本和}
+作变换
+\[
+(X_1,\ldots,X_n)\longmapsto(X_1,\ldots,X_{n-1},T),
+\qquad x_n=t-\sum_{i=1}^{n-1}x_i.
+\]
+逆变换的雅可比行列式绝对值为 $1$，于是
+\[
+f(x_1,\ldots,x_{n-1},t\mid\theta)
+=\theta^ne^{-\theta t}\ind_{D_t},
+\quad D_t=\left\{x_i>0,\ \sum_{i=1}^{n-1}x_i<t\right\}.
+\]
+
+\step{第二步：写出 $T$ 的密度}
+由相同率参数的 Gamma 分布可加性，
+\[
+T\mid\theta\sim\Ga(n,\theta),\qquad
+f_T(t\mid\theta)=\frac{\theta^n}{\Gamma(n)}t^{n-1}e^{-\theta t},\quad t>0.
+\]
+
+\step{第三步：计算给定 $T=t$ 时的条件密度}
+\begin{align*}
+f(x_1,\ldots,x_{n-1}\mid t,\theta)
+&=\frac{f(x_1,\ldots,x_{n-1},t\mid\theta)}{f_T(t\mid\theta)}\\
+&=\frac{(n-1)!}{t^{n-1}}\ind_{D_t}.
+\end{align*}
+右端不含 $\theta$。且在给定 $T=t$ 后，$X_n=t-\sum_{i<n}X_i$ 被前 $n-1$ 个变量确定，故整个样本在给定 $T$ 后的条件分布与 $\theta$ 无关。因此 $T$ 是 $\theta$ 的充分统计量。
+
+\subsection{用因子分解证明：正态样本的两个充分统计量}
+设 $X_i\mid\mu,\sigma^2\overset{iid}{\sim}N(\mu,\sigma^2)$，$\mu,\sigma^2$ 都未知。令
+\[
+\bar x=\frac1n\sum_i x_i,\qquad Q=\sum_i(x_i-\bar x)^2.
+\]
+先展开平方和：
+\begin{align*}
+\sum_i(x_i-\mu)^2
+&=\sum_i\{(x_i-\bar x)+(\bar x-\mu)\}^2\\
+&=Q+2(\bar x-\mu)\underbrace{\sum_i(x_i-\bar x)}_{=0}
++n(\bar x-\mu)^2\\
+&=Q+n(\bar x-\mu)^2.
+\end{align*}
+因此似然为
+\[
+L(\mu,\sigma^2;x)=(2\pi\sigma^2)^{-n/2}
+\exp\left\{-\frac{Q+n(\bar x-\mu)^2}{2\sigma^2}\right\}
+=g((\bar x,Q),\mu,\sigma^2)\,h(x),
+\]
+其中 $h(x)=1$。由因子分解定理，$T=(\bar X,Q)$ 是 $(\mu,\sigma^2)$ 的充分统计量。
+
+\subsection{例1.6.2：只使用充分统计量求正态后验}
+设 $X_i\mid\theta\overset{iid}{\sim}N(\theta,1)$，先验 $\theta\sim N(0,\tau^2)$。因为 $\bar X$ 充分，可以直接用 $\bar X$ 的抽样分布。
+
+\step{Step 1：似然函数}
+\[
+\bar X\mid\theta\sim N\left(\theta,\frac1n\right),\qquad
+L(\theta;\bar x)=\sqrt{\frac{n}{2\pi}}
+\exp\left\{-\frac n2(\theta-\bar x)^2\right\}.
+\]
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac1{\sqrt{2\pi}\tau}
+\exp\left(-\frac{\theta^2}{2\tau^2}\right),\qquad\tau^2>0.
+\]
+\step{Step 3：相乘并配方}
+\begin{align*}
+\pi(\theta\mid\bar x)&\propto
+\exp\left\{-\frac12\left[n(\theta-\bar x)^2+\tau^{-2}\theta^2\right]\right\}\\
+&\propto\exp\left\{-\frac{n+\tau^{-2}}2
+\left(\theta-\frac{n\bar x}{n+\tau^{-2}}\right)^2\right\}.
+\end{align*}
+\step{Step 4：识别后验分布并求均值}
+\[
+\boxed{\theta\mid x\sim N\left(
+\frac{n\tau^2}{1+n\tau^2}\bar x,\frac{\tau^2}{1+n\tau^2}\right).}
+\]
+其后验均值为
+\[
+E(\theta\mid x)=\frac{n\tau^2}{1+n\tau^2}\bar x
++\frac1{1+n\tau^2}\cdot0.
+\]
+这里配方系数为 $n+\tau^{-2}$，并非 $n+\tau^2$；写成分式时可将分子、分母同时乘以 $\tau^2$ 核对。$\pi(\theta\mid x)=\pi(\theta\mid\bar x)$，所以不必再使用完整样本逐项相乘。
+
+\subsection*{似然记号与条件分布记号的区别}
+老师在板书中写的 $L(\theta;x)$ 或 $L(\theta\mid x)$，强调“观测 $x$ 固定后，似然是参数 $\theta$ 的函数”。课件写 $L(x\mid\theta)$，沿用的是抽样密度 $p(x\mid\theta)$ 的顺序。两种似然写法所指的数值函数相同：
+\[
+L(\theta;x):=p(x\mid\theta).
+\]
+但是 $\pi(\theta\mid x)$ 表示\textbf{后验密度}，必须再乘先验并归一化：
+\[
+\pi(\theta\mid x)=\frac{L(\theta;x)\pi(\theta)}{\int L(t;x)\pi(t)\,dt}.
+\]
+因此改变似然记号的排列顺序，不是把抽样分布变成了后验分布；均值未知与方差未知都遵守同一个公式。

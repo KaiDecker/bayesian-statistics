@@ -1,0 +1,1196 @@
+\chapter{贝叶斯推断}
+
+\section{条件观点}
+在样本 $x$ 已经观察到以后，用 $\pi(\theta\mid x)$ 描述参数的不确定性，并在这个后验分布下进行估计、检验和预测。这就是本章贯穿始终的\textbf{条件观点}。
+
+给定 $x$ 后，估计误差中的期望是对 $\theta\mid x$ 求的；频率方法的重复抽样误差则通常固定 $\theta$，对可能出现的样本 $X$ 求期望。两者的条件对象不同。
+
+\section{估计}
+\subsection{三种后验点估计}
+给定后验分布后，板书使用以下三种点估计：
+\begin{align*}
+\hat\theta_{MD}&=\mathop{\arg\max}_{\theta}\pi(\theta\mid x)
+&&\text{（后验众数，最大后验估计，MAP）},\\
+P(\theta\leq\hat\theta_{Me}\mid x)&\geq\tfrac12,\quad
+P(\theta\geq\hat\theta_{Me}\mid x)\geq\tfrac12
+&&\text{（后验中位数）},\\
+\hat\theta_E&=E(\theta\mid x)
+&&\text{（后验均值）}.
+\end{align*}
+若后验连续且分布函数严格递增，中位数满足
+$\int_{-\infty}^{\hat\theta_{Me}}\pi(\theta\mid x)\,d\theta=1/2$。
+在正态后验中三者相同；一般分布中不一定相同。
+
+损失函数决定如何从后验分布中选取估计。在似然与先验已经固定时，改变损失函数不会改变后验分布。例如平方损失下取后验均值，绝对损失下取后验中位数。给定行动 $a$ 的后验风险为
+\[
+\rho(a\mid x)=E[L(\theta,a)\mid x].
+\]
+
+\subsection{例2.2.1：正态均值及智商测量}
+一般地，若 $X_i\mid\theta\overset{iid}{\sim}N(\theta,\sigma^2)$，$\sigma^2$ 已知，先验 $\theta\sim N(\mu,\tau^2)$，则
+\[
+\theta\mid x\sim N(\mu_1,\sigma_1^2),\quad
+\sigma_1^2=\left(\frac n{\sigma^2}+\frac1{\tau^2}\right)^{-1},\quad
+\mu_1=\sigma_1^2\left(\frac{n\bar x}{\sigma^2}+\frac\mu{\tau^2}\right).
+\]
+因此 $\hat\theta_{MD}=\hat\theta_{Me}=\hat\theta_E=\mu_1$。
+
+板书中的智商例子为单次观测
+\[
+X\mid\theta\sim N(\theta,100),\qquad\theta\sim N(100,225),\qquad x=115.
+\]
+\step{Step 1：似然函数}
+\[
+L(\theta;x)=\frac1{\sqrt{2\pi\cdot100}}
+\exp\left[-\frac{(x-\theta)^2}{200}\right].
+\]
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac1{\sqrt{2\pi\cdot225}}
+\exp\left[-\frac{(\theta-100)^2}{450}\right].
+\]
+\step{Step 3：相乘、配方并识别后验}
+\[
+\pi(\theta\mid x)\propto
+\exp\left\{-\frac12\left[\frac{(x-\theta)^2}{100}
++\frac{(\theta-100)^2}{225}\right]\right\}.
+\]
+后验精度和均值分别为
+\[
+\frac1{\sigma_1^2}=\frac1{100}+\frac1{225}=\frac{13}{900},\qquad
+\mu_1=\frac{900}{13}\left(\frac{x}{100}+\frac{100}{225}\right)
+=\frac{9x+400}{13}.
+\]
+归一化后为正态密度，故
+\[
+\theta\mid x=115\sim N\left(\frac{1435}{13},\frac{900}{13}\right)
+\approx N(110.3846,69.2308).
+\]
+\step{Step 4：点估计与后验标准差}
+\[
+\boxed{\hat\theta_{MD}=\hat\theta_{Me}=\hat\theta_E=110.3846,\qquad
+\sigma_1=\sqrt{900/13}\approx8.3205.}
+\]
+后验均值还可写为 $\frac9{13}x+\frac4{13}\cdot100$。正态分布第二个参数是\textbf{方差}，不能把 $69.2308$ 当成标准差。
+
+\subsection{例2.2.2：二项分布与 Beta 先验}
+设 $X\mid\theta\sim\Bin(n,\theta)$，$x$ 表示不合格品数，先验为 $\theta\sim\Be(\alpha,\beta)$，$\alpha,\beta>0$。
+\step{Step 1：似然函数}
+\[
+L(\theta;x)=\binom nx\theta^x(1-\theta)^{n-x},\qquad 0<\theta<1.
+\]
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac1{B(\alpha,\beta)}
+\theta^{\alpha-1}(1-\theta)^{\beta-1}\ind_{(0,1)}(\theta).
+\]
+\step{Step 3：后验核与归一化}
+\[
+\pi(\theta\mid x)\propto
+\theta^{\alpha+x-1}(1-\theta)^{\beta+n-x-1}.
+\]
+令 $a=\alpha+x$，$b=\beta+n-x$。由于核在 $(0,1)$ 上的积分为 $B(a,b)$，有
+\[
+\boxed{\pi(\theta\mid x)=\frac{\theta^{a-1}(1-\theta)^{b-1}}{B(a,b)},\qquad
+\theta\mid x\sim\Be(a,b).}
+\]
+若需边缘概率，则 $m(x)=\binom nx B(a,b)/B(\alpha,\beta)$。
+
+\step{Step 4：求最大后验估计}
+当 $a>1,b>1$ 时，令 $\ell(\theta)=\log\pi(\theta\mid x)$，有
+\[
+\ell'(\theta)=\frac{a-1}{\theta}-\frac{b-1}{1-\theta},\qquad
+\ell''(\theta)=-\frac{a-1}{\theta^2}-\frac{b-1}{(1-\theta)^2}<0.
+\]
+由 $\ell'(\theta)=0$ 解得
+\[
+(a-1)(1-\theta)=(b-1)\theta
+\quad\Longrightarrow\quad
+\boxed{\hat\theta_{MD}=\frac{a-1}{a+b-2}
+=\frac{\alpha+x-1}{\alpha+\beta+n-2}.}
+\]
+这个内部众数公式要求 $a,b>1$。若后验向某个端点单调上升，则按端点极限取众数；均匀密度没有唯一众数，$a,b<1$ 时则可能两端都有峰，不能直接套内部公式。
+
+\step{Step 5：用 Beta 函数求后验均值}
+\begin{align*}
+\hat\theta_E
+&=\frac1{B(a,b)}\int_0^1\theta^a(1-\theta)^{b-1}\,d\theta
+=\frac{B(a+1,b)}{B(a,b)}\\
+&=\frac{\Gamma(a+1)\Gamma(b)}{\Gamma(a+b+1)}
+\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}
+=\frac{a}{a+b}.
+\end{align*}
+其中使用 $\Gamma(a+1)=a\Gamma(a)$，故
+\[
+\boxed{\hat\theta_E=\frac{\alpha+x}{\alpha+\beta+n}.}
+\]
+记先验强度 $s=\alpha+\beta$、先验均值 $\mu_0=\alpha/s$，则在 $n>0$ 时
+\[
+\hat\theta_E=\frac{s}{s+n}\mu_0+\frac n{s+n}\frac xn.
+\]
+即后验均值是先验均值与样本不合格品率的加权平均。
+
+\step{课堂补充：未检出不合格品时的尾概率}
+若先验均匀，即 $\alpha=\beta=1$，且观察到 $x=0$，则
+\[
+\theta\mid x=0\sim\Be(1,n+1),\qquad
+\pi(\theta\mid x=0)=(n+1)(1-\theta)^n.
+\]
+对 $0<t<1$，
+\[
+P(\theta>t\mid x=0)=\int_t^1(n+1)(1-\theta)^n\,d\theta=(1-t)^{n+1}.
+\]
+取 $t=0.2$：$n=3$ 时为 $0.8^4=0.4096$；$n=10$ 时为 $0.8^{11}\approx0.08590$。同样“没有检出不合格品”，样本量不同，后验判断不同。
+
+\subsection{例2.2.3：平移指数分布与柯西先验}
+本例在板书上也记作“例2.4”。设 $X=\theta+Y$，$Y\sim\operatorname{Exp}(1)$。
+\step{Step 1：似然函数及参数范围}
+\[
+L(\theta;x)=e^{-(x-\theta)}\ind_{\{\theta\leq x\}}.
+\]
+观测 $x$ 固定后，$\theta\leq x$ 是似然对参数的限制，必须保留。
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac1{\pi(1+\theta^2)},\qquad-\infty<\theta<\infty.
+\]
+\step{Step 3：相乘并归一化}
+\[
+m(x)=\frac{e^{-x}}\pi\int_{-\infty}^x\frac{e^t}{1+t^2}\,dt,
+\]
+\[
+\pi(\theta\mid x)=
+\frac{e^\theta/(1+\theta^2)}{\displaystyle\int_{-\infty}^x e^t/(1+t^2)\,dt}
+\ind_{\{\theta\leq x\}}.
+\]
+\step{Step 4：求众数与均值}
+令 $g(\theta)=e^\theta/(1+\theta^2)$，则
+\[
+g'(\theta)=\frac{e^\theta(1+\theta^2)-2\theta e^\theta}{(1+\theta^2)^2}
+=\frac{e^\theta(\theta-1)^2}{(1+\theta^2)^2}\geq0.
+\]
+因此后验密度在允许范围内单调不减，其最大值在 $\theta=x$ 处取得：
+\[
+\boxed{\hat\theta_{MD}=x=\hat\theta_{MLE}.}
+\]
+但后验均值为
+\[
+\hat\theta_E=
+\frac{\displaystyle\int_{-\infty}^x\frac{t e^t}{1+t^2}\,dt}
+{\displaystyle\int_{-\infty}^x\frac{e^t}{1+t^2}\,dt}<x.
+\]
+后验分布集中于 $(-\infty,x]$，且不是全都集中在 $x$，所以其均值严格小于 $x$；不能因 MAP 等于 $x$ 就把后验均值也写成 $x$。
+
+\subsection{后验估计误差：板书中的完整展开}
+固定已经观察到的 $x$，估计值 $\hat\theta=\hat\theta(x)$ 是常数。后验均方误差定义为
+\[
+\MSE(\hat\theta\mid x)=E[(\theta-\hat\theta)^2\mid x]
+=\int(\theta-\hat\theta)^2\pi(\theta\mid x)\,d\theta.
+\]
+令 $m=E(\theta\mid x)$，则
+\[
+\theta-\hat\theta=(\theta-m)+(m-\hat\theta).
+\]
+平方并求后验期望：
+\begin{align*}
+\MSE(\hat\theta\mid x)
+&=E[(\theta-m)^2\mid x]
++2(m-\hat\theta)E(\theta-m\mid x)+(m-\hat\theta)^2\\
+&=\Var(\theta\mid x)+0+(m-\hat\theta)^2.
+\end{align*}
+所以
+\[
+\boxed{\MSE(\hat\theta\mid x)=\Var(\theta\mid x)
++\{E(\theta\mid x)-\hat\theta\}^2.}
+\]
+这里交叉项等于零，是因为 $E(\theta-m\mid x)=m-m=0$。于是
+\[
+\MSE(\hat\theta\mid x)\geq\Var(\theta\mid x),
+\]
+等号在 $\hat\theta=\hat\theta_E=m$ 时取得。这就证明了\textbf{后验均值在平方损失下最优}。
+
+估计值 $\hat\theta$ 的后验标准误为 $\sqrt{\MSE(\hat\theta\mid x)}$；后验标准差为 $\sqrt{\Var(\theta\mid x)}$。取后验均值作为估计时二者相等，一般情况下不相等。
+
+\subsection{例2.2.4：几何抽检与离散后验}
+本例在板书上也记作“例2.5”。逐件检查产品，直到发现第一个不合格品；$X$ 是累计检查件数，$\theta$ 是不合格品率。已知
+\[
+\theta\in\left\{\tfrac14,\tfrac12,\tfrac34\right\},\qquad
+P(\theta=\tfrac14)=P(\theta=\tfrac12)=P(\theta=\tfrac34)=\tfrac13,
+\]
+观察到 $X=3$。
+\step{Step 1：似然}
+\[
+P(X=x\mid\theta)=\theta(1-\theta)^{x-1},\qquad x=1,2,\ldots.
+\]
+故 $L(\theta;3)=\theta(1-\theta)^2$。
+\step{Step 2：先验与联合概率}
+先验三点各为 $1/3$，似然乘先验得到
+\[
+\begin{array}{c|ccc}
+\theta&1/4&1/2&3/4\\\hline
+P(X=3\mid\theta)&9/64&1/8&3/64\\
+P(X=3,\theta)&9/192&8/192&3/192
+\end{array}
+\]
+\step{Step 3：边缘概率及归一化}
+\[
+m(3)=\frac{9+8+3}{192}=\frac5{48},\qquad
+P(\theta=t\mid X=3)=\frac{P(X=3,\theta=t)}{m(3)}.
+\]
+所以
+\[
+\begin{array}{c|ccc}
+\theta&1/4&1/2&3/4\\\hline
+P(\theta\mid X=3)&9/20&8/20&3/20
+\end{array}
+\]
+\step{Step 4：点估计、后验矩与误差}
+\[
+\hat\theta_{MD}=\frac14,\qquad
+\hat\theta_E=\frac14\frac9{20}+\frac12\frac8{20}+\frac34\frac3{20}
+=\frac{17}{40}.
+\]
+累积到 $1/4$ 时为 $9/20<1/2$，累积到 $1/2$ 时为 $17/20>1/2$，故后验中位数为 $\hat\theta_{Me}=1/2$。
+\[
+E(\theta^2\mid3)=\frac1{16}\frac9{20}+\frac14\frac8{20}+\frac9{16}\frac3{20}
+=\frac{17}{80},
+\]
+\[
+\Var(\theta\mid3)=\frac{17}{80}-\left(\frac{17}{40}\right)^2
+=\frac{51}{1600}.
+\]
+因此
+\[
+\MSE(\hat\theta_E\mid3)=\frac{51}{1600},\qquad
+\MSE(\hat\theta_{MD}\mid3)=\frac{51}{1600}
++\left(\frac{17}{40}-\frac14\right)^2=\frac1{16}.
+\]
+后验众数估计的后验标准误为 $\sqrt{1/16}=1/4$。也可以直接计算
+\[
+E[(\theta-\tfrac14)^2\mid3]
+=0^2\frac9{20}+(\tfrac14)^2\frac8{20}+(\tfrac12)^2\frac3{20}
+=\frac1{16},
+\]
+与分解公式所得结果相同。
+
+\subsection{例2.2.5：Beta 后验下两种估计的误差比较}
+在二项模型中，取均匀先验 $\Be(1,1)$，则
+\[
+\theta\mid x\sim\Be(x+1,n-x+1),\qquad
+\hat\theta_E=\frac{x+1}{n+2},\quad\hat\theta_{MD}=\frac xn\quad(n>0).
+\]
+其中 $x=0$ 或 $n$ 时，众数按端点极限解释。后验方差为
+\[
+V_x:=\Var(\theta\mid x)=\frac{(x+1)(n-x+1)}{(n+2)^2(n+3)}.
+\]
+因此
+\[
+\MSE(\hat\theta_E\mid x)=V_x,\qquad
+\MSE(\hat\theta_{MD}\mid x)=V_x+
+\left(\frac{x+1}{n+2}-\frac xn\right)^2.
+\]
+通分得
+\[
+\frac{x+1}{n+2}-\frac xn=\frac{n-2x}{n(n+2)},
+\]
+所以
+\[
+\boxed{\MSE(\hat\theta_{MD}\mid x)-\MSE(\hat\theta_E\mid x)
+=\frac{(n-2x)^2}{n^2(n+2)^2}\geq0.}
+\]
+课堂代入 $n=3,x=0$：
+\[
+\hat\theta_E=\frac15,\qquad\hat\theta_{MD}=0,\qquad
+\Var(\theta\mid x)=\frac{1\cdot4}{5^2\cdot6}=\frac2{75},
+\]
+\[
+\MSE(\hat\theta_{MD}\mid x)=\frac2{75}+(\tfrac15-0)^2=\frac1{15}.
+\]
+
+\subsection{例2.2.6：均匀分布上限参数的后验均值（课件补全）}
+设 $X_1,\ldots,X_n\mid\theta\overset{iid}{\sim}U(0,\theta)$，先验 $\theta\sim\IGa(\alpha,\lambda)$，$\alpha,\lambda>0$。求 $E(\theta\mid x)$。
+\step{Step 1：直接从完整样本写似然}
+假设观测均为正数，记 $y=\max_i x_i$，则
+\[
+L(\theta;x)=\prod_{i=1}^n\frac1\theta\ind_{\{0<x_i<\theta\}}
+=\theta^{-n}\ind_{\{\theta>y\}}.
+\]
+这里\textbf{不必先求最大次序统计量的分布}。引入 $y$ 只是简写“$\theta$ 必须大于所有观测值”；也可一直写 $\max_i x_i$。课件用 $Y=\max_iX_i$ 的密度 $ny^{n-1}\theta^{-n}\ind_{\{0<y<\theta\}}$ 求解，其多出的 $ny^{n-1}$ 与 $\theta$ 无关，所得后验相同。
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac{\lambda^\alpha}{\Gamma(\alpha)}
+\theta^{-\alpha-1}e^{-\lambda/\theta}\ind_{\{\theta>0\}}.
+\]
+\step{Step 3：相乘并保留后验的支撑范围}
+令 $a=\alpha+n$，则
+\[
+\pi(\theta\mid x)\propto\theta^{-a-1}e^{-\lambda/\theta}\ind_{\{\theta>y\}}.
+\]
+它是 $\IGa(a,\lambda)$ \textbf{在 $(y,\infty)$ 上截断后的分布}，不是整个 $(0,\infty)$ 上的普通倒 Gamma 分布。
+\step{Step 4：归一化及均值的积分比}
+定义下不完全 Gamma 函数 $\gamma(s,z)=\int_0^z u^{s-1}e^{-u}\,du$。代换 $u=\lambda/\theta$，得
+\[
+D=\int_y^\infty\theta^{-a-1}e^{-\lambda/\theta}\,d\theta
+=\lambda^{-a}\gamma(a,\lambda/y).
+\]
+所以后验密度为
+\[
+\pi(\theta\mid x)=\frac{\lambda^a}{\gamma(a,\lambda/y)}
+\theta^{-a-1}e^{-\lambda/\theta}\ind_{\{\theta>y\}}.
+\]
+当 $a>1$ 时，
+\begin{align*}
+E(\theta\mid x)
+&=\frac{\displaystyle\int_y^\infty\theta^{-a}e^{-\lambda/\theta}\,d\theta}
+{\displaystyle\int_y^\infty\theta^{-a-1}e^{-\lambda/\theta}\,d\theta}\\
+&=\lambda\frac{\gamma(a-1,\lambda/y)}{\gamma(a,\lambda/y)}.
+\end{align*}
+\step{Step 5：按课件化为卡方分布函数之比}
+因为
+\[
+P(\chi^2_{2s}\leq v)=\frac{\gamma(s,v/2)}{\Gamma(s)},\qquad
+\Gamma(a)=(a-1)\Gamma(a-1),
+\]
+故
+\[
+\boxed{E(\theta\mid x)=\frac{\lambda}{\alpha+n-1}
+\frac{P(\chi^2_{2(\alpha+n-1)}\leq2\lambda/y)}
+{P(\chi^2_{2(\alpha+n)}\leq2\lambda/y)}.}
+\]
+卡方自由度是 $2(\alpha+n-1)$ 与 $2(\alpha+n)$，不能漏掉因子 $2$。
+
+课件数值 $n=5,y=2,\alpha=2,\lambda=8$ 给出 $2\lambda/y=8$：
+\[
+E(\theta\mid x)=\frac86\frac{P(\chi^2_{12}\leq8)}{P(\chi^2_{14}\leq8)}
+=\frac86\frac{0.2148696\cdots}{0.1106740\cdots}\approx2.5886.
+\]
+课件采用舍入概率给出约 $2.5884$，差别来自数值舍入。计算时必须保留截断所带来的两个分布函数。
+
+\section{区间估计}
+\subsection{可信区间、分位数与单侧可信限}
+给定观测 $x$，若区间 $[L(x),U(x)]$ 满足
+\[
+P\{L(x)\leq\theta\leq U(x)\mid x\}\geq1-\alpha,
+\]
+则称其为可信水平 $1-\alpha$ 的可信区间。若后验连续，上式左端写为
+\[
+\int_{L(x)}^{U(x)}\pi(\theta\mid x)\,d\theta.
+\]
+板书保留“$\geq$”是为了兼顾离散分布：离散概率不一定能恰好凑成 $1-\alpha$。例如
+\[
+P(\theta=0\mid x)=0.2,\quad P(\theta=1\mid x)=0.5,\quad P(\theta=2\mid x)=0.3,
+\]
+此时 $[0,2]$ 的后验概率为 $1\geq0.9$，可作 $90\%$ 可信区间。
+
+记后验分布函数和分位数为
+\[
+F_x(t)=P(\theta\leq t\mid x),\qquad
+q_p(x)=\inf\{t:F_x(t)\geq p\}.
+\]
+\textbf{等尾可信区间}取
+\[
+\boxed{[q_{\alpha/2}(x),q_{1-\alpha/2}(x)].}
+\]
+当后验连续且相应分位数处无平坦段时，两侧尾概率各为 $\alpha/2$。
+
+单侧情形中，若
+\[
+P(\theta\geq L\mid x)\geq1-\alpha,
+\]
+则 $L$ 为可信水平 $1-\alpha$ 的\textbf{单侧下可信限}；若
+\[
+P(\theta\leq U\mid x)\geq1-\alpha,
+\]
+则 $U$ 为\textbf{单侧上可信限}。连续且严格递增的分布中可分别取 $L=q_\alpha$ 与 $U=q_{1-\alpha}$。
+
+\subsection{例2.3.1：正态后验的可信区间}
+若 $\theta\mid x\sim N(\mu_1,\sigma_1^2)$，则
+\[
+\frac{\theta-\mu_1}{\sigma_1}\biggm|x\sim N(0,1).
+\]
+以下用 $z_p=\Phi^{-1}(p)$ 表示标准正态的\textbf{下侧 $p$ 分位数}，即 $P(Z\leq z_p)=p$。从而
+\[
+P\left\{-z_{1-\alpha/2}\leq\frac{\theta-\mu_1}{\sigma_1}
+\leq z_{1-\alpha/2}\mid x\right\}=1-\alpha,
+\]
+得到
+\[
+\boxed{[\mu_1-z_{1-\alpha/2}\sigma_1,\ \mu_1+z_{1-\alpha/2}\sigma_1].}
+\]
+若教材用 $z_{\alpha/2}$ 表示\textbf{上尾概率}为 $\alpha/2$ 的正数，则数值相同，只是分位数记法不同。
+
+对智商例子，$\mu_1=110.3846$，$\sigma_1=8.3205$，故 $95\%$ 可信区间为
+\[
+110.3846\pm1.96\times8.3205\approx[94.08,126.69].
+\]
+这是给定本次测量后关于真实参数 $\theta$ 的区间，不是下一次测量值的预测区间。
+
+\subsection{例2.3.2：截尾寿命试验的倒 Gamma 后验}
+电视机寿命 $T$ 在给定平均寿命 $\theta$ 下服从指数分布。本例 $\theta$ 是\textbf{均值参数}，与第一章指数分布的率参数记法应区分。
+
+\step{Step 1：似然函数}
+寿命密度与存活概率为
+\[
+p(t\mid\theta)=\frac1\theta e^{-t/\theta},\quad t>0,
+\qquad P(T>t\mid\theta)=e^{-t/\theta}.
+\]
+在 $n$ 台电视机中，记录到 $r$ 台在时刻 $t_1\leq\cdots\leq t_r$ 失效，其余 $n-r$ 台在停止时刻 $c$ 仍存活，故
+\begin{align*}
+L(\theta;t)
+&\propto\prod_{i=1}^r\left(\frac1\theta e^{-t_i/\theta}\right)
+\left(e^{-c/\theta}\right)^{n-r}\\
+&=\theta^{-r}\exp\left\{-\frac{\sum_{i=1}^r t_i+(n-r)c}{\theta}\right\}.
+\end{align*}
+令总试验时间 $S_r=\sum_{i=1}^r t_i+(n-r)c$。定数截尾时 $c=t_r$，这就得到板书的
+\[
+S_r=\sum_{i=1}^r t_i+(n-r)t_r.
+\]
+若一次失效也没有（$r=0$），应理解为在预定时刻 $c$ 停止，此时 $S_0=nc$；不能写不存在的 $t_0$。
+
+\step{Step 2：先验密度}
+取 $\theta\sim\IGa(\alpha,\beta)$：
+\[
+\pi(\theta)=\frac{\beta^\alpha}{\Gamma(\alpha)}
+\theta^{-\alpha-1}e^{-\beta/\theta},\quad\theta>0.
+\]
+\step{Step 3：相乘并识别后验}
+\[
+\pi(\theta\mid t)\propto\theta^{-r}e^{-S_r/\theta}
+\theta^{-\alpha-1}e^{-\beta/\theta}
+=\theta^{-(\alpha+r)-1}e^{-(\beta+S_r)/\theta}.
+\]
+因此
+\[
+\boxed{\theta\mid t\sim\IGa(\alpha+r,\beta+S_r).}
+\]
+其归一化常数是 $(\beta+S_r)^{\alpha+r}/\Gamma(\alpha+r)$。
+\step{Step 4：后验均值及课堂数值}
+当 $\alpha+r>1$ 时，
+\[
+\hat\theta_E=\frac{\beta+S_r}{\alpha+r-1}.
+\]
+沿用板书 $r=0,S_0=40000,\alpha=1.956,\beta=2868$，则
+\[
+\theta\mid t\sim\IGa(1.956,42868),\qquad
+\hat\theta_E=\frac{42868}{0.956}\approx44841\text{小时}.
+\]
+\textit{数值核对：}这里按板书取 $\beta=2868$。课件先验确定部分另写“均值为30000小时”，但 $2868/(1.956-1)=3000$，两者相差一位；不能把这两项当成同时成立的条件。本例后续计算沿用板书参数及后验 $42868$。
+
+\subsection{最大后验密度可信集与 HPD 区间}
+可信水平相同的区间可以有许多个。老师进一步问：能否优先选取后验密度较高的部分，使区间尽可能短？
+
+记 $f(\theta)=\pi(\theta\mid x)$，对阈值 $k$ 定义
+\[
+C_k=\{\theta:f(\theta)\geq k\}.
+\]
+选择 $k$ 使
+\[
+\int_{C_k}f(\theta)\,d\theta=1-\alpha,
+\]
+所得 $C_k$ 称最大后验密度（HPD）可信集。\textbf{单峰、连续且无平顶等常见条件下}，$C_k$ 是区间；若后验多峰，HPD 集可能是若干段，不一定是单个区间。
+
+\step{板书推导：为什么两个内部端点的密度相等？}
+在单峰情形中，设区间为 $[L,U]$，有
+\[
+F_x(U)-F_x(L)=1-\alpha.
+\]
+在保持后验概率不变的条件下，把 $U$ 看成 $L$ 的函数，求导得
+\[
+f(U)\frac{dU}{dL}-f(L)=0,
+\qquad \frac{dU}{dL}=\frac{f(L)}{f(U)}.
+\]
+区间长度为 $U-L$，内部最优点满足
+\[
+\frac d{dL}(U-L)=\frac{f(L)}{f(U)}-1=0.
+\]
+故需联立
+\[
+\boxed{\begin{cases}
+\displaystyle\int_L^U f(\theta)\,d\theta=1-\alpha,\\
+f(L)=f(U).
+\end{cases}}
+\]
+若最优端点位于支撑边界，上述内部端点等密度条件不一定适用。
+
+\step{板书中的阈值搜索法}
+定义 $M(k)=\int_{\{f\geq k\}}f(\theta)\,d\theta$。若 $M(k)>1-\alpha$，表示取入的概率过多，应增大 $k$；若 $M(k)<1-\alpha$，则减小 $k$。每次由 $f(L)=f(U)=k$ 找到两端点，迭代直到概率满足要求。
+
+\step{寿命例子的 $90\%$ HPD 区间}
+对 $\IGa(a,b)$，对数密度中与 $\theta$ 有关的部分为
+\[
+-(a+1)\log\theta-\frac b\theta.
+\]
+令 $h(\theta)=(a+1)\log\theta+b/\theta$，则 $f(L)=f(U)$ 等价于 $h(L)=h(U)$，数值上更便于计算。众数 $b/(a+1)$ 位于两端点之间。
+
+\textbf{为了对应老师板书的数值，这一步按课件将 $a=1.956$ 近似为 $2$，保持 $b=42868$。}此时
+\[
+f(\theta)=b^2\theta^{-3}e^{-b/\theta},\qquad
+F(\theta)=\left(1+\frac b\theta\right)e^{-b/\theta}.
+\]
+计算程序于是化为求解
+\[
+\begin{cases}
+\displaystyle\left(1+\frac bU\right)e^{-b/U}
+-\left(1+\frac bL\right)e^{-b/L}=0.9,\\
+3\log L+b/L=3\log U+b/U.
+\end{cases}
+\]
+所得
+\[
+\boxed{[L,U]\approx[4735.17,81183.22]\text{小时}\quad(a\approx2).}
+\]
+保留原后验 $\IGa(1.956,42868)$ 而不作形状参数近似时，数值解约为 $[4750.48,84767.95]$ 小时。两个区间对应不同的形状参数，不能混用。
+
+\section{假设检验}
+\subsection{后验概率、边缘似然与检验决策}
+考虑
+\[
+H_0:\theta\in\Theta_0,\qquad H_1:\theta\in\Theta_1,
+\quad\Theta_0\cap\Theta_1=\varnothing,\quad\Theta_0\cup\Theta_1=\Theta.
+\]
+按板书记假设的先验概率和后验概率分别为
+\[
+\pi_i=P(H_i)>0,\qquad \alpha_i=P(H_i\mid x),\qquad i=0,1.
+\]
+这里 $\alpha_i$ 是\textbf{假设的后验概率}，不是可信水平中的尾概率 $\alpha$，也不是频率检验中的显著性水平。
+
+若 $\pi(\theta)$ 是连续先验，则在假设 $H_i$ 成立的条件下，参数的条件先验密度为
+\[
+g_i(\theta)=\pi(\theta\mid H_i)
+=\frac{\pi(\theta)\ind_{\Theta_i}(\theta)}{\pi_i}.
+\]
+总体先验写为 $\pi(\theta)=\pi_0g_0(\theta)+\pi_1g_1(\theta)$。定义 $H_i$ 下数据的边缘密度为
+\[
+m_i(x)=\int_{\Theta_i}p(x\mid\theta)g_i(\theta)\,d\theta.
+\]
+于是由事件形式贝叶斯公式，
+\[
+\boxed{\alpha_i=\frac{\pi_i m_i(x)}{\pi_0m_0(x)+\pi_1m_1(x)}.}
+\]
+若已求出完整后验，也可以直接积分：
+\[
+\alpha_i=\int_{\Theta_i}\pi(\theta\mid x)\,d\theta,\qquad
+\alpha_0+\alpha_1=1.
+\]
+
+\step{两种错误损失相同时}
+正确决策损失为零，两种错误损失都取 $1$。选择 $H_0$ 的后验风险为 $\alpha_1$，选择 $H_1$ 的后验风险为 $\alpha_0$。因此
+\[
+\alpha_0>\alpha_1\Rightarrow\text{选择 }H_0,\qquad
+\alpha_1>\alpha_0\Rightarrow\text{选择 }H_1.
+\]
+相等时两种决策的后验风险相同。
+
+\step{错误损失不同时：板书反例}
+令 $C_{01}$ 表示“选择 $H_0$、实际 $H_1$ 为真”的损失，$C_{10}$ 表示反向错误的损失，正确决策仍取零。则
+\[
+\rho_0(x)=C_{01}\alpha_1,\qquad\rho_1(x)=C_{10}\alpha_0.
+\]
+若 $\alpha_0=0.8,\alpha_1=0.2$，但 $C_{01}=10,C_{10}=1$，则
+\[
+\rho_0=10\times0.2=2,\qquad\rho_1=1\times0.8=0.8,
+\]
+故应选择 $H_1$。不能脱离损失条件，机械地“选择后验概率较大的假设”。
+
+\step{与频率检验的区别}
+板书另写频率方法对拒绝域 $W$ 的约束
+\[
+\sup_{\theta\in\Theta_0}P_\theta(X\in W)\leq\alpha.
+\]
+这是在 $H_0$ 下控制重复抽样误拒概率；后验概率 $P(H_0\mid x)$ 是给定已经观察到的数据后关于假设的概率，两者含义不同。
+
+\subsection{贝叶斯因子：后验赔率除以先验赔率}
+由后验概率公式相除，
+\[
+\frac{\alpha_0}{\alpha_1}
+=\frac{\pi_0}{\pi_1}\frac{m_0(x)}{m_1(x)}.
+\]
+支持 $H_0$ 相对于 $H_1$ 的贝叶斯因子定义为
+\[
+\boxed{\BF_{01}(x)=\frac{\alpha_0/\alpha_1}{\pi_0/\pi_1}
+=\frac{m_0(x)}{m_1(x)}.}
+\]
+即
+\[
+\boxed{\text{后验赔率}=\text{先验赔率}\times\text{贝叶斯因子}.}
+\]
+$\BF_{01}>1$ 表示数据使相对证据向 $H_0$ 移动，$\BF_{01}<1$ 则向 $H_1$ 移动，且 $\BF_{10}=1/\BF_{01}$。\textbf{贝叶斯因子大于1本身不保证最终选择 $H_0$}，还需结合先验赔率和损失。
+
+当先验概率相同、两种错误损失相同时，可以按 $\BF_{01}$ 与 $1$ 比较。一般地，选择 $H_0$ 的条件为
+\[
+\frac{\alpha_0}{\alpha_1}>\frac{C_{01}}{C_{10}}
+\quad\Longleftrightarrow\quad
+\BF_{01}>\frac{C_{01}}{C_{10}}\frac{\pi_1}{\pi_0}.
+\]
+
+\subsection{例2.4.1：二项概率的单侧检验与三种积分算法}
+板书也记作“例2.10”。设 $X\mid\theta\sim\Bin(n,\theta)$，先验为 $\theta\sim U(0,1)$，检验
+\[
+H_0:\theta\leq\tfrac12,\qquad H_1:\theta>\tfrac12.
+\]
+\step{Step 1：似然函数}
+\[
+L(\theta;x)=\binom nx\theta^x(1-\theta)^{n-x}.
+\]
+\step{Step 2：先验及两个假设的先验概率}
+先验密度为 $\pi(\theta)=1$，$0<\theta<1$，所以
+\[
+\pi_0=\pi_1=\frac12,
+\]
+在两半区间上的条件先验密度分别为 $2\ind_{(0,1/2]}$ 与 $2\ind_{(1/2,1)}$。
+\step{Step 3：后验分布}
+\[
+\pi(\theta\mid x)\propto\theta^x(1-\theta)^{n-x},\qquad
+\theta\mid x\sim\Be(x+1,n-x+1),
+\]
+\[
+\pi(\theta\mid x)=\frac{(n+1)!}{x!(n-x)!}\theta^x(1-\theta)^{n-x}.
+\]
+\step{Step 4：计算后验假设概率}
+\[
+\alpha_0=\frac{(n+1)!}{x!(n-x)!}
+\int_0^{1/2}\theta^x(1-\theta)^{n-x}\,d\theta,
+\qquad\alpha_1=1-\alpha_0.
+\]
+老师在板书中给出了下面三种算法。
+
+\step{方法一：分部积分，建立递推}
+记 $I_{p,q}=\int_0^{1/2}\theta^p(1-\theta)^q\,d\theta$，取
+$u=(1-\theta)^q$，$dv=\theta^p\,d\theta$，得到
+\begin{align*}
+I_{p,q}
+&=\left[\frac{\theta^{p+1}(1-\theta)^q}{p+1}\right]_0^{1/2}
++\frac q{p+1}\int_0^{1/2}\theta^{p+1}(1-\theta)^{q-1}\,d\theta\\
+&=\frac{2^{-(p+q+1)}}{p+1}+\frac q{p+1}I_{p+1,q-1}.
+\end{align*}
+一直递推到 $I_{p+q,0}=2^{-(p+q+1)}/(p+q+1)$ 即可。
+代入课堂数值 $n=5,x=1$：
+\begin{align*}
+I_{1,4}
+&=\frac1{128}\left(1+\frac43+\frac{4\cdot3}{3\cdot4}
++\frac{4\cdot3\cdot2}{3\cdot4\cdot5}
++\frac{4!}{3\cdot4\cdot5\cdot6}\right)\\
+&=\frac1{128}\left(1+\frac43+1+\frac25+\frac1{15}\right)
+=\frac{19}{640}.
+\end{align*}
+因此
+\[
+\alpha_0=\frac{6!}{1!4!}\frac{19}{640}=\frac{57}{64},\qquad
+\alpha_1=\frac7{64}.
+\]
+
+\step{方法二：二项展开后逐项积分}
+令 $m=n-x$，由 $(1-\theta)^m=\sum_{k=0}^m(-1)^k\binom mk\theta^k$，
+\[
+I_{x,m}=\sum_{k=0}^m(-1)^k\binom mk
+\frac{2^{-(x+k+1)}}{x+k+1}.
+\]
+对 $x=1,m=4$，
+\[
+I_{1,4}=\frac18-\frac16+\frac3{32}-\frac1{40}+\frac1{384}
+=\frac{57}{1920}=\frac{19}{640},
+\]
+再乘 $30$ 即得 $\alpha_0=57/64$。
+
+\step{方法三：Beta 分布函数与二项尾概率的关系}
+当 $a,b$ 是正整数，$U\sim\Be(a,b)$ 时，
+\[
+P(U\leq t)=\sum_{j=a}^{a+b-1}\binom{a+b-1}{j}t^j(1-t)^{a+b-1-j}
+=P\{\Bin(a+b-1,t)\geq a\}.
+\]
+代入 $a=x+1,b=n-x+1,t=1/2$，得
+\[
+\boxed{\alpha_0=2^{-(n+1)}\sum_{j=x+1}^{n+1}\binom{n+1}{j}.}
+\]
+例如 $n=5,x=1$，
+\[
+\alpha_0=P\{\Bin(6,\tfrac12)\geq2\}
+=1-\frac{\binom60+\binom61}{64}=\frac{57}{64}.
+\]
+
+\step{Step 5：贝叶斯因子与决策}
+先验赔率为 $1$，所以 $\BF_{01}=\alpha_0/\alpha_1$。当 $n=5$ 时，板书的对照表为
+\begin{center}
+\begin{tabular}{cccl}
+\toprule
+$x$&$P(H_0\mid x)$&$P(H_1\mid x)$&$\BF_{01}$\\
+\midrule
+0&$63/64$&$1/64$&$63$\\
+1&$57/64$&$7/64$&$57/7\approx8.14$\\
+2&$42/64$&$22/64$&$21/11\approx1.91$\\
+3&$22/64$&$42/64$&$11/21\approx0.524$\\
+4&$7/64$&$57/64$&$7/57\approx0.123$\\
+5&$1/64$&$63/64$&$1/63\approx0.0159$\\
+\bottomrule
+\end{tabular}
+\end{center}
+在两种错误损失相同的条件下，$x=0,1,2$ 时选 $H_0$，$x=3,4,5$ 时选 $H_1$。还可利用对称关系
+\[
+\alpha_0(x)=\alpha_1(n-x)
+\]
+检查计算，减少重复。
+
+\subsection{简单假设对简单假设：似然比形式}
+若 $H_0:\theta=\theta_0$，$H_1:\theta=\theta_1$，则两个假设内没有待积分的参数，故
+\[
+m_0(x)=p(x\mid\theta_0),\qquad m_1(x)=p(x\mid\theta_1),\qquad
+\BF_{01}(x)=\frac{p(x\mid\theta_0)}{p(x\mid\theta_1)}.
+\]
+两种错误损失相同时，选择 $H_1$ 的条件等价于
+\[
+\frac{p(x\mid\theta_1)}{p(x\mid\theta_0)}>\frac{\pi_0}{\pi_1}.
+\]
+这是一种似然比判别形式。若似然可分解为 $h(x)g(T(x),\theta)$，则 $h(x)$ 在比值中抵消，只需使用充分统计量。
+
+\subsection{例2.4.2：正态均值的两个简单假设}
+板书也记作“例2.11”。设 $X_i\mid\theta\overset{iid}{\sim}N(\theta,1)$，检验
+\[
+H_0:\theta=0,\qquad H_1:\theta=1.
+\]
+\step{Step 1：似然函数与平方和分解}
+\[
+L(\theta;x)=(2\pi)^{-n/2}\exp\left[-\frac12\sum_i(x_i-\theta)^2\right]
+=h(x)\exp\left[-\frac n2(\bar x-\theta)^2\right],
+\]
+其中 $h(x)=(2\pi)^{-n/2}\exp[-\frac12\sum_i(x_i-\bar x)^2]$ 与 $\theta$ 无关。
+\step{Step 2：先验假设概率与贝叶斯因子}
+设 $P(H_i)=\pi_i$。两种假设均为单点，故
+\begin{align*}
+\BF_{01}(x)
+&=\frac{h(x)e^{-n\bar x^2/2}}{h(x)e^{-n(\bar x-1)^2/2}}\\
+&=\exp\left[-\frac n2\{\bar x^2-(\bar x-1)^2\}\right]
+=\boxed{\exp\left[-\frac n2(2\bar x-1)\right].}
+\end{align*}
+所以 $\bar x<1/2$ 时数据相对支持 $H_0$，$\bar x>1/2$ 时相对支持 $H_1$，$\bar x=1/2$ 时贝叶斯因子为 $1$。
+
+\step{Step 3：代入板书数值，并结合先验作决策}
+当 $n=10,\bar x=2$ 时，
+\[
+\BF_{01}=e^{-15}\approx3.0590\times10^{-7},\qquad
+\BF_{10}=e^{15}\approx3.2690\times10^6.
+\]
+若 $\pi_0=\pi_1$，则
+\[
+P(H_0\mid x)=\frac{e^{-15}}{1+e^{-15}}\approx3.0590\times10^{-7},
+\qquad P(H_1\mid x)\approx0.9999996941.
+\]
+两种错误损失相同时选择 $H_1$。若希望选择 $H_0$，则须
+\[
+e^{-15}\frac{\pi_0}{\pi_1}>1
+\quad\Longleftrightarrow\quad\frac{\pi_0}{\pi_1}>e^{15}.
+\]
+例如即使先验赔率达到 $10000:1$，后验赔率仍为
+\[
+\frac{\alpha_0}{\alpha_1}=10000e^{-15}\approx0.003059<1,
+\]
+仍选择 $H_1$。这说明足够强的样本证据可以改变原有的先验倾向。
+
+\subsection{复合假设对复合假设：积分与最大化的区别}
+当 $H_i$ 内含多个参数值时，贝叶斯因子采用\textbf{按条件先验加权积分}：
+\[
+\BF_{01}(x)=\frac{\int_{\Theta_0}p(x\mid\theta)g_0(\theta)\,d\theta}
+{\int_{\Theta_1}p(x\mid\theta)g_1(\theta)\,d\theta}.
+\]
+板书还对照写出广义似然比的一种形式
+\[
+\lambda(x)=\frac{\sup_{\theta\in\Theta_0}p(x\mid\theta)}
+{\sup_{\theta\in\Theta}p(x\mid\theta)}.
+\]
+这里分子、分母是最大值；贝叶斯因子的分子、分母是边缘似然。不能把积分直接替换为最大值。
+
+\subsection{例2.4.3：正态后验下的复合假设检验}
+设 $X_i\mid\theta\overset{iid}{\sim}N(\theta,1)$，先验 $\theta\sim N(0.5,2)$，$n=10,\bar x=1.5$，检验
+\[
+H_0:\theta\leq1,\qquad H_1:\theta>1.
+\]
+\step{Step 1：似然核}
+\[
+L(\theta;x)\propto\exp\left[-\frac n2(\theta-\bar x)^2\right].
+\]
+\step{Step 2：先验与先验假设概率}
+\[
+\pi(\theta)=\frac1{\sqrt{4\pi}}e^{-(\theta-0.5)^2/4},
+\qquad \pi_0=\Phi\left(\frac{1-0.5}{\sqrt2}\right)\approx0.638163,
+\]
+所以 $\pi_1\approx0.361837$，先验赔率 $\pi_0/\pi_1\approx1.76366$。
+\step{Step 3：后验核、配方及归一化}
+\[
+\pi(\theta\mid x)\propto\exp\left\{-\frac12
+\left[n(\theta-\bar x)^2+\frac12(\theta-0.5)^2\right]\right\}.
+\]
+识别为 $N(\mu_n,S_n^2)$，其中
+\[
+S_n^2=\frac1{n+1/2}=\frac1{10.5},\qquad
+\mu_n=\frac{n\bar x+0.5/2}{n+1/2}
+=\frac{15.25}{10.5}\approx1.452381.
+\]
+\step{Step 4：后验假设概率}
+\[
+S_n\approx0.308607,\qquad
+\alpha_0=\Phi\left(\frac{1-\mu_n}{S_n}\right)
+=\Phi(-1.465882)\approx0.071340,
+\]
+\[
+\alpha_1=1-\alpha_0\approx0.928660,
+\qquad\frac{\alpha_0}{\alpha_1}\approx0.07682.
+\]
+\step{Step 5：贝叶斯因子及结论}
+\[
+\BF_{01}=\frac{\alpha_0/\alpha_1}{\pi_0/\pi_1}
+\approx\frac{0.07682}{1.76366}=0.04356,\qquad
+\BF_{10}\approx22.96.
+\]
+两种错误损失相同时选择 $H_1$。虽然先验更倾向 $H_0$，观察数据后的后验概率与贝叶斯因子都明显倾向 $H_1$。
+
+\subsection{简单原假设对复合备择假设：点质量与连续先验的混合}
+考虑 $H_0:\theta=\theta_0$ 与 $H_1:\theta\ne\theta_0$。若仅取连续先验，则单点的先验概率为零，无法赋予 $H_0$ 正的先验概率。板书的处理是另给原假设一个点质量：
+\[
+\pi(d\theta)=\pi_0\delta_{\theta_0}(d\theta)
++(1-\pi_0)g_1(\theta)\,d\theta,\qquad0<\pi_0<1,
+\]
+其中 $\delta_{\theta_0}$ 是在 $\theta_0$ 处的单位点质量，$g_1$ 是 $H_1$ 下的条件先验密度。
+
+原假设与备择假设下的边缘似然分别为
+\[
+m_0(x)=p(x\mid\theta_0),\qquad
+m_1(x)=\int_{\theta\ne\theta_0}p(x\mid\theta)g_1(\theta)\,d\theta,
+\]
+总边缘密度为 $m(x)=\pi_0m_0(x)+(1-\pi_0)m_1(x)$。所以
+\[
+\BF_{01}=\frac{p(x\mid\theta_0)}{m_1(x)},\qquad
+\boxed{P(H_0\mid x)=\left[1+\frac{1-\pi_0}{\pi_0}\frac1{\BF_{01}}\right]^{-1}.}
+\]
+若 $\pi_0=1/2$，简化为
+\[
+P(H_0\mid x)=\frac{\BF_{01}}{1+\BF_{01}},\qquad
+P(H_1\mid x)=\frac1{1+\BF_{01}}.
+\]
+连续密度 $g_1$ 在 $\theta_0$ 处的取值不影响积分；它与额外设置的点质量不能混淆。
+
+\subsection{例2.4.4：二项概率等于二分之一的检验}
+设 $X\mid\theta\sim\Bin(n,\theta)$，检验
+\[
+H_0:\theta=\tfrac12,\qquad H_1:\theta\ne\tfrac12.
+\]
+\step{Step 1：似然函数}
+\[
+p(x\mid\theta)=\binom nx\theta^x(1-\theta)^{n-x}.
+\]
+\step{Step 2：混合先验}
+取 $P(H_0)=\pi_0$，$P(H_1)=1-\pi_0$，在 $H_1$ 下用 $(0,1)$ 上的均匀条件先验 $g_1(\theta)=1$。这里不能误写成整个先验只有 $U(0,1)$。
+\step{Step 3：分别求边缘似然}
+\[
+m_0(x)=\binom nx2^{-n},
+\]
+\begin{align*}
+m_1(x)&=\int_0^1\binom nx\theta^x(1-\theta)^{n-x}\,d\theta\\
+&=\binom nx B(x+1,n-x+1)
+=\frac{n!}{x!(n-x)!}\frac{x!(n-x)!}{(n+1)!}
+=\frac1{n+1}.
+\end{align*}
+\step{Step 4：贝叶斯因子与后验概率}
+\[
+\boxed{\BF_{01}(x)=\frac{m_0(x)}{m_1(x)}
+=\frac{(n+1)!}{2^n x!(n-x)!}.}
+\]
+当 $\pi_0=1/2,n=5,x=3$ 时，
+\[
+\BF_{01}=\frac{6!}{2^5 3!2!}=\frac{15}{8},\qquad
+P(H_0\mid x)=\frac{15}{23},\quad P(H_1\mid x)=\frac8{23}.
+\]
+两种错误损失相同时选择 $H_0$。与例2.4.1相比，这次原假设是单点而非半个区间，先验构造与边缘似然也随之不同。
+
+\section{预测}
+\subsection{先验预测与后验预测}
+设 $X$ 是已经观测的样本，$Z$ 是未来观测。给定 $\theta$ 后，假定 $Z$ 与 $X$ 条件独立，且 $Z$ 的条件密度或概率质量函数为 $g(z\mid\theta)$。
+
+\textbf{尚未观察样本时}，用先验对未知参数平均，得到先验预测分布
+\[
+m(z)=\int g(z\mid\theta)\pi(\theta)\,d\theta.
+\]
+\textbf{已经观察到 $x$ 时}，把先验换成后验，得到后验预测分布
+\[
+\boxed{m(z\mid x)=\int g(z\mid\theta)\pi(\theta\mid x)\,d\theta
+=E[g(z\mid\theta)\mid x].}
+\]
+老师强调：先求参数的后验，再对未来分布平均。一般不能把参数直接换成后验均值，因为
+\[
+E[g(z\mid\theta)\mid x]\ne g\{z\mid E(\theta\mid x)\}
+\]
+通常成立。代入一个参数估计值，会漏掉参数本身的后验不确定性。
+
+\subsection{预测均值、方差与点预测}
+由条件期望公式，
+\[
+\boxed{E(Z\mid x)=E\{E(Z\mid\theta)\mid x\}.}
+\]
+由条件方差分解，
+\[
+\boxed{\Var(Z\mid x)=E\{\Var(Z\mid\theta)\mid x\}
++\Var\{E(Z\mid\theta)\mid x\}.}
+\]
+第一项来自给定参数后未来观测自身的随机波动，第二项来自参数的后验不确定性。平方损失下，最佳点预测为 $\hat z=E(Z\mid x)$；绝对损失下，最佳点预测为后验预测分布的中位数。
+
+\subsection{例2.5.1：二项模型的 Beta--二项预测分布}
+过去 $n$ 次试验中的成功次数为 $X$，未来 $k$ 次试验的成功次数为 $Z$。在给定 $\theta$ 时，
+\[
+X\mid\theta\sim\Bin(n,\theta),\qquad
+Z\mid\theta\sim\Bin(k,\theta),\qquad X\perp Z\mid\theta.
+\]
+\step{Step 1：已有样本的似然函数}
+\[
+L(\theta;x)=\binom nx\theta^x(1-\theta)^{n-x}.
+\]
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac1{B(\alpha,\beta)}
+\theta^{\alpha-1}(1-\theta)^{\beta-1},\quad0<\theta<1.
+\]
+\step{Step 3：参数的后验分布}
+相乘后识别为
+\[
+\theta\mid x\sim\Be(a,b),\qquad a=\alpha+x,\quad b=\beta+n-x.
+\]
+\step{Step 4：对后验积分，得到未来次数的预测分布}
+对 $z=0,1,\ldots,k$，
+\begin{align*}
+P(Z=z\mid x)
+&=\int_0^1\binom kz\theta^z(1-\theta)^{k-z}
+\frac{\theta^{a-1}(1-\theta)^{b-1}}{B(a,b)}\,d\theta\\
+&=\frac{\binom kz}{B(a,b)}
+\int_0^1\theta^{a+z-1}(1-\theta)^{b+k-z-1}\,d\theta\\
+&=\boxed{\binom kz\frac{B(a+z,b+k-z)}{B(a,b)}}.
+\end{align*}
+这称为 Beta--二项预测分布。用 Gamma 函数展开为
+\[
+P(Z=z\mid x)=\binom kz
+\frac{\Gamma(a+b)\Gamma(a+z)\Gamma(b+k-z)}
+{\Gamma(a)\Gamma(b)\Gamma(a+b+k)}.
+\]
+\step{Step 5：代入板书数据 $n=10,x=3,k=5$}
+取均匀先验 $\alpha=\beta=1$，则 $a=4,b=8$，即
+\[
+\theta\mid x=3\sim\Be(4,8).
+\]
+例如
+\[
+P(Z=0\mid x=3)=\frac{B(4,13)}{B(4,8)}
+=\frac{\Gamma(12)\Gamma(13)}{\Gamma(8)\Gamma(17)}
+=\frac{33}{182}\approx0.1813.
+\]
+其余各项同理得到
+\begin{center}
+\begin{tabular}{c*{6}{c}}
+\toprule
+$z$&0&1&2&3&4&5\\
+\midrule
+$P(Z=z\mid x=3)$&$99/546$&$165/546$&$150/546$&$90/546$&$35/546$&$7/546$\\
+\bottomrule
+\end{tabular}
+\end{center}
+这六个概率之和为 $1$。从表中可见，最可能的未来成功次数是 $1$；平方损失下的点预测却是
+\[
+\hat z=E(Z\mid x)=E(k\theta\mid x)
+=k\frac a{a+b}=5\times\frac4{12}=\frac53.
+\]
+点预测为 $5/3$ 不要求未来次数实际能取 $5/3$；它是平方损失下的最优实数行动值。
+
+板书还计算了预测区间 $[0,3]$ 的概率：
+\[
+P(0\leq Z\leq3\mid x=3)
+=\frac{99+165+150+90}{546}=\frac{12}{13}\approx0.9231.
+\]
+因此它可作为可信水平至少 $90\%$ 的预测区间。
+
+\step{补充：若没有过去样本，均匀先验的预测是什么？}
+直接对先验积分：
+\[
+P(Z=z)=\binom kz\int_0^1\theta^z(1-\theta)^{k-z}\,d\theta
+=\binom kz B(z+1,k-z+1)=\frac1{k+1}.
+\]
+所以 $Z$ 在 $0,1,\ldots,k$ 上均匀分布。直接代入均匀先验的均值 $1/2$，会得到 $\Bin(k,1/2)$；当 $k\geq2$ 时，它与这里的先验预测分布不同。
+
+\subsection{正态预测及例2.5.2的两架天平}
+设第一架天平测量 $n$ 次，$X_i\mid\theta\overset{iid}{\sim}N(\theta,\sigma^2)$，先验为 $N(\mu,\tau^2)$。按前面的似然乘先验并配方后，
+\[
+\theta\mid x\sim N(\mu_n,\tau_n^2),\qquad
+\tau_n^2=\left(\frac n{\sigma^2}+\frac1{\tau^2}\right)^{-1},\quad
+\mu_n=\tau_n^2\left(\frac{n\bar x}{\sigma^2}+\frac\mu{\tau^2}\right).
+\]
+第二架天平的未来称量值为 $Z\mid\theta\sim N(\theta,\sigma_2^2)$。为简化配方，令 $v=\tau_n^2$，$w=\sigma_2^2$，则
+\begin{align*}
+m(z\mid x)
+&=\frac1{2\pi\sqrt{vw}}\int_{-\infty}^{\infty}
+\exp\left\{-\frac12\left[\frac{(z-\theta)^2}{w}
++\frac{(\theta-\mu_n)^2}{v}\right]\right\}\,d\theta.
+\end{align*}
+沿用课件的配方过程，记
+\[
+A=\frac1w+\frac1v,\qquad B=\frac zw+\frac{\mu_n}v,\qquad
+C=\frac{z^2}w+\frac{\mu_n^2}v.
+\]
+则指数中的二次式为
+\[
+A\theta^2-2B\theta+C
+=A\left(\theta-\frac BA\right)^2+C-\frac{B^2}A,
+\]
+其中 $C-B^2/A=(z-\mu_n)^2/(v+w)$。利用正态核的积分为 $\sqrt{2\pi/A}$，得到
+\[
+m(z\mid x)=\frac1{\sqrt{2\pi(v+w)}}
+\exp\left[-\frac{(z-\mu_n)^2}{2(v+w)}\right].
+\]
+故
+\[
+\boxed{Z\mid x\sim N(\mu_n,\sigma_2^2+\tau_n^2).}
+\]
+也可用板书中的条件矩公式核对：
+\[
+E(Z\mid x)=E(\theta\mid x)=\mu_n,
+\]
+\[
+\Var(Z\mid x)=E(\sigma_2^2\mid x)+\Var(\theta\mid x)
+=\sigma_2^2+\tau_n^2.
+\]
+
+\step{参数可信区间与未来观测预测区间的区别}
+在同一可信水平 $95\%$ 下，
+\[
+\begin{array}{ll}
+\text{参数 }\theta\text{ 的可信区间：}&\mu_n\pm1.96\tau_n,\\[3pt]
+\text{未来观测 }Z\text{ 的预测区间：}&\mu_n\pm1.96\sqrt{\sigma_2^2+\tau_n^2}.
+\end{array}
+\]
+后者还包括未来观测本身的误差，因此更宽。板书中若统一把未来观测方差记为 $\sigma^2$，只需在上式以 $\sigma^2$ 替换 $\sigma_2^2$。
+
+\section{似然原理}
+\subsection{似然函数的含义与比例关系}
+给定模型 $p(x\mid\theta)$，同一表达式可以从两个角度看：固定 $\theta$、让 $x$ 变化时，是样本的抽样分布；固定已经观测到的 $x$、让 $\theta$ 变化时，是似然函数
+\[
+L(\theta;x):=p(x\mid\theta).
+\]
+似然\textbf{不是参数的后验密度}，不要求对 $\theta$ 的积分等于 $1$。先验乘似然后，才通过贝叶斯公式得到后验。
+
+若两次试验分别得到观测 $x,y$，并且对所有 $\theta$ 有
+\[
+L_1(\theta;x)=c\,L_2(\theta;y),\qquad c>0\text{ 且与 }\theta\text{ 无关},
+\]
+则两者对任意两个参数值的相对支持相同：
+\[
+\frac{L_1(\theta_a;x)}{L_1(\theta_b;x)}
+=\frac{L_2(\theta_a;y)}{L_2(\theta_b;y)}.
+\]
+\textbf{似然原理}主张：对参数的统计推断应依据实际观测给出的似然；比例相同的似然提供相同的相对证据。
+
+取相同先验且后验可归一化时，比例常数在贝叶斯公式中抵消：
+\[
+\pi_1(\theta\mid x)
+=\frac{cL_2(\theta;y)\pi(\theta)}{c\int L_2(t;y)\pi(t)\,dt}
+=\pi_2(\theta\mid y).
+\]
+因此此时得到相同的后验及基于该后验的推断。
+
+\subsection{课堂引例：固定次数与达到成功数后停止}
+\textbf{方案A：}预先规定做 $10$ 次试验，观察到 $3$ 次成功。
+\[
+L_A(\theta)=\binom{10}{3}\theta^3(1-\theta)^7.
+\]
+\textbf{方案B：}一直做到第 $3$ 次成功，恰在第 $10$ 次试验停止。最后一次必须成功，前 $9$ 次有 $2$ 次成功，因此
+\[
+L_B(\theta)=\binom92\theta^3(1-\theta)^7.
+\]
+两者之比为
+\[
+\frac{L_A(\theta)}{L_B(\theta)}=\frac{\binom{10}{3}}{\binom92}
+=\frac{10}{3},
+\]
+与 $\theta$ 无关。若均取 $\Be(\alpha,\beta)$ 先验，则两个方案都得到
+\[
+\theta\mid\text{data}\sim\Be(\alpha+3,\beta+7).
+\]
+停止规则不同，但这两组实际观测给出的似然成比例，采用同一先验时后验相同。
+
+\subsection{例2.6.1：抛硬币的两个方案}
+设正面概率为 $\theta$，考虑
+\[
+H_0:\theta=\tfrac12,\qquad H_1:\theta>\tfrac12.
+\]
+\step{第一步：两种试验的似然函数}
+方案一预先规定抛 $12$ 次，得到 $9$ 次正面、$3$ 次反面：
+\[
+L_1(\theta)=\binom{12}{9}\theta^9(1-\theta)^3
+=220\theta^9(1-\theta)^3.
+\]
+方案二一直抛到出现第 $3$ 次反面停止，此前共出现 $9$ 次正面。最后一次是反面，前 $11$ 次恰有 $9$ 次正面、$2$ 次反面：
+\[
+L_2(\theta)=\binom{11}{9}\theta^9(1-\theta)^3
+=55\theta^9(1-\theta)^3.
+\]
+故 $L_1=4L_2$，满足似然成比例的条件。
+
+\step{第二步：频率方法的两个 $p$ 值}
+在方案一中，$H_0$ 下 $X\sim\Bin(12,1/2)$，所以
+\[
+p_1=P_{H_0}(X\geq9)
+=\frac{\binom{12}{9}+\binom{12}{10}+\binom{12}{11}+\binom{12}{12}}{2^{12}}
+=\frac{299}{4096}\approx0.07300.
+\]
+方案二令 $Y$ 表示第 $3$ 次反面出现之前的正面次数，则
+\[
+P_\theta(Y=j)=\binom{j+2}{j}\theta^j(1-\theta)^3,\qquad j=0,1,\ldots,
+\]
+因此
+\[
+p_2=P_{H_0}(Y\geq9)
+=\sum_{j=9}^{\infty}\binom{j+2}{j}2^{-(j+3)}.
+\]
+“第3次反面之前至少有9次正面”等价于“前11次中至少有9次正面”，故也可以算作
+\[
+p_2=\frac{\binom{11}{9}+\binom{11}{10}+\binom{11}{11}}{2^{11}}
+=\frac{67}{2048}\approx0.03271.
+\]
+在 $5\%$ 显著性水平下，方案一不拒绝 $H_0$，方案二拒绝 $H_0$。这是因为两个 $p$ 值依据不同抽样方案下的尾部事件计算。
+
+\step{第三步：先验假设概率及备择下的条件先验}
+按板书取
+\[
+P(H_0)=P(H_1)=\frac12,\qquad
+\theta\mid H_1\sim U(1/2,1),
+\]
+所以 $g_1(\theta)=2\ind_{(1/2,1)}(\theta)$。
+
+\step{第四步：边缘似然与贝叶斯因子}
+把方案 $i$ 的似然统一写为 $L_i(\theta)=k_i\theta^9(1-\theta)^3$，其中 $k_1=220,k_2=55$。则
+\[
+m_{0,i}=k_i2^{-12},\qquad
+m_{1,i}=2k_i\int_{1/2}^1\theta^9(1-\theta)^3\,d\theta.
+\]
+相除后 $k_i$ 抵消，故两个方案的贝叶斯因子相同：
+\[
+\BF_{01}=\frac{2^{-12}}{2\displaystyle\int_{1/2}^1\theta^9(1-\theta)^3\,d\theta}.
+\]
+沿用板书的多项式展开，
+\[
+\theta^9(1-\theta)^3=\theta^9-3\theta^{10}+3\theta^{11}-\theta^{12},
+\]
+\[
+I=\int_{1/2}^1\theta^9(1-\theta)^3\,d\theta
+=\left[\frac{\theta^{10}}{10}-\frac{3\theta^{11}}{11}
++\frac{\theta^{12}}4-\frac{\theta^{13}}{13}\right]_{1/2}^1
+\approx0.0003335166.
+\]
+从而
+\[
+\BF_{01}=\frac{1430}{3907}\approx0.36601,\qquad
+\BF_{10}\approx2.73217.
+\]
+
+\step{第五步：后验概率与结论}
+先验赔率为 $1$，所以两个方案都给出
+\[
+P(H_0\mid\text{data})=\frac{\BF_{01}}{1+\BF_{01}}
+=\frac{1430}{5337}\approx0.26794,
+\]
+\[
+P(H_1\mid\text{data})=\frac1{1+\BF_{01}}
+=\frac{3907}{5337}\approx0.73206.
+\]
+两种错误损失相同时，两方案均选择 $H_1$。例子说明：似然成比例并取相同先验时，贝叶斯计算不因这两种停止规则的差别而改变；频率 $p$ 值则可能不同。

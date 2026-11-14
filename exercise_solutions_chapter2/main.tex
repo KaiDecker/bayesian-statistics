@@ -1,0 +1,783 @@
+\documentclass[UTF8,zihao=-4]{ctexart}
+\usepackage{amsmath,amssymb,geometry,enumitem,booktabs}
+\usepackage[unicode,hidelinks]{hyperref}
+\geometry{a4paper,margin=2.2cm}
+\setlist{itemsep=2pt,topsep=3pt}
+\allowdisplaybreaks[2]
+\emergencystretch=2em
+\newcommand{\step}[1]{\par\medskip\noindent\textbf{#1}\par\nopagebreak}
+\newcommand{\Be}{\operatorname{Be}}
+\newcommand{\Ga}{\operatorname{Ga}}
+\newcommand{\IGa}{\operatorname{IGa}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\ind}{\mathbf{1}}
+\title{第二章习题解答}
+\author{按课堂板书方法整理：2.1--2.10}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{记号约定：}似然记作 $L(\theta;x)=p(x\mid\theta)$。解答依照“似然函数、先验密度、后验核、归一化或识别分布、求所需估计”的顺序展开。Gamma 分布采用课堂的率参数化：
+\[
+Y\sim\Ga(a,b)\quad\Longleftrightarrow\quad
+f_Y(y)=\frac{b^a}{\Gamma(a)}y^{a-1}e^{-by},\quad y>0.
+\]
+其均值为 $a/b$，方差为 $a/b^2$。倒 Gamma 分布记为
+\[
+Y\sim\IGa(a,b)\quad\Longleftrightarrow\quad
+f_Y(y)=\frac{b^a}{\Gamma(a)}y^{-a-1}e^{-b/y},\quad y>0.
+\]
+正态分布 $N(\mu,\sigma^2)$ 的第二个参数为方差；后验期望估计记为 $\hat\theta_E$，最大后验估计记为 $\hat\theta_{MD}$。
+\section*{2.1\quad 几何分布的后验期望估计}
+题给
+\[
+P(X=x\mid\theta)=\theta(1-\theta)^x,\qquad x=0,1,\ldots,
+\qquad\theta\sim U(0,1).
+\]
+\textbf{注意：}本题 $X$ 从 $0$ 开始取值，指数为 $x$，不能写成从 $1$ 开始计数的 $\theta(1-\theta)^{x-1}$。
+
+\subsection*{（1）一次观测，观测值为3}
+\step{Step 1：似然函数}
+\[
+L(\theta;3)=P(X=3\mid\theta)=\theta(1-\theta)^3,\qquad0<\theta<1.
+\]
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=1,\qquad0<\theta<1.
+\]
+\step{Step 3：后验核及归一化}
+\[
+\pi(\theta\mid X=3)\propto L(\theta;3)\pi(\theta)
+=\theta(1-\theta)^3.
+\]
+这是 $\Be(2,4)$ 的核。由
+\[
+\int_0^1\theta(1-\theta)^3\,d\theta
+=B(2,4)=\frac{\Gamma(2)\Gamma(4)}{\Gamma(6)}=\frac1{20},
+\]
+得
+\[
+\pi(\theta\mid X=3)=20\theta(1-\theta)^3,\quad0<\theta<1,
+\qquad\theta\mid X=3\sim\Be(2,4).
+\]
+\step{Step 4：后验期望估计}
+\[
+\boxed{\hat\theta_E=E(\theta\mid X=3)=\frac2{2+4}=\frac13.}
+\]
+
+\subsection*{（2）三次独立观测，观测值为3、2、5}
+\step{Step 1：似然函数}
+\[
+L(\theta;x)=\prod_{i=1}^3\theta(1-\theta)^{x_i}
+=\theta^3(1-\theta)^{3+2+5}=\theta^3(1-\theta)^{10}.
+\]
+\step{Step 2：先验密度}
+仍取 $\pi(\theta)=1$，$0<\theta<1$。
+\step{Step 3：后验分布}
+\[
+\pi(\theta\mid x)\propto\theta^3(1-\theta)^{10}.
+\]
+故归一化后
+\[
+\pi(\theta\mid x)=\frac{\theta^{4-1}(1-\theta)^{11-1}}{B(4,11)},
+\qquad\boxed{\theta\mid x\sim\Be(4,11).}
+\]
+\step{Step 4：后验期望估计}
+\[
+\boxed{\hat\theta_E=E(\theta\mid x)=\frac4{4+11}=\frac4{15}.}
+\]
+
+\section*{2.2\quad 指数服务时间与参数倒数的估计}
+设20位顾客的服务时间在给定 $\lambda$ 时相互独立，且
+\[
+X_i\mid\lambda\sim\operatorname{Exp}(\lambda),\qquad
+p(x_i\mid\lambda)=\lambda e^{-\lambda x_i},\quad x_i>0.
+\]
+题给 $\bar x=3.8$，所以 $\sum_{i=1}^{20}x_i=20\times3.8=76$。
+
+\step{Step 1：似然函数}
+\[
+L(\lambda;x)=\prod_{i=1}^{20}\lambda e^{-\lambda x_i}
+=\lambda^{20}e^{-76\lambda},\qquad\lambda>0.
+\]
+
+\step{Step 2：由先验均值、标准差确定先验密度}
+设 $\lambda\sim\Ga(\alpha,\beta)$。题给先验均值为 $0.2$，标准差为 $1.0$，故
+\[
+\frac\alpha\beta=0.2,\qquad\frac\alpha{\beta^2}=1.0^2=1.
+\]
+两式相除，得
+\[
+\beta=\frac{0.2}{1}=0.2,\qquad\alpha=0.2\beta=0.04.
+\]
+所以先验为 $\Ga(0.04,0.2)$，密度为
+\[
+\pi(\lambda)=\frac{0.2^{0.04}}{\Gamma(0.04)}
+\lambda^{0.04-1}e^{-0.2\lambda},\quad\lambda>0.
+\]
+
+\step{Step 3：后验核及后验分布}
+\begin{align*}
+\pi(\lambda\mid x)
+&\propto L(\lambda;x)\pi(\lambda)\\
+&\propto\lambda^{20}e^{-76\lambda}\lambda^{0.04-1}e^{-0.2\lambda}\\
+&=\lambda^{20.04-1}e^{-76.2\lambda}.
+\end{align*}
+故
+\[
+\boxed{\lambda\mid x\sim\Ga(20.04,76.2),}
+\qquad
+\pi(\lambda\mid x)=\frac{76.2^{20.04}}{\Gamma(20.04)}
+\lambda^{20.04-1}e^{-76.2\lambda}.
+\]
+
+\step{Step 4：求 $\lambda$ 的后验期望估计}
+\[
+\boxed{\hat\lambda_E=E(\lambda\mid x)=\frac{20.04}{76.2}
+=\frac{167}{635}\approx0.26299.}
+\]
+
+\step{Step 5：求 $\theta=\lambda^{-1}$ 的后验期望估计}
+不能把 $E(\lambda^{-1}\mid x)$ 写成 $\{E(\lambda\mid x)\}^{-1}$。直接对后验积分，令 $a=20.04,b=76.2$，则
+\begin{align*}
+E(\lambda^{-1}\mid x)
+&=\frac{b^a}{\Gamma(a)}\int_0^\infty
+\lambda^{a-2}e^{-b\lambda}\,d\lambda\\
+&=\frac{b^a}{\Gamma(a)}\frac{\Gamma(a-1)}{b^{a-1}}
+=\frac b{a-1}.
+\end{align*}
+本题 $a>1$，因此
+\[
+\boxed{\hat\theta_E=E(\theta\mid x)=\frac{76.2}{20.04-1}
+=\frac{1905}{476}\approx4.00210\text{分钟}.}
+\]
+等价地，由变量变换 $\theta=1/\lambda$ 可得
+$\theta\mid x\sim\IGa(20.04,76.2)$，再利用倒 Gamma 均值公式得到相同结果。
+
+\section*{2.3\quad 泊松缺陷数的后验均值与方差}
+每盘磁带长度均为1200公尺，设三盘的缺陷数在给定 $\theta$ 时独立同分布于 $\operatorname{Poisson}(\theta)$。$\theta$ 表示\textbf{每盘1200公尺磁带的平均缺陷数}。观测为 $x_1=2,x_2=0,x_3=6$。
+
+\step{Step 1：似然函数}
+\begin{align*}
+L(\theta;x)
+&=\prod_{i=1}^3\frac{e^{-\theta}\theta^{x_i}}{x_i!}
+=\frac{e^{-3\theta}\theta^{2+0+6}}{2!\,0!\,6!}\\
+&\propto\theta^8e^{-3\theta},\qquad\theta>0.
+\end{align*}
+\step{Step 2：先验密度}
+题给 $\theta\sim\Ga(3,1)$，所以
+\[
+\pi(\theta)=\frac{1^3}{\Gamma(3)}\theta^{3-1}e^{-\theta}
+=\frac12\theta^2e^{-\theta},\quad\theta>0.
+\]
+\step{Step 3：后验分布}
+\[
+\pi(\theta\mid x)\propto\theta^8e^{-3\theta}\theta^2e^{-\theta}
+=\theta^{11-1}e^{-4\theta}.
+\]
+因此
+\[
+\boxed{\theta\mid x\sim\Ga(11,4),}
+\qquad
+\pi(\theta\mid x)=\frac{4^{11}}{\Gamma(11)}\theta^{10}e^{-4\theta},\quad\theta>0.
+\]
+\step{Step 4：后验期望估计及后验方差}
+\[
+\boxed{\hat\theta_E=E(\theta\mid x)=\frac{11}{4}=2.75,}
+\]
+\[
+\boxed{\Var(\theta\mid x)=\frac{11}{4^2}=\frac{11}{16}=0.6875.}
+\]
+
+\section*{2.4\quad 顺序抽样下的不合格品率估计}
+先验为 $\theta\sim\Be(5,10)$。两次抽样在给定 $\theta$ 时相互独立。
+
+\subsection*{（1）第一次抽检20件，发现3件不合格品}
+\step{Step 1：似然函数}
+\[
+L_1(\theta;3)=\binom{20}{3}\theta^3(1-\theta)^{17}.
+\]
+\step{Step 2：先验密度}
+\[
+\pi_0(\theta)=\frac1{B(5,10)}\theta^{5-1}(1-\theta)^{10-1},\quad0<\theta<1.
+\]
+\step{Step 3：后验核并归一化}
+\[
+\pi_1(\theta\mid x_1=3)\propto\theta^{3+5-1}(1-\theta)^{17+10-1}
+=\theta^{8-1}(1-\theta)^{27-1}.
+\]
+故
+\[
+\theta\mid x_1=3\sim\Be(8,27),\qquad
+\pi_1(\theta\mid3)=\frac{\theta^7(1-\theta)^{26}}{B(8,27)}.
+\]
+\step{Step 4：最大后验估计与后验期望估计}
+对后验密度取对数并求导：
+\[
+\ell_1'(\theta)=\frac7\theta-\frac{26}{1-\theta}=0
+\quad\Longrightarrow\quad7(1-\theta)=26\theta.
+\]
+又 $\ell_1''(\theta)=-7/\theta^2-26/(1-\theta)^2<0$，故
+\[
+\boxed{\hat\theta_{MD}^{(1)}=\frac7{33}\approx0.21212,\qquad
+\hat\theta_E^{(1)}=\frac8{35}\approx0.22857.}
+\]
+
+\subsection*{（2）再抽检20件，没有发现不合格品}
+\step{Step 1：新增样本的似然函数}
+\[
+L_2(\theta;0)=\binom{20}{0}\theta^0(1-\theta)^{20}=(1-\theta)^{20}.
+\]
+\step{Step 2：将第一次后验作为第二次先验}
+\[
+\pi_1(\theta)=\frac{\theta^{8-1}(1-\theta)^{27-1}}{B(8,27)},\quad0<\theta<1.
+\]
+\step{Step 3：两次抽样后的后验分布}
+\[
+\pi_2(\theta\mid3,0)\propto(1-\theta)^{20}
+\theta^{8-1}(1-\theta)^{27-1}
+=\theta^{8-1}(1-\theta)^{47-1}.
+\]
+故
+\[
+\boxed{\theta\mid x_1=3,x_2=0\sim\Be(8,47),}
+\qquad\pi_2(\theta\mid3,0)=\frac{\theta^7(1-\theta)^{46}}{B(8,47)}.
+\]
+\step{Step 4：最大后验估计与后验期望估计}
+\[
+\ell_2'(\theta)=\frac7\theta-\frac{46}{1-\theta}=0
+\quad\Longrightarrow\quad\hat\theta_{MD}^{(2)}=\frac7{53}.
+\]
+同理二阶导数小于零，所以
+\[
+\boxed{\hat\theta_{MD}^{(2)}=\frac7{53}\approx0.13208,\qquad
+\hat\theta_E^{(2)}=\frac8{55}\approx0.14545.}
+\]
+也可把两次样本合并：总抽检40件，累计3件不合格，直接由原先验更新得
+$\Be(5+3,10+37)=\Be(8,47)$，与顺序更新一致。
+
+\section*{2.5\quad 由后验方差确定最小样本量}
+已知 $X_1,\ldots,X_n\mid\theta\overset{iid}{\sim}N(\theta,2^2)$。先验为正态分布，其标准差为1。令先验均值为 $\mu_0$，则 $\theta\sim N(\mu_0,1)$。
+
+\step{Step 1：似然函数}
+\[
+L(\theta;x)=(2\pi\cdot4)^{-n/2}
+\exp\left[-\frac18\sum_{i=1}^n(x_i-\theta)^2\right].
+\]
+利用 $\sum_i(x_i-\theta)^2=\sum_i(x_i-\bar x)^2+n(\bar x-\theta)^2$，得到
+\[
+L(\theta;x)\propto\exp\left[-\frac n8(\theta-\bar x)^2\right].
+\]
+
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac1{\sqrt{2\pi}}
+\exp\left[-\frac12(\theta-\mu_0)^2\right],\quad-\infty<\theta<\infty.
+\]
+
+\step{Step 3：后验核并配方}
+\begin{align*}
+\pi(\theta\mid x)
+&\propto\exp\left\{-\frac12\left[\frac n4(\theta-\bar x)^2
++(\theta-\mu_0)^2\right]\right\}\\
+&\propto\exp\left\{-\frac12\left(\frac n4+1\right)
+\left(\theta-\frac{n\bar x/4+\mu_0}{n/4+1}\right)^2\right\}.
+\end{align*}
+故
+\[
+\theta\mid x\sim N\left(\frac{n\bar x+4\mu_0}{n+4},\frac4{n+4}\right).
+\]
+
+\step{Step 4：解后验方差的不等式}
+要求后验\textbf{方差}不超过 $0.1$，即
+\[
+\frac4{n+4}\leq0.1
+\quad\Longleftrightarrow\quad
+40\leq n+4
+\quad\Longleftrightarrow\quad n\geq36.
+\]
+当 $n=36$ 时后验方差正好为 $0.1$；当 $n=35$ 时为 $4/39>0.1$。所以最小样本量为
+\[
+\boxed{n_{\min}=36.}
+\]
+这个样本量与先验均值 $\mu_0$ 及样本的具体观测值无关。
+\section*{2.6\quad 两种先验下的后验及其估计差}
+设 $X$ 为1000名受调查者中赞成禁止吸烟的人数，观测到 $X=710$。给定赞成比例 $\theta$ 时，$X\mid\theta\sim\operatorname{Bin}(1000,\theta)$。
+
+\subsection*{（1）分别求两种先验下的后验分布}
+\step{Step 1：似然函数}
+\[
+L(\theta;710)=\binom{1000}{710}\theta^{710}(1-\theta)^{290},\quad0<\theta<1.
+\]
+\step{Step 2：分别识别两种先验}
+统计学家A建议的先验密度为
+\[
+\pi_A(\theta)=2\theta
+=\frac{\theta^{2-1}(1-\theta)^{1-1}}{B(2,1)},
+\]
+即 $\theta\sim\Be(2,1)$。统计学家B建议
+\[
+\pi_B(\theta)=4\theta^3
+=\frac{\theta^{4-1}(1-\theta)^{1-1}}{B(4,1)},
+\]
+即 $\theta\sim\Be(4,1)$。两者的支撑范围均为 $0<\theta<1$。
+
+\step{Step 3：分别计算后验核并归一化}
+对A的先验，
+\[
+\pi_A(\theta\mid710)\propto\theta^{710}(1-\theta)^{290}\cdot2\theta
+\propto\theta^{712-1}(1-\theta)^{291-1}.
+\]
+故
+\[
+\boxed{\theta\mid X=710\text{（A先验）}\sim\Be(712,291),}
+\qquad\pi_A(\theta\mid710)=\frac{\theta^{711}(1-\theta)^{290}}{B(712,291)}.
+\]
+对B的先验，
+\[
+\pi_B(\theta\mid710)\propto\theta^{710}(1-\theta)^{290}\cdot4\theta^3
+\propto\theta^{714-1}(1-\theta)^{291-1}.
+\]
+故
+\[
+\boxed{\theta\mid X=710\text{（B先验）}\sim\Be(714,291),}
+\qquad\pi_B(\theta\mid710)=\frac{\theta^{713}(1-\theta)^{290}}{B(714,291)}.
+\]
+
+\subsection*{（2）分别求后验期望估计}
+利用 Beta 分布均值公式，
+\[
+\boxed{\hat\theta_{E,A}=\frac{712}{712+291}=\frac{712}{1003}
+\approx0.709870,}
+\]
+\[
+\boxed{\hat\theta_{E,B}=\frac{714}{714+291}=\frac{714}{1005}
+\approx0.710448.}
+\]
+
+\subsection*{（3）证明任意赞成人数下，两个估计之差不超过0.002}
+将赞成人数记为 $s$，其中 $s=0,1,\ldots,1000$。此时似然为
+\[
+L(\theta;s)=\binom{1000}{s}\theta^s(1-\theta)^{1000-s}.
+\]
+分别与 $\Be(2,1)$、$\Be(4,1)$ 先验相乘，得到
+\[
+\theta\mid s\text{（A）}\sim\Be(s+2,1001-s),\qquad
+\theta\mid s\text{（B）}\sim\Be(s+4,1001-s).
+\]
+所以
+\[
+\hat\theta_{E,A}(s)=\frac{s+2}{1003},\qquad
+\hat\theta_{E,B}(s)=\frac{s+4}{1005}.
+\]
+两式相减并通分：
+\begin{align*}
+\hat\theta_{E,B}(s)-\hat\theta_{E,A}(s)
+&=\frac{1003(s+4)-1005(s+2)}{1003\cdot1005}\\
+&=\frac{2002-2s}{1003\cdot1005}
+=\frac{2(1001-s)}{1003\cdot1005}.
+\end{align*}
+由 $0\leq s\leq1000$，有
+\[
+0<\hat\theta_{E,B}(s)-\hat\theta_{E,A}(s)
+\leq\frac{2002}{1003\cdot1005}.
+\]
+又因为
+\[
+\frac{2002}{1003\cdot1005}<\frac2{1000}=0.002
+\quad\left(2002\times1000<2\times1003\times1005\right),
+\]
+故对任意 $s=0,1,\ldots,1000$，
+\[
+\boxed{\left|\hat\theta_{E,A}(s)-\hat\theta_{E,B}(s)\right|<0.002.}
+\]
+于是题中要求的“不超过0.002”成立。差值在 $s=0$ 时达到最大。
+
+\section*{2.7\quad 均匀分布与 Pareto 先验的后验矩}
+设 $X_1,\ldots,X_n\mid\theta\overset{iid}{\sim}U(0,\theta)$。沿用第一章习题1.12的 Pareto 参数记法，先验密度为
+\[
+\pi(\theta)=\alpha\theta_0^\alpha\theta^{-\alpha-1}
+\ind_{\{\theta>\theta_0\}},\qquad\alpha>0,\quad\theta_0>0.
+\]
+求 $\theta$ 的后验均值与后验方差。
+
+\step{Step 1：似然函数}
+设观测 $x_i>0$，记 $x_{(n)}=\max\{x_1,\ldots,x_n\}$。则
+\begin{align*}
+L(\theta;x)
+&=\prod_{i=1}^n\frac1\theta\ind_{\{0<x_i<\theta\}}\\
+&=\theta^{-n}\ind_{\{\theta>x_{(n)}\}}.
+\end{align*}
+只需保留“$\theta$ 大于所有观测值”这个限制，不必另求最大次序统计量的分布。
+
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\alpha\theta_0^\alpha\theta^{-\alpha-1}
+\ind_{\{\theta>\theta_0\}}.
+\]
+
+\step{Step 3：后验核及支撑范围}
+\begin{align*}
+\pi(\theta\mid x)
+&\propto\theta^{-n}\theta^{-\alpha-1}
+\ind_{\{\theta>x_{(n)}\}}\ind_{\{\theta>\theta_0\}}\\
+&=\theta^{-(\alpha+n)-1}\ind_{\{\theta>c\}},
+\end{align*}
+其中
+\[
+c=\max\{\theta_0,x_{(n)}\},\qquad a=\alpha+n.
+\]
+
+\step{Step 4：归一化并识别后验}
+因为
+\[
+\int_c^\infty\theta^{-a-1}\,d\theta=\frac{c^{-a}}a,
+\]
+所以
+\[
+\boxed{\pi(\theta\mid x)=ac^a\theta^{-a-1}\ind_{\{\theta>c\}},
+\qquad\theta\mid x\sim\operatorname{Pareto}(a,c).}
+\]
+
+\step{Step 5：由积分求后验均值}
+当 $a>1$ 时，
+\begin{align*}
+E(\theta\mid x)
+&=ac^a\int_c^\infty\theta^{-a}\,d\theta
+=ac^a\frac{c^{1-a}}{a-1}
+=\frac{ac}{a-1}.
+\end{align*}
+因此
+\[
+\boxed{E(\theta\mid x)=\frac{(\alpha+n)\max\{\theta_0,x_{(n)}\}}
+{\alpha+n-1},\qquad\alpha+n>1.}
+\]
+
+\step{Step 6：由二阶矩求后验方差}
+当 $a>2$ 时，
+\[
+E(\theta^2\mid x)=ac^a\int_c^\infty\theta^{1-a}\,d\theta
+=\frac{ac^2}{a-2}.
+\]
+故
+\begin{align*}
+\Var(\theta\mid x)
+&=\frac{ac^2}{a-2}-\left(\frac{ac}{a-1}\right)^2\\
+&=\frac{ac^2\{(a-1)^2-a(a-2)\}}{(a-2)(a-1)^2}
+=\frac{ac^2}{(a-1)^2(a-2)}.
+\end{align*}
+即
+\[
+\boxed{\Var(\theta\mid x)=
+\frac{(\alpha+n)\bigl[\max\{\theta_0,x_{(n)}\}\bigr]^2}
+{(\alpha+n-1)^2(\alpha+n-2)},\quad\alpha+n>2.}
+\]
+若 $1<a\leq2$，均值有限而二阶矩发散，方差无有限值；若 $a\leq1$，均值也无有限值。存在条件不可省略。
+\section*{2.8\quad Gamma 模型与倒 Gamma 先验}
+题给
+\[
+X\mid\theta\sim\Ga\left(\frac n2,\frac1{2\theta}\right),\qquad
+\theta\sim\IGa(\alpha,\beta),\qquad\alpha,\beta>0.
+\]
+按率参数化，$1/(2\theta)$ 是 Gamma 分布的率参数。
+
+\subsection*{（1）一次观测时的后验分布}
+\step{Step 1：似然函数}
+观测到 $X=x>0$，条件密度为
+\[
+p(x\mid\theta)=\frac{(1/(2\theta))^{n/2}}{\Gamma(n/2)}
+x^{n/2-1}e^{-x/(2\theta)}.
+\]
+固定 $x$ 后，略去与 $\theta$ 无关的因子，得
+\[
+L(\theta;x)\propto\theta^{-n/2}e^{-x/(2\theta)},\quad\theta>0.
+\]
+
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac{\beta^\alpha}{\Gamma(\alpha)}
+\theta^{-\alpha-1}e^{-\beta/\theta},\quad\theta>0.
+\]
+
+\step{Step 3：后验核}
+\begin{align*}
+\pi(\theta\mid x)
+&\propto\theta^{-n/2}e^{-x/(2\theta)}
+\theta^{-\alpha-1}e^{-\beta/\theta}\\
+&=\theta^{-(\alpha+n/2)-1}
+\exp\left[-\frac{\beta+x/2}{\theta}\right].
+\end{align*}
+
+\step{Step 4：归一化并识别分布}
+令 $a=\alpha+n/2$，$b=\beta+x/2$，则
+\[
+\pi(\theta\mid x)=\frac{b^a}{\Gamma(a)}\theta^{-a-1}e^{-b/\theta},\quad\theta>0.
+\]
+因此所要证明的结论为
+\[
+\boxed{\theta\mid x\sim\IGa\left(\alpha+\frac n2,\beta+\frac x2\right).}
+\]
+
+\subsection*{（2）一次观测时的后验均值与方差}
+由后验 $\IGa(a,b)$，作代换 $u=b/\theta$，对 $k<a$ 有
+\begin{align*}
+E(\theta^k\mid x)
+&=\frac{b^a}{\Gamma(a)}\int_0^\infty
+\theta^{k-a-1}e^{-b/\theta}\,d\theta\\
+&=\frac{b^k}{\Gamma(a)}\int_0^\infty u^{a-k-1}e^{-u}\,du
+=b^k\frac{\Gamma(a-k)}{\Gamma(a)}.
+\end{align*}
+所以当 $a>1$ 时，
+\[
+E(\theta\mid x)=\frac b{a-1}.
+\]
+当 $a>2$ 时，$E(\theta^2\mid x)=b^2/[(a-1)(a-2)]$，从而
+\begin{align*}
+\Var(\theta\mid x)
+&=\frac{b^2}{(a-1)(a-2)}-\frac{b^2}{(a-1)^2}
+=\frac{b^2}{(a-1)^2(a-2)}.
+\end{align*}
+代回 $a,b$，得到
+\[
+\boxed{E(\theta\mid x)=\frac{\beta+x/2}{\alpha+n/2-1},
+\qquad\alpha+\frac n2>1,}
+\]
+\[
+\boxed{\Var(\theta\mid x)=
+\frac{(\beta+x/2)^2}{(\alpha+n/2-1)^2(\alpha+n/2-2)},
+\quad\alpha+\frac n2>2.}
+\]
+若 $1<a\leq2$，后验均值有限而方差无有限值；若 $a\leq1$，后验均值无有限值。
+
+\subsection*{（3）独立抽取容量为 $n$ 的样本}
+\textbf{题中两个 $n$ 的区别：}本小问每个 $X_i$ 的 Gamma 形状参数为 $n/2$，同时又抽取 $n$ 个观测。因此要把 $n$ 个含 $\theta^{-n/2}$ 的因子相乘。
+
+\step{Step 1：样本似然函数}
+\[
+X_i\mid\theta\overset{iid}{\sim}\Ga\left(\frac n2,\frac1{2\theta}\right),
+\qquad i=1,\ldots,n.
+\]
+令 $S=\sum_{i=1}^n x_i$，则
+\begin{align*}
+L(\theta;x)
+&=\prod_{i=1}^n\frac{(1/(2\theta))^{n/2}}{\Gamma(n/2)}
+x_i^{n/2-1}e^{-x_i/(2\theta)}\\
+&\propto\theta^{-n\cdot n/2}\exp\left[-\frac S{2\theta}\right]
+=\theta^{-n^2/2}e^{-S/(2\theta)}.
+\end{align*}
+
+\step{Step 2：先验密度}
+先验不变，仍为
+\[
+\pi(\theta)=\frac{\beta^\alpha}{\Gamma(\alpha)}
+\theta^{-\alpha-1}e^{-\beta/\theta},\quad\theta>0.
+\]
+
+\step{Step 3：后验核及后验分布}
+\[
+\pi(\theta\mid x)\propto
+\theta^{-n^2/2}e^{-S/(2\theta)}\theta^{-\alpha-1}e^{-\beta/\theta}
+=\theta^{-(\alpha+n^2/2)-1}e^{-(\beta+S/2)/\theta}.
+\]
+令
+\[
+a_n=\alpha+\frac{n^2}{2},\qquad b_n=\beta+\frac S2,
+\]
+归一化后有
+\[
+\boxed{\theta\mid x\sim\IGa(a_n,b_n),\qquad
+\pi(\theta\mid x)=\frac{b_n^{a_n}}{\Gamma(a_n)}\theta^{-a_n-1}e^{-b_n/\theta}.}
+\]
+
+\step{Step 4：求最大后验估计}
+对后验密度取对数，略去常数：
+\[
+\ell(\theta)=-(a_n+1)\log\theta-\frac{b_n}{\theta}+C.
+\]
+求导并令其为零：
+\[
+\ell'(\theta)=-\frac{a_n+1}{\theta}+\frac{b_n}{\theta^2}
+=\frac{b_n-(a_n+1)\theta}{\theta^2}=0.
+\]
+当 $\theta<b_n/(a_n+1)$ 时导数为正，大于该点时导数为负，所以
+\[
+\boxed{\hat\theta_{MD}=\frac{b_n}{a_n+1}
+=\frac{\displaystyle\beta+\frac12\sum_{i=1}^n x_i}
+{\displaystyle\alpha+\frac{n^2}{2}+1}.}
+\]
+
+\step{Step 5：求后验期望估计}
+当 $a_n>1$ 时，利用（2）中求得的倒 Gamma 均值，
+\[
+\boxed{\hat\theta_E=\frac{b_n}{a_n-1}
+=\frac{\displaystyle\beta+\frac12\sum_{i=1}^n x_i}
+{\displaystyle\alpha+\frac{n^2}{2}-1},\qquad\alpha+\frac{n^2}{2}>1.}
+\]
+以上 $n^2/2$ 是按题图的原式计算得到。若将单个观测的形状参数另记为 $\nu/2$、样本容量记为 $m$，相应后验形状参数就是 $\alpha+m\nu/2$；本题取 $m=\nu=n$。
+
+\section*{2.9\quad 多项分布与狄里赫利先验}
+题给 $x=(x_1,\ldots,x_r)$ 服从多项分布，概率向量为
+\[
+\theta=(\theta_1,\ldots,\theta_r),\qquad
+\theta_i>0,\quad\sum_{i=1}^r\theta_i=1,
+\]
+先验为 $D(\alpha_1,\ldots,\alpha_r)$，其中 $\alpha_i>0$。
+
+\textbf{记号说明：}为区分类别数与总试验次数，先记总次数为 $N=\sum_i x_i$，类别数为 $r$。题图写作 $M(r;\theta_1,\ldots,\theta_r)$，按原式总次数也等于 $r$，最后令 $N=r$ 即可。
+
+\step{Step 1：似然函数}
+\[
+L(\theta;x)=\frac{N!}{x_1!\cdots x_r!}
+\prod_{i=1}^r\theta_i^{x_i}
+\propto\prod_{i=1}^r\theta_i^{x_i},\qquad\sum_i\theta_i=1.
+\]
+
+\step{Step 2：先验密度}
+令 $A=\sum_{i=1}^r\alpha_i$，狄里赫利先验密度为
+\[
+\pi(\theta)=\frac{\Gamma(A)}{\prod_{i=1}^r\Gamma(\alpha_i)}
+\prod_{i=1}^r\theta_i^{\alpha_i-1},\qquad\theta_i>0,\quad\sum_i\theta_i=1.
+\]
+该密度按单纯形上的 $r-1$ 个自由坐标理解，其中
+$\theta_r=1-\sum_{i=1}^{r-1}\theta_i$。
+
+\step{Step 3：后验核、归一化及后验分布}
+\[
+\pi(\theta\mid x)\propto L(\theta;x)\pi(\theta)
+\propto\prod_{i=1}^r\theta_i^{x_i+\alpha_i-1}.
+\]
+令
+\[
+a_i=\alpha_i+x_i,\qquad a_+=\sum_{i=1}^r a_i=A+N.
+\]
+归一化后
+\[
+\pi(\theta\mid x)=\frac{\Gamma(a_+)}{\prod_i\Gamma(a_i)}
+\prod_{i=1}^r\theta_i^{a_i-1},
+\]
+即
+\[
+\boxed{\theta\mid x\sim D(\alpha_1+x_1,\ldots,\alpha_r+x_r).}
+\]
+
+\step{Step 4：求后验期望估计}
+记单纯形为 $\Delta$，多元 Beta 函数为
+\[
+\mathcal B(a_1,\ldots,a_r)=\frac{\prod_i\Gamma(a_i)}{\Gamma(a_+)}.
+\]
+把 $\theta_i$ 乘入后验密度，积分时相当于只把第 $i$ 个形状参数加 $1$，所以
+\begin{align*}
+E(\theta_i\mid x)
+&=\frac{1}{\mathcal B(a_1,\ldots,a_r)}
+\int_\Delta\theta_i\prod_{j=1}^r\theta_j^{a_j-1}\,d\theta\\
+&=\frac{\mathcal B(a_1,\ldots,a_i+1,\ldots,a_r)}
+{\mathcal B(a_1,\ldots,a_i,\ldots,a_r)}\\
+&=\frac{\Gamma(a_i+1)}{\Gamma(a_i)}
+\frac{\Gamma(a_+)}{\Gamma(a_++1)}=\frac{a_i}{a_+}.
+\end{align*}
+故
+\[
+\boxed{\hat\theta_{E,i}=\frac{\alpha_i+x_i}{A+N},\quad i=1,\ldots,r.}
+\]
+这些分量之和为 $1$，所以确实构成概率向量。
+
+\step{Step 5：在总和约束下求最大后验估计}
+先考虑 $a_i=\alpha_i+x_i>1$ 对所有 $i$ 均成立的情形。取后验对数密度并用拉格朗日乘子法：
+\[
+\mathcal L(\theta,\eta)=\sum_{i=1}^r(a_i-1)\log\theta_i
++\eta\left(1-\sum_{i=1}^r\theta_i\right).
+\]
+对 $\theta_i$ 求偏导，令其为零：
+\[
+\frac{\partial\mathcal L}{\partial\theta_i}=\frac{a_i-1}{\theta_i}-\eta=0
+\quad\Longrightarrow\quad\theta_i=\frac{a_i-1}{\eta}.
+\]
+由 $\sum_i\theta_i=1$，得
+\[
+\eta=\sum_{i=1}^r(a_i-1)=a_+-r=A+N-r.
+\]
+因为 $\sum_i(a_i-1)\log\theta_i$ 在内部严格凹，驻点即唯一最大值点。因此
+\[
+\boxed{\hat\theta_{MD,i}=\frac{\alpha_i+x_i-1}{A+N-r},\quad
+i=1,\ldots,r,\quad\alpha_i+x_i>1\text{ 对所有 }i.}
+\]
+
+\step{按题图原记号 $N=r$ 写出结果}
+若总试验次数与类别数均为题图中的 $r$，则上面的结果简化为
+\[
+\boxed{\hat\theta_{E,i}=\frac{\alpha_i+x_i}{\sum_{j=1}^r\alpha_j+r},
+\qquad
+\hat\theta_{MD,i}=\frac{\alpha_i+x_i-1}{\sum_{j=1}^r\alpha_j}.}
+\]
+其中最大后验估计的内部公式仍须满足所有 $\alpha_i+x_i>1$。
+
+\step{边界条件说明}
+题目只给 $\alpha_i>0$，并不自动保证存在内部众数。若所有 $a_i\geq1$，且至少一个 $a_i>1$，上式在闭单纯形的边界延拓意义下仍给出众数，$a_i=1$ 对应分量取 $0$。若全部 $a_i=1$，后验在单纯形上均匀，最大后验估计不唯一。若某个 $a_i<1$，后验密度会在某些边界附近发散，不能机械套用内部公式得出负分量；此时没有有限密度的内部最大值。
+
+\section*{2.10\quad 正态均值的0.95可信区间}
+设三次观测在给定 $\theta$ 时相互独立，
+\[
+X_i\mid\theta\sim N(\theta,1),\qquad(x_1,x_2,x_3)=(2,4,6),
+\qquad\theta\sim N(3,1).
+\]
+此时样本量 $n=3$，样本均值 $\bar x=(2+4+6)/3=4$。
+
+\step{Step 1：似然函数}
+\[
+L(\theta;x)=(2\pi)^{-3/2}
+\exp\left[-\frac12\{(2-\theta)^2+(4-\theta)^2+(6-\theta)^2\}\right].
+\]
+由平方和分解得
+\[
+\sum_{i=1}^3(x_i-\theta)^2
+=\sum_{i=1}^3(x_i-4)^2+3(\theta-4)^2
+=8+3(\theta-4)^2,
+\]
+故
+\[
+L(\theta;x)\propto\exp\left[-\frac32(\theta-4)^2\right].
+\]
+
+\step{Step 2：先验密度}
+\[
+\pi(\theta)=\frac1{\sqrt{2\pi}}
+\exp\left[-\frac12(\theta-3)^2\right],\quad\theta\in\mathbb R.
+\]
+
+\step{Step 3：相乘并配方}
+\begin{align*}
+\pi(\theta\mid x)
+&\propto\exp\left[-\frac12\{3(\theta-4)^2+(\theta-3)^2\}\right].
+\end{align*}
+其中
+\begin{align*}
+3(\theta-4)^2+(\theta-3)^2
+&=4\theta^2-30\theta+57\\
+&=4\left(\theta-\frac{15}{4}\right)^2+\frac34.
+\end{align*}
+略去与 $\theta$ 无关的常数项后，
+\[
+\pi(\theta\mid x)\propto
+\exp\left[-\frac{1}{2(1/4)}\left(\theta-\frac{15}{4}\right)^2\right].
+\]
+归一化后为正态密度，所以
+\[
+\boxed{\theta\mid x\sim N\left(\frac{15}{4},\frac14\right).}
+\]
+即后验均值 $\mu_1=3.75$，后验标准差 $\sigma_1=1/2$。
+
+\step{Step 4：构造0.95等尾可信区间}
+因为
+\[
+\frac{\theta-3.75}{0.5}\biggm|x\sim N(0,1),
+\]
+标准正态下侧 $0.975$ 分位数为 $z_{0.975}\approx1.96$，故
+\[
+P\left(-1.96\leq\frac{\theta-3.75}{0.5}\leq1.96\biggm|x\right)\approx0.95.
+\]
+从而所求可信区间为
+\[
+\boxed{[\mu_1-1.96\sigma_1,\ \mu_1+1.96\sigma_1]
+=[3.75-0.98,\ 3.75+0.98]=[2.77,4.73].}
+\]
+由于后验为对称单峰的正态分布，这个等尾可信区间同时也是 $0.95$ 的最高后验密度（HPD）可信区间。
+\end{document}
