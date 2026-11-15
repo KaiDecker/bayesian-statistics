@@ -19,7 +19,7 @@
 \newcommand{\MSE}{\operatorname{MSE}}
 \newcommand{\BF}{B^*}
 \newcommand{\ind}{\mathbf1}
-\newcommand{\head}[2]{\noindent{\fontsize{14}{17}\selectfont\bfseries 贝叶斯统计\quad A4 双面速查}\hfill{\small #1}\par
+\newcommand{\head}[2]{\noindent{\fontsize{14}{17}\selectfont\bfseries 贝叶斯统计\quad A4 手抄参考}\hfill{\small #1}\par
   \vspace{1pt}\hrule height .7pt\vspace{3pt}{\small #2}\par\vspace{2pt}}
 \newcommand{\block}[1]{\par\vspace{3pt}{\bfseries\fontsize{10}{12}\selectfont #1}\par\vspace{1pt}\hrule height .3pt\vspace{3pt}}
 \newcommand{\sub}[1]{\par\vspace{2pt}\textbf{#1}\enspace}
@@ -28,25 +28,26 @@
 \newsavebox{\rightbody}
 \begin{document}
 \fontsize{9}{11.1}\selectfont\tight
-\head{正面 / 1}{第一章：先验分布与后验分布\hfill 约定：$\Ga(a,b)$ 的 $b$ 为\textbf{率参数}，$\IG(a,b)$ 的密度含 $e^{-b/v}$。}
+\head{1 / 分布与共轭先验}{第一章：先验分布与后验分布\hfill 约定：$\Ga(\alpha,\lambda)$ 的 $\lambda$ 为\textbf{率参数}；各小节沿用常见记号。}
 
 \sbox{\leftbody}{\begin{minipage}[t]{.487\textwidth}
 \block{1\quad Gamma 函数、Beta 函数与积分}
 \[
- \Gamma(a)=\int_0^\infty t^{a-1}e^{-t}\,dt,\quad a>0.
+ \Gamma(\alpha)=\int_0^\infty x^{\alpha-1}e^{-x}\,dx,\quad\alpha>0.
 \]
 \[
- \Gamma(a+1)=a\Gamma(a),\quad\Gamma(n+1)=n!,\quad\Gamma(\tfrac12)=\sqrt\pi.
+ \Gamma(\alpha+1)=\alpha\Gamma(\alpha),\quad\Gamma(n+1)=n!,\quad\Gamma(\tfrac12)=\sqrt\pi.
 \]
 \[
- B(a,b)=\int_0^1t^{a-1}(1-t)^{b-1}\,dt
- =\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}.
+ B(\alpha,\beta)=\int_0^1x^{\alpha-1}(1-x)^{\beta-1}\,dx
+ =\frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)}.
 \]
 \[
- \int_0^\infty t^{a-1}e^{-bt}\,dt=\frac{\Gamma(a)}{b^a},\qquad
- \int_0^\infty t^{-a-1}e^{-b/t}\,dt=\frac{\Gamma(a)}{b^a}.
+ \int_0^\infty x^{\alpha-1}e^{-\lambda x}\,dx=\frac{\Gamma(\alpha)}{\lambda^\alpha},\qquad
+ \int_0^\infty x^{-\alpha-1}e^{-\lambda/x}\,dx=\frac{\Gamma(\alpha)}{\lambda^\alpha}.
 \]
-$a,b>0$；$B(1,1)=1$，$B(a+1,b)=\dfrac{a}{a+b}B(a,b)$。
+$\alpha,\beta,\lambda>0$；$B(1,1)=1$；
+$B(\alpha+1,\beta)=\dfrac{\alpha}{\alpha+\beta}B(\alpha,\beta)$。
 
 \block{2\quad 常见分布与常用结论}
 \sub{正态 $N(\mu,\sigma^2)$}$x\in\mathbb R$。
@@ -56,53 +57,55 @@ $a,b>0$；$B(1,1)=1$，$B(a+1,b)=\dfrac{a}{a+b}B(a,b)$。
 $\E X=\mu$，$\Var X=\sigma^2$，众数、中位数均为 $\mu$；
 $\dfrac{X-\mu}{\sigma}\sim N(0,1)$。独立正态之和仍正态，均值、方差分别相加。
 
-\sub{二项 $\Bin(m,p)$}$k=0,\ldots,m$。
+\sub{二项 $\Bin(n,\theta)$}$x=0,\ldots,n$。
 \[
- P(X=k)=\binom mk p^k(1-p)^{m-k},\;
- \E X=mp,\quad\Var X=mp(1-p).
+ p(x\mid\theta)=\binom nx\theta^x(1-\theta)^{n-x},\quad
+ \E X=n\theta,\quad\Var X=n\theta(1-\theta).
 \]
-众数 $\lfloor(m+1)p\rfloor$；若 $(m+1)p$ 为整数且 $0<p<1$，有该数及前一个整数两个众数。$p=0,1$ 时分别为 $0,m$。
+众数 $\lfloor(n+1)\theta\rfloor$；若 $(n+1)\theta$ 为整数且 $0<\theta<1$，有该数及前一个整数两个众数。$\theta=0,1$ 时分别为 $0,n$。
 
-\sub{均匀 $U(l,u)$}$l<x<u$。
+\sub{均匀 $U(a,b)$}$a<x<b$。
 \[
- f(x)=\frac1{u-l},\qquad\E X=\frac{l+u}{2},\quad\Var X=\frac{(u-l)^2}{12}.
+ f(x)=\frac1{b-a},\qquad\E X=\frac{a+b}{2},\quad\Var X=\frac{(b-a)^2}{12}.
 \]
-区间内密度等高，中位数为 $(l+u)/2$。
+区间内密度等高，中位数为 $(a+b)/2$。
 
-\sub{Gamma $\Ga(a,b)$}$x>0$，$a,b>0$；$b$ 为率。
+\sub{Gamma $\Ga(\alpha,\lambda)$}$x>0$，$\alpha,\lambda>0$；$\lambda$ 为率。
 \[
- f(x)=\frac{b^a}{\Gamma(a)}x^{a-1}e^{-bx},\quad
- \E X=\frac ab,\quad\Var X=\frac a{b^2}.
+ f(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x},\quad
+ \E X=\frac{\alpha}{\lambda},\quad\Var X=\frac{\alpha}{\lambda^2}.
 \]
-众数 $(a-1)/b$（$a>1$）；$a\le1$ 时密度递减。
-$cX\sim\Ga(a,b/c)$（$c>0$）。
-独立同率 $\Ga(a_i,b)$ 之和为 $\Ga(\sum_i a_i,b)$。
+众数 $(\alpha-1)/\lambda$（$\alpha>1$）；$\alpha\le1$ 时密度递减。
+$cX\sim\Ga(\alpha,\lambda/c)$（$c>0$）。
+独立同率 $\Ga(\alpha_i,\lambda)$ 之和为 $\Ga(\sum_i\alpha_i,\lambda)$。
 
-\sub{Beta $\Be(a,b)$}$0<x<1$，$a,b>0$。
+\sub{Beta $\Be(\alpha,\beta)$}$0<x<1$，$\alpha,\beta>0$。
 \[
- f(x)=\frac{x^{a-1}(1-x)^{b-1}}{B(a,b)},\qquad\E X=\frac a{a+b}.
+ f(x)=\frac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)},\qquad\E X=\frac \alpha{\alpha+\beta}.
 \]
 \[
- \Var X=\frac{ab}{(a+b)^2(a+b+1)},\quad
- \operatorname{Mode}(X)=\frac{a-1}{a+b-2}\quad(a,b>1).
+ \Var X=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)},
+\]
+\[
+ \operatorname{Mode}(X)=\frac{\alpha-1}{\alpha+\beta-2}\quad(\alpha,\beta>1).
 \]
 $\Be(1,1)=U(0,1)$；内点众数条件不满足时检查 $0,1$ 边界。
-$\E(X^r)=B(a+r,b)/B(a,b)$（$r>-a$）。
+$\E(X^r)=B(\alpha+r,\beta)/B(\alpha,\beta)$（$r>-\alpha$）。
 
-\sub{倒 Gamma $\IG(a,b)$}$x>0$，$a,b>0$。
+\sub{倒 Gamma $\IG(\alpha,\lambda)$}$x>0$，$\alpha,\lambda>0$。
 \[
- f(x)=\frac{b^a}{\Gamma(a)}x^{-a-1}e^{-b/x},\qquad
- \operatorname{Mode}(X)=\frac b{a+1}.
+ f(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}x^{-\alpha-1}e^{-\lambda/x},\qquad
+ \operatorname{Mode}(X)=\frac \lambda{\alpha+1}.
 \]
 \[
- \E X=\frac b{a-1}\ (a>1),\quad
- \Var X=\frac{b^2}{(a-1)^2(a-2)}\ (a>2).
+ \E X=\frac \lambda{\alpha-1}\ (\alpha>1),\quad
+ \Var X=\frac{\lambda^2}{(\alpha-1)^2(\alpha-2)}\ (\alpha>2).
 \]
-$X^{-1}\sim\Ga(a,b)$；$\E(X^r)=b^r\Gamma(a-r)/\Gamma(a)$（$r<a$）。
+$X^{-1}\sim\Ga(\alpha,\lambda)$；$\E(X^r)=\lambda^r\Gamma(\alpha-r)/\Gamma(\alpha)$（$r<\alpha$）。
 
-\sub{泊松 $\Poi(\lambda)$}$k=0,1,\ldots$，$\lambda>0$。
+\sub{泊松 $\Poi(\lambda)$}$x=0,1,\ldots$，$\lambda>0$。
 \[
- P(X=k)=\frac{\lambda^ke^{-\lambda}}{k!},\qquad\E X=\Var X=\lambda.
+ P(X=x)=\frac{\lambda^xe^{-\lambda}}{x!},\qquad\E X=\Var X=\lambda.
 \]
 众数 $\lfloor\lambda\rfloor$；$\lambda$ 为整数时为 $\lambda-1,\lambda$。
 
@@ -110,7 +113,7 @@ $X^{-1}\sim\Ga(a,b)$；$\E(X^r)=b^r\Gamma(a-r)/\Gamma(a)$（$r<a$）。
 \[
  f(x)=\lambda e^{-\lambda x},\quad\E X=1/\lambda,\quad\Var X=1/\lambda^2.
 \]
-密度随 $x$ 递减；$P(X>t)=e^{-\lambda t}$（$t\ge0$）。
+密度随 $x$ 递减；$P(X>x)=e^{-\lambda x}$（$x\ge0$）。
 \end{minipage}}
 \sbox{\rightbody}{\begin{minipage}[t]{.487\textwidth}
 \block{3\quad 三种信息、似然与后验}
@@ -121,7 +124,7 @@ $X^{-1}\sim\Ga(a,b)$；$\E(X^r)=b^r\Gamma(a-r)/\Gamma(a)$（$r<a$）。
  L(\theta\mid x)=p(x\mid\theta)=\prod_{i=1}^n p(x_i\mid\theta)\quad(\text{独立样本}).
 \]
 \[
- \pi(\theta\mid x)=\frac{L(\theta\mid x)\pi(\theta)}{\int_\Theta L(t\mid x)\pi(t)\,dt}
+ \pi(\theta\mid x)=\frac{L(\theta\mid x)\pi(\theta)}{\int_\Theta L(\theta\mid x)\pi(\theta)\,d\theta}
  \ \propto\ L(\theta\mid x)\pi(\theta).
 \]
 \textbf{顺序}：似然 $\to$ 先验密度 $\to$ 相乘整理 $\to$ 识别、归一化。参数离散时，积分换成求和。
@@ -129,25 +132,25 @@ $X^{-1}\sim\Ga(a,b)$；$\E(X^r)=b^r\Gamma(a-r)/\Gamma(a)$（$r<a$）。
 \textbf{贝叶斯假设}（成功概率）：$\theta\sim U(0,1)=\Be(1,1)$。
 
 \block{4\quad 常用共轭先验：教材表 1.3.1}
-共轭：先验与后验属于同一分布族。以下 $X_i$ 均为独立同分布样本；先验超参数记为 $a,b$。
+共轭：先验与后验属于同一分布族。以下 $X_i$ 均为独立同分布样本；参数记号在各模型内分别使用。
 
 \sub{① 二项成功概率}$X\mid\theta\sim\Bin(n,\theta)$，观测 $x$。
 \[
- \theta\sim\Be(a,b)\quad\Longrightarrow\quad
- \theta\mid x\sim\Be(a+x,b+n-x).
+ \theta\sim\Be(\alpha,\beta)\quad\Longrightarrow\quad
+ \theta\mid x\sim\Be(\alpha+x,\beta+n-x).
 \]
 若各次为 $\Bin(m_i,\theta)$，则用 $n=\sum_i m_i$，$x=\sum_i x_i$。
 
-\sub{② 泊松均值}$X_i\mid\lambda\sim\Poi(\lambda)$。
+\sub{② 泊松均值}$X_i\mid\theta\sim\Poi(\theta)$。
 \[
- \lambda\sim\Ga(a,b)\quad\Longrightarrow\quad
- \lambda\mid x\sim\Ga(a+\textstyle\sum_i x_i,b+n).
+ \theta\sim\Ga(\alpha,\lambda)\quad\Longrightarrow\quad
+ \theta\mid x\sim\Ga(\alpha+\textstyle\sum_i x_i,\lambda+n).
 \]
 
-\sub{③ 指数率（均值的倒数）}$X_i\mid\lambda\sim\Exp(\lambda)$。
+\sub{③ 指数率（均值的倒数）}$X_i\mid\theta\sim\Exp(\theta)$。
 \[
- \lambda\sim\Ga(a,b)\quad\Longrightarrow\quad
- \lambda\mid x\sim\Ga(a+n,b+\textstyle\sum_i x_i).
+ \theta\sim\Ga(\alpha,\lambda)\quad\Longrightarrow\quad
+ \theta\mid x\sim\Ga(\alpha+n,\lambda+\textstyle\sum_i x_i).
 \]
 
 \sub{④ 正态均值（方差已知）}$X_i\mid\theta\sim N(\theta,\sigma^2)$。
@@ -160,12 +163,12 @@ $X^{-1}\sim\Ga(a,b)$；$\E(X^r)=b^r\Gamma(a-r)/\Gamma(a)$（$r<a$）。
  \tau_n^2=\frac1{1/\tau^2+n/\sigma^2}.
 \]
 
-\sub{⑤ 正态方差（均值已知）}$X_i\mid v\sim N(\mu,v)$。
+\sub{⑤ 正态方差（均值已知）}$X_i\mid\sigma^2\sim N(\mu,\sigma^2)$。
 \[
- v=\sigma^2\sim\IG(a,b)\quad\Longrightarrow\quad
- v\mid x\sim\IG(a+n/2,b+T/2),
+ \sigma^2\sim\IG(\alpha,\lambda)\quad\Longrightarrow\quad
+ \sigma^2\mid x\sim\IG(\alpha+n/2,\lambda+T/2),
 \]
-其中 $T=\sum_i(x_i-\mu)^2$；$\E(v\mid x)=\dfrac{b+T/2}{a+n/2-1}$（$a+n/2>1$）。
+其中 $T=\sum_i(x_i-\mu)^2$；$\E(\sigma^2\mid x)=\dfrac{\lambda+T/2}{\alpha+n/2-1}$（$\alpha+n/2>1$）。
 
 \block{5\quad 后验与先验、样本之间的关系}
 \textbf{正态均值：精度相加，均值按精度加权}
@@ -181,17 +184,17 @@ $X^{-1}\sim\Ga(a,b)$；$\E(X^r)=b^r\Gamma(a-r)/\Gamma(a)$（$r<a$）。
 
 \textbf{二项成功概率：先验均值与样本频率加权}
 \[
- \E(\theta\mid x)=\frac{a+x}{a+b+n}
- =\frac{a+b}{a+b+n}\frac a{a+b}+\frac n{a+b+n}\frac xn.
+ \E(\theta\mid x)=\frac{\alpha+x}{\alpha+\beta+n}
+ =\frac{\alpha+\beta}{\alpha+\beta+n}\frac \alpha{\alpha+\beta}+\frac n{\alpha+\beta+n}\frac xn.
 \]
 
-\textbf{正态方差：已知均值下的加权式}（$a>1$）
+\textbf{正态方差：已知均值下的加权式}（$\alpha>1$）
 \[
- \E(v\mid x)=\frac{b+T/2}{a+n/2-1}
- =\gamma\frac b{a-1}+(1-\gamma)\frac Tn,
+ \E(\sigma^2\mid x)=\frac{\lambda+T/2}{\alpha+n/2-1}
+ =\gamma\frac \lambda{\alpha-1}+(1-\gamma)\frac Tn,
 \]
 \[
- \gamma=\frac{a-1}{a+n/2-1}.
+ \gamma=\frac{\alpha-1}{\alpha+n/2-1}.
 \]
 $T/n$ 以\textbf{已知 $\mu$} 为中心；不是以 $\bar x$ 为中心的 $s^2$。
 
@@ -202,7 +205,7 @@ $T/n$ 以\textbf{已知 $\mu$} 为中心；不是以 $\bar x$ 为中心的 $s^2$
 \noindent\usebox{\leftbody}\hfill\usebox{\rightbody}
 
 \newpage
-\head{背面 / 2}{第二章：贝叶斯推断\hfill 统一分位数约定：$P(Y\le q_p)=p$；$z_p=\Phi^{-1}(p)$，$\chi^2_p(\nu)$ 为\textbf{左侧概率 $p$} 分位数。}
+\head{2 / 贝叶斯推断}{第二章：贝叶斯推断\hfill 统一分位数约定：$P(Y\le q_p)=p$；$z_p=\Phi^{-1}(p)$，$\chi^2_p(\nu)$ 为\textbf{左侧概率 $p$} 分位数。}
 \sbox{\leftbody}{\begin{minipage}[t]{.487\textwidth}
 \block{6\quad 后验估计、损失与 MSE}
 \[
@@ -213,24 +216,24 @@ $T/n$ 以\textbf{已知 $\mu$} 为中心；不是以 $\bar x$ 为中心的 $s^2$
 \[
  \int_{-\infty}^{\hat\theta_{\rm Me}}\pi(\theta\mid x)\,d\theta=\tfrac12.
 \]
-\textbf{平方损失} $L(\theta,d)=(\theta-d)^2$：后验均值最优。
+\textbf{平方损失} $L(\theta,\hat\theta)=(\theta-\hat\theta)^2$：后验均值最优。
 \[
- \MSE(d\mid x)=\E[(\theta-d)^2\mid x]
- =\Var(\theta\mid x)+[d-\E(\theta\mid x)]^2.
+ \MSE(\hat\theta\mid x)=\E[(\theta-\hat\theta)^2\mid x]
+ =\Var(\theta\mid x)+[\hat\theta-\E(\theta\mid x)]^2.
 \]
 \[
  \Var(\theta\mid x)=\E(\theta^2\mid x)-[\E(\theta\mid x)]^2.
 \]
 最小后验 MSE 为 $\Var(\theta\mid x)$；后验标准差为其平方根。
 
-\textbf{绝对值损失} $L(\theta,d)=|\theta-d|$：后验中位数最优。
+\textbf{绝对值损失} $L(\theta,\hat\theta)=|\theta-\hat\theta|$：后验中位数最优。
 
-离散后验的中位数满足 $P(\theta\le d\mid x)\ge1/2$ 且 $P(\theta\ge d\mid x)\ge1/2$。后验为正态时，均值、中位数、众数相同。
+离散后验的中位数满足 $P(\theta\le \hat\theta\mid x)\ge1/2$ 且 $P(\theta\ge \hat\theta\mid x)\ge1/2$。后验为正态时，均值、中位数、众数相同。
 
 \textbf{频率 MSE}（与上面的后验 MSE 区分）：
 \[
- \MSE_\theta(\delta)=\E_\theta[(\delta(X)-\theta)^2]
- =\Var_\theta(\delta)+[\E_\theta\delta-\theta]^2.
+ \MSE_\theta(\hat\theta)=\E_\theta[(\hat\theta(X)-\theta)^2]
+ =\Var_\theta(\hat\theta)+[\E_\theta\hat\theta-\theta]^2.
 \]
 前者固定 $x$ 对 $\theta\mid x$ 取期望；后者固定 $\theta$ 对样本取期望。
 
@@ -245,11 +248,11 @@ $T/n$ 以\textbf{已知 $\mu$} 为中心；不是以 $\bar x$ 为中心的 $s^2$
 \toprule 模型与未知参数 & 充分统计量 \\
 \midrule
 Bernoulli / 二项，$\theta$ & $\sum_i X_i$ \\
-泊松均值 $\lambda$ & $\sum_i X_i$ \\
+泊松均值 $\theta$ & $\sum_i X_i$ \\
 指数率 / Gamma 率（形状已知） & $\sum_i X_i$ \\
 $N(\theta,\sigma^2)$，$\sigma^2$ 已知 & $\bar X$ \\
-$N(\mu,v)$，$\mu$ 已知 & $\sum_i(X_i-\mu)^2$ \\
-$N(\mu,v)$，$\mu,v$ 均未知 & $(\bar X,\sum_i(X_i-\bar X)^2)$ \\
+$N(\mu,\sigma^2)$，$\mu$ 已知 & $\sum_i(X_i-\mu)^2$ \\
+$N(\mu,\sigma^2)$，$\mu,\sigma^2$ 均未知 & $(\bar X,\sum_i(X_i-\bar X)^2)$ \\
 $U(0,\theta)$ & $X_{(n)}=\max_iX_i$ \\
 $U(\theta,\theta+c)$，$c$ 已知 & $(X_{(1)},X_{(n)})$ \\
 \bottomrule
@@ -259,31 +262,31 @@ $U(\theta,\theta+c)$，$c$ 已知 & $(X_{(1)},X_{(n)})$ \\
 \]
 $U(0,\theta)$ 中，似然为 $\theta^{-n}\ind_{\{\theta\ge x_{(n)}\}}$（样本非负）；\textbf{支持集不能略去}。
 \[
- P(X_{(n)}\le y\mid\theta)=(y/\theta)^n,\quad0<y<\theta.
+ P(X_{(n)}\le x\mid\theta)=(x/\theta)^n,\quad0<x<\theta.
 \]
 
 \block{8\quad 倒 Gamma $\leftrightarrow$ 卡方：可信上限}
-若 $\theta\mid x\sim\IG(A,B)$，则
+若 $\theta\mid x\sim\IG(\alpha,\beta)$，则
 \[
- \theta^{-1}\mid x\sim\Ga(A,B),\qquad
- \frac{2B}{\theta}\,\bigg|\,x\sim\Ga(A,\tfrac12)=\chi^2(2A).
+ \theta^{-1}\mid x\sim\Ga(\alpha,\beta),\qquad
+ \frac{2\beta}{\theta}\,\bigg|\,x\sim\Ga(\alpha,\tfrac12)=\chi^2(2\alpha).
 \]
-记 $W=2B/\theta$。取倒数后不等号反向，因此
+取倒数后不等号反向，因此 $1-\gamma$ 可信上限为
 \[
- \boxed{\ U=\frac{2B}{\chi^2_{\alpha}(2A)}\ },\qquad
- P(\theta\le U\mid x)=1-\alpha.
+ \boxed{\ \theta_U=\frac{2\beta}{\chi^2_{\gamma}(2\alpha)}\ },\qquad
+ P(\theta\le\theta_U\mid x)=1-\gamma.
 \]
-核查：$\theta\le U\iff W\ge\chi^2_\alpha(2A)$，右侧概率为 $1-\alpha$。
+核查：$\theta\le\theta_U\iff 2\beta/\theta\ge\chi^2_\gamma(2\alpha)$，右侧概率为 $1-\gamma$。
 \[
- L=\frac{2B}{\chi^2_{1-\alpha}(2A)},\qquad P(\theta\ge L\mid x)=1-\alpha.
+ \theta_L=\frac{2\beta}{\chi^2_{1-\gamma}(2\alpha)},\quad P(\theta\ge\theta_L\mid x)=1-\gamma.
 \]
-等尾 $1-\alpha$ 可信区间：
+等尾 $1-\gamma$ 可信区间：
 \[
- \left[\frac{2B}{\chi^2_{1-\alpha/2}(2A)},\ \frac{2B}{\chi^2_{\alpha/2}(2A)}\right].
+ \left[\frac{2\beta}{\chi^2_{1-\gamma/2}(2\alpha)},\ \frac{2\beta}{\chi^2_{\gamma/2}(2\alpha)}\right].
 \]
 正态后验 $\theta\mid x\sim N(\mu_n,\tau_n^2)$：
 \[
- U=\mu_n+z_{1-\alpha}\tau_n;\qquad\text{等尾区间 }\mu_n\pm z_{1-\alpha/2}\tau_n.
+ \theta_U=\mu_n+z_{1-\gamma}\tau_n;\qquad\text{等尾区间 }\mu_n\pm z_{1-\gamma/2}\tau_n.
 \]
 \end{minipage}}
 \sbox{\rightbody}{\begin{minipage}[t]{.487\textwidth}
@@ -355,4 +358,143 @@ $\pi_0=\pi_1=1/2$ 时，$\alpha_0=\BF/(1+\BF)$，$\alpha_1=1/(1+\BF)$。
 \typeout{LEFT-COLUMN-HEIGHT: \the\dimexpr\ht\leftbody+\dp\leftbody\relax}
 \typeout{RIGHT-COLUMN-HEIGHT: \the\dimexpr\ht\rightbody+\dp\rightbody\relax}
 \noindent\usebox{\leftbody}\hfill\usebox{\rightbody}
+
+\newpage
+\head{3 / 教材例 1.5.1}{正态均值与方差均未知：联合共轭模型\hfill 沿用教材和板书的 $\mu,\sigma^2,\mu_0,\kappa_0,\nu_0,\sigma_0^2$。}
+\noindent\begin{minipage}[t]{.487\textwidth}
+\block{11\quad 模型、似然与联合先验}
+设 $X_1,\ldots,X_n\mid\mu,\sigma^2\overset{\rm iid}{\sim}N(\mu,\sigma^2)$，
+$\mu,\sigma^2$ 均未知；$\kappa_0,\nu_0,\sigma_0^2>0$。
+\[
+ \bar x=\frac1n\sum_i x_i,\qquad(n-1)s^2=\sum_i(x_i-\bar x)^2.
+\]
+\textbf{Step 1：似然函数}
+\[
+ \begin{aligned}
+ L(\mu,\sigma^2\mid x)
+ &=(2\pi\sigma^2)^{-n/2}\exp\!\left[-\frac{\sum_i(x_i-\mu)^2}{2\sigma^2}\right]\\
+ &\propto(\sigma^2)^{-n/2}\exp\!\left[-\frac{(n-1)s^2+n(\bar x-\mu)^2}{2\sigma^2}\right].
+ \end{aligned}
+\]
+\textbf{Step 2：先验密度（正态—倒 Gamma）}
+\[
+ \mu\mid\sigma^2\sim N\!\left(\mu_0,\frac{\sigma^2}{\kappa_0}\right),\qquad
+ \sigma^2\sim\IG\!\left(\frac{\nu_0}{2},\frac{\nu_0\sigma_0^2}{2}\right).
+\]
+\[
+ \pi(\mu,\sigma^2)=\pi(\mu\mid\sigma^2)\pi(\sigma^2).
+\]
+\[
+ \pi(\mu\mid\sigma^2)=\sqrt{\frac{\kappa_0}{2\pi\sigma^2}}
+ \exp\!\left[-\frac{\kappa_0(\mu-\mu_0)^2}{2\sigma^2}\right].
+\]
+\[
+ \pi(\sigma^2)=\frac{(\nu_0\sigma_0^2/2)^{\nu_0/2}}{\Gamma(\nu_0/2)}
+ (\sigma^2)^{-(\nu_0/2+1)}e^{-\nu_0\sigma_0^2/(2\sigma^2)}.
+\]
+故联合先验的核为
+\[
+ \pi(\mu,\sigma^2)\propto(\sigma^2)^{-(\nu_0/2+3/2)}
+ \exp\!\left[-\frac{\nu_0\sigma_0^2+\kappa_0(\mu-\mu_0)^2}{2\sigma^2}\right].
+\]
+\textbf{注意}：$\mu$ 的条件先验方差含 $\sigma^2$；不能把联合先验写成两个独立先验的乘积 $\pi(\mu)\pi(\sigma^2)$。
+
+\block{12\quad 相乘、配方与参数更新}
+\textbf{Step 3：似然乘先验，合并幂次和指数}
+\[
+ \pi(\mu,\sigma^2\mid x)\propto L(\mu,\sigma^2\mid x)\pi(\mu,\sigma^2).
+\]
+\[
+ \begin{aligned}
+ \pi(\mu,\sigma^2\mid x)
+ &\propto(\sigma^2)^{-((\nu_0+n)/2+3/2)}\\
+ &\quad\times\exp\!\bigg\{-\frac{1}{2\sigma^2}\Big[\nu_0\sigma_0^2+(n-1)s^2\\
+ &\hspace{18mm}+\kappa_0(\mu-\mu_0)^2+n(\mu-\bar x)^2\Big]\bigg\}.
+ \end{aligned}
+\]
+配方恒等式：
+\[
+ \begin{aligned}
+ &\kappa_0(\mu-\mu_0)^2+n(\mu-\bar x)^2\\
+ &=\kappa_n(\mu-\mu_n)^2+\frac{\kappa_0n}{\kappa_0+n}(\bar x-\mu_0)^2.
+ \end{aligned}
+\]
+参数更新为
+\[
+ \boxed{\ \kappa_n=\kappa_0+n,\qquad\nu_n=\nu_0+n\ },
+\]
+\[
+ \boxed{\ \mu_n=\frac{\kappa_0\mu_0+n\bar x}{\kappa_0+n}\ },
+\]
+\[
+ \boxed{\ \nu_n\sigma_n^2=\nu_0\sigma_0^2+(n-1)s^2
+ +\frac{\kappa_0n}{\kappa_0+n}(\bar x-\mu_0)^2\ }.
+\]
+\end{minipage}\hfill
+\begin{minipage}[t]{.487\textwidth}
+\block{13\quad 联合后验、条件后验与边际后验}
+\textbf{Step 4：识别后验分布}
+\[
+ \pi(\mu,\sigma^2\mid x)\propto(\sigma^2)^{-(\nu_n/2+3/2)}
+ \exp\!\left[-\frac{\nu_n\sigma_n^2+\kappa_n(\mu-\mu_n)^2}{2\sigma^2}\right].
+\]
+与联合先验同形，仍为正态—倒 Gamma 分布，并可分解为
+\[
+ \pi(\mu,\sigma^2\mid x)=\pi(\mu\mid\sigma^2,x)\pi(\sigma^2\mid x),
+\]
+\[
+ \boxed{\ \mu\mid\sigma^2,x\sim N\!\left(\mu_n,\frac{\sigma^2}{\kappa_n}\right)\ },
+\]
+\[
+ \boxed{\ \sigma^2\mid x\sim\IG\!\left(\frac{\nu_n}{2},\frac{\nu_n\sigma_n^2}{2}\right)\ }.
+\]
+$\mu\mid\sigma^2,x$ 是\textbf{条件后验}；$\sigma^2\mid x$ 是\textbf{边际后验}。
+$\sigma_n^2$ 是更新后的超参数，不等同于 $\E(\sigma^2\mid x)$。
+
+\textbf{$\mu$ 的边际后验}：把 $\sigma^2$ 积分掉。
+\[
+ \begin{aligned}
+ \pi(\mu\mid x)
+ &=\int_0^\infty\pi(\mu,\sigma^2\mid x)\,d\sigma^2\\
+ &\propto\left[\nu_n\sigma_n^2+\kappa_n(\mu-\mu_n)^2\right]^{-(\nu_n+1)/2}\\
+ &\propto\left[1+\frac1{\nu_n}
+ \left(\frac{\mu-\mu_n}{\sigma_n/\sqrt{\kappa_n}}\right)^2\right]^{-(\nu_n+1)/2}.
+ \end{aligned}
+\]
+因此
+\[
+ \boxed{\ \frac{\mu-\mu_n}{\sigma_n/\sqrt{\kappa_n}}\,\bigg|\,x\sim t_{\nu_n}\ }.
+\]
+这里的 $t_{\nu_n}$ 为标准 $t$ 分布；$\sigma_n^2/\kappa_n$ 为尺度的平方，\textbf{不是方差}。
+
+\block{14\quad 本例的均值、方差与加权解释}
+\[
+ \E(\mu\mid x)=\mu_n\quad(\nu_n>1),
+\]
+\[
+ \Var(\mu\mid x)=\frac{\nu_n}{\nu_n-2}\frac{\sigma_n^2}{\kappa_n}
+ \quad(\nu_n>2),
+\]
+\[
+ \E(\sigma^2\mid x)=\frac{\nu_n\sigma_n^2}{\nu_n-2}\quad(\nu_n>2).
+\]
+\[
+ \mu_n=\frac{\kappa_0}{\kappa_0+n}\mu_0+\frac n{\kappa_0+n}\bar x.
+\]
+$\kappa_0$ 可解释为先验信息对应的样本量；$\kappa_n=\kappa_0+n$。
+$\nu_n=\nu_0+n$；更新平方和由三部分相加：
+\[
+ \underbrace{\nu_0\sigma_0^2}_{\text{先验平方和}}
+ +\underbrace{(n-1)s^2}_{\text{样本内平方和}}
+ +\underbrace{\frac{\kappa_0n}{\kappa_0+n}(\bar x-\mu_0)^2}_{\text{两均值差异的附加项}}.
+\]
+\textbf{本例求方差可信上限}：由本例的边际后验，直接代入第 8 块：
+\[
+ \frac{\nu_n\sigma_n^2}{\sigma^2}\,\bigg|\,x\sim\chi^2(\nu_n),\qquad
+ (\sigma^2)_U=\frac{\nu_n\sigma_n^2}{\chi^2_\gamma(\nu_n)}.
+\]
+\[
+ P\bigl(\sigma^2\le(\sigma^2)_U\mid x\bigr)=1-\gamma.
+\]
+\end{minipage}
 \end{document}
