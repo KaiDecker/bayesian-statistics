@@ -12,6 +12,6 @@ Corrections to formulas, derivations, typography, and documentation are welcome.
 - Edit the `.tex` sources and rebuild the affected PDF. Do not commit temporary LaTeX files or original textbook, lecture-slide, or photo files.
 - Visually inspect changed PDF pages for missing glyphs, clipped formulas, and overflow. A successful build alone does not verify mathematical correctness.
 
-Run `./build.ps1` to build all documents, or `./build.ps1 -Target homework_chapter1` to build one. Check the resulting `main.log` for warnings and run `git diff --check` before submitting a pull request.
+Build the affected document using the command in its README. Check the resulting `main.log` for warnings and run `git diff --check` before submitting a pull request.
 
 Use English Conventional Commit messages, such as `docs: update bilingual navigation` or `fix: correct a posterior variance formula`.

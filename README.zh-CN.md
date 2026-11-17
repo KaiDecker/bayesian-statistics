@@ -27,7 +27,7 @@ Set-Location bayes_notes
 latexmk -xelatex -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-在其他文档目录中也可使用同一命令。也可以在仓库根目录通过 PowerShell 运行 `./build.ps1`，一次编译全部五份文档；添加 `-Target exam_reference` 只编译指定目录，或添加 `-Rebuild` 强制重新编译。`.aux`、`.log`、`.xdv` 等编译中间文件由 Git 忽略；正式 PDF 保留在仓库中。
+在其他文档目录中也可使用同一命令。`.aux`、`.log`、`.xdv` 等编译中间文件由 Git 忽略；正式 PDF 保留在仓库中。
 
 当前源码在 Windows、TeX Live 2025 下编译。速查稿显式指定 `fontset=windows`；其他系统应选择可用中文字体集（如 `fandol`）并检查生成排版。
 

@@ -27,7 +27,7 @@ Set-Location bayes_notes
 latexmk -xelatex -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-Use the same command from the other document directories. Alternatively, run `./build.ps1` from the repository root in PowerShell to build all five documents; add `-Target exam_reference` to build only one, or `-Rebuild` to force recompilation. Build outputs such as `.aux`, `.log`, and `.xdv` are ignored by Git; compiled PDFs are kept in version control.
+Use the same command from the other document directories. Build outputs such as `.aux`, `.log`, and `.xdv` are ignored by Git; compiled PDFs are kept in version control.
 
 The sources were built with TeX Live 2025 on Windows. The exam reference explicitly selects `fontset=windows`; on other systems, select an available Chinese font set (such as `fandol`) and check the resulting layout.
 

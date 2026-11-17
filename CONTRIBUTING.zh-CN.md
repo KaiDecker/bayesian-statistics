@@ -12,6 +12,6 @@
 - 修改 `.tex` 后重新编译相应 PDF，不提交 LaTeX 中间文件，也不上传教材、课件或照片原件。
 - 检查修改页是否缺字、公式截断或溢出。编译成功本身不代表数学推导已验证。
 
-运行 `./build.ps1` 编译全部文档，或用 `./build.ps1 -Target homework_chapter1` 编译一个目录。提交拉取请求前，检查生成的 `main.log` 警告，并执行 `git diff --check`。
+按相应目录 README 中的命令编译修改的文档。提交拉取请求前，检查生成的 `main.log` 警告，并执行 `git diff --check`。
 
 提交信息采用全英文 Conventional Commits，例如 `docs: update bilingual navigation` 或 `fix: correct a posterior variance formula`。
