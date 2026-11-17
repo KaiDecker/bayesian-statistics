@@ -41,4 +41,6 @@ latexmk -xelatex -interaction=nonstopmode -halt-on-error main.tex
 
 ## 许可证
 
-目前尚未选择全仓库许可证。教材、讲义和板书等第三方内容的权利仍归原权利人；公开本仓库并不代表对这些材料授予许可。
+仓库作者的原创贡献采用 [知识共享署名 4.0 国际许可协议（CC BY 4.0）](LICENSE)。允许分享、修改及商业使用，但须适当署名、提供许可证链接并注明修改。署名时请注明 KaiDecker，并链接到[本仓库](https://github.com/KaiDecker/bayesian-statistics)。
+
+教材、讲义和板书等第三方内容不在此许可范围内，其权利仍归原权利人。此许可仅适用于仓库作者有权授权的贡献。

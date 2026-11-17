@@ -41,4 +41,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for correction reports, transcription con
 
 ## Licensing
 
-No project-wide license has been selected. Third-party textbook, lecture, and blackboard content remains subject to its original rights; publishing this repository does not grant a license to those materials.
+Original contributions by the repository author are licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE). You may share and adapt that material, including commercially, provided you give appropriate credit, link to the license, and indicate changes. For attribution, credit KaiDecker and link to [this repository](https://github.com/KaiDecker/bayesian-statistics).
+
+Third-party textbook, lecture, and blackboard content is excluded from this license and remains subject to its original rights. The license covers only contributions the repository author has authority to license.
