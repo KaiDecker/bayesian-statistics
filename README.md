@@ -1,35 +1,44 @@
 # Bayesian Statistics
 
-Course notes and worked exercise solutions for Bayesian Statistics, including LaTeX sources and compiled PDFs. The learning materials are written in Chinese.
+[简体中文](README.zh-CN.md)
+
+Student-prepared course notes, blackboard transcriptions, worked exercises, and a compact exam reference for a Bayesian Statistics course. The materials are written in Chinese and typeset with LaTeX.
+
+This is an independent study resource, not an official university or instructor publication. Lecture slides, textbook files, and original classroom photographs are not included. The blackboard transcription directory contains a source index and photo manifest for local cross-checking; those references do not make the photographs available in this repository.
 
 ## Contents
 
-| Directory | Contents |
-| --- | --- |
-| `bayes_notes/` | Course notes, with `main.tex` as the entry point and separate introduction, Chapter 1, and Chapter 2 sources. Includes a compiled PDF, usage instructions, and a board reference index. |
-| `board_transcription/` | A separate electronic transcription of the instructor's blackboard, organized by section, with LaTeX sources, a compiled PDF, and a photo source index. |
-| `exam_reference/` | An A4 reference for hand-copying Chapter 1 and Chapter 2 exam formulas, including the joint normal model, with LaTeX source and a compiled PDF. |
-| `exercise_solutions/` | Selected Chapter 1 exercise solutions in LaTeX and PDF formats. |
-| `exercise_solutions_chapter2/` | Solutions to Chapter 2 exercises 2.1–2.10 in LaTeX and PDF formats. |
+| Directory | Description | PDF |
+| --- | --- | --- |
+| [`bayes_notes/`](bayes_notes/) | Course notes: introduction, Chapter 1, and Chapter 2 through Section 2.6. | [Read](bayes_notes/main.pdf) |
+| [`board_transcription/`](board_transcription/) | Electronic blackboard transcription, organized by section. | [Read](board_transcription/main.pdf) |
+| [`homework_chapter1/`](homework_chapter1/) | Selected Chapter 1 exercise solutions. | [Read](homework_chapter1/main.pdf) |
+| [`homework_chapter2/`](homework_chapter2/) | Chapter 2 exercises 2.1–2.10. | [Read](homework_chapter2/main.pdf) |
+| [`exam_reference/`](exam_reference/) | Three-page A4 reference for Chapters 1 and 2, including the joint normal model. | [Read](exam_reference/main.pdf) |
 
-The ZIP archive at the repository root preserves the notes snapshot created on October 27, 2026.
+Each directory contains its own `main.tex`, compiled `main.pdf`, and bilingual README. The notes and transcriptions prioritize the instructor's blackboard conventions; the worked solutions show the likelihood, prior, posterior kernel, and requested result in sequence. The transcription preserves board notation and records known ambiguities separately.
 
 ## Build
 
-Install a TeX distribution with XeLaTeX, `ctex`, and the required Chinese fonts. From the directory of the document you want to build, run:
+Install a TeX distribution with XeLaTeX, `latexmk`, `ctex`, and the required Chinese fonts. Build a document from its own directory:
 
-```sh
+```powershell
+Set-Location bayes_notes
 latexmk -xelatex -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-Alternatively, compile `main.tex` with XeLaTeX in your editor. Compile twice when needed to update the table of contents. Keep the chapter source files alongside the main document.
+Use the same command from the other document directories. Alternatively, run `./build.ps1` from the repository root in PowerShell to build all five documents; add `-Target exam_reference` to build only one, or `-Rebuild` to force recompilation. Build outputs such as `.aux`, `.log`, and `.xdv` are ignored by Git; compiled PDFs are kept in version control.
 
-Compiled PDFs are included in version control. LaTeX build artifacts are excluded by `.gitignore`.
+The sources were built with TeX Live 2025 on Windows. The exam reference explicitly selects `fontset=windows`; on other systems, select an available Chinese font set (such as `fandol`) and check the resulting layout.
 
-## Editorial approach
+## Scope and sources
 
-The notes prioritize the instructor's board work, using lecture slides as supporting material. Exercise solutions follow the classroom sequence: likelihood, prior density, posterior distribution, and the requested result.
+The notes and transcriptions are based on student-provided class materials. Some exercise solutions and reference-sheet formulas use the textbook or lecture slides for derivations and cross-checks. See each directory's README for its precise scope. Source photographs and course PDFs remain with their owner and are not redistributed here.
 
-The blackboard transcription preserves photographed board content and is maintained separately from the notes. It merges overlapping photographs without adding slide material or explanatory derivations. Source discrepancies and reading decisions are recorded separately.
+## Contributing
 
-Original lecture slides and board photographs are stored separately. Some image links in the board reference index refer to local files and will not resolve on GitHub.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for correction reports, transcription conventions, and build checks. Commit messages use English [Conventional Commits](https://www.conventionalcommits.org/).
+
+## Licensing
+
+No project-wide license has been selected. Third-party textbook, lecture, and blackboard content remains subject to its original rights; publishing this repository does not grant a license to those materials.

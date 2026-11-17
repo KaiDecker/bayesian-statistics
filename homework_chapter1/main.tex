@@ -18,13 +18,13 @@ P(\theta=0.1)=0.7,\qquad P(\theta=0.2)=0.3.
 
 \textbf{Step 1：似然函数}
 \[
-P(X=2\mid\theta)={8\choose2}\theta^2(1-\theta)^6.
+P(X=2\mid\theta)=\binom{8}{2}\theta^2(1-\theta)^6.
 \]
 分别计算
 \[
 \begin{aligned}
-P(X=2\mid\theta=0.1)&={8\choose2}(0.1)^2(0.9)^6,\\
-P(X=2\mid\theta=0.2)&={8\choose2}(0.2)^2(0.8)^6.
+P(X=2\mid\theta=0.1)&=\binom{8}{2}(0.1)^2(0.9)^6,\\
+P(X=2\mid\theta=0.2)&=\binom{8}{2}(0.2)^2(0.8)^6.
 \end{aligned}
 \]
 
@@ -40,7 +40,7 @@ P(\theta=0.1\mid X=2)
 =\frac{P(X=2\mid\theta=0.1)P(\theta=0.1)}
 {\sum_{j=1}^2P(X=2\mid\theta_j)P(\theta_j)}.
 \]
-组合数 \({8\choose2}\) 在分子、分母中约去，故
+组合数 \(\binom{8}{2}\) 在分子、分母中约去，故
 \[
 P(\theta=0.1\mid X=2)
 =\frac{0.7(0.1)^2(0.9)^6}
@@ -98,13 +98,13 @@ P(\lambda=1.5\mid X=3)=0.7543.}
 设从一批产品中抽取 \(n=8\) 件，发现不合格品数 \(x=3\)。
 \[
 X\mid\theta\sim\operatorname{Bin}(8,\theta),\qquad
-L(\theta\mid x)={8\choose3}\theta^3(1-\theta)^5.
+L(\theta\mid x)=\binom{8}{3}\theta^3(1-\theta)^5.
 \]
 
 \subsection*{(1) \(\theta\sim U(0,1)\)}
 \textbf{Step 1：似然函数}
 \[
-L(\theta\mid x)={8\choose3}\theta^3(1-\theta)^5
+L(\theta\mid x)=\binom{8}{3}\theta^3(1-\theta)^5
 \propto\theta^3(1-\theta)^5.
 \]
 
@@ -318,7 +318,7 @@ L(\theta\mid x)\propto\theta^{-2}I_{(x,1)}(\theta).
 
 \textbf{Step 1：似然函数}
 \[
-L(\theta\mid x)={100\choose3}\theta^3(1-\theta)^{97}
+L(\theta\mid x)=\binom{100}{3}\theta^3(1-\theta)^{97}
 \propto\theta^3(1-\theta)^{97}.
 \]
 
